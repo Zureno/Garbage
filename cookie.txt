@@ -1,5 +1,11 @@
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1&logicType=subPlan"
+TEST 1 - id=1:
+curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1&logicType=subPlan" | findstr "clientId ="
 
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic"
+TEST 2 - id=30:
+curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" | findstr "clientId ="
 
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?awardTypeKey=VALUE"
+TEST 3 - id=50:
+curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=50&logicType=subPlan" | findstr "clientId ="
+
+TEST 4 - id=100:
+curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=100&logicType=subPlan" | findstr "clientId ="
