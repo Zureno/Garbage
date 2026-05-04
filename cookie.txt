@@ -1,2 +1,1 @@
-# Test with id=30 (Sudeep's client)
-curl -v -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+curl -v -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CommonClientTaxLogic?id=30"
