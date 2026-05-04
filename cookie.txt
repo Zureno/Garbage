@@ -1,7 +1,5 @@
-curl -b "TC-BAC-DEV=FIRST_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" | findstr "clientId"
+# Show HTTP status code + response
+curl -i -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan"
 
-curl -b "TC-BAC-DEV=FIRST_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1&logicType=subPlan" | findstr "clientId"
-
-curl -b "TC-BAC-DEV=FIRST_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=99&logicType=subPlan" | findstr "clientId"
-
-
+# Save to file AND show first 50 lines
+curl -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" > test_response.txt && head -50 test_response.txt
