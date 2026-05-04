@@ -1,2 +1,24 @@
-TC-BAC-DEV 03wmiv45aqnshv1q0jdh3z5g
-TC-BAC-DEV xu5nie5v4jh3zsebntiuz1bu
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=98"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+
+curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=100"
+
+curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=98"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+
+curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=98"
+
+curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+
+curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+
