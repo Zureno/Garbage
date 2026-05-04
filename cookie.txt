@@ -1,1 +1,3 @@
-curl -v -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30"
+curl -v -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=98&logicType=subPlan"
+
+curl -v -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic"
