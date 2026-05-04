@@ -1,0 +1,832 @@
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9,EmulateIE10,EmulateIE11" />
+    <meta http-equiv="Page-Enter" content="RevealTrans(Duration=0, transition=0)" />
+    <meta http-equiv="Content-Type" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Pragma-directive" content="no-cache" />
+    <meta http-equiv="cache-directive" content="no-cache" />
+    <meta name="csp-nonce" content="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+    <link type="text/css" rel="stylesheet" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" href="/gettaxcalcbac/styles/flags.css?v=1.1" />
+    <link type="text/css" rel="stylesheet" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" href="/gettaxcalcbac/styles/calendar-blue.css?v=3.355.202512191322" />
+    <link type="text/css" rel="stylesheet" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" href="/gettaxcalcbac/styles/fontawesome-pro-5.13.0-web/css/all.min.css" />
+    <link type="text/css" rel="stylesheet" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" href="/gettaxcalcbac/styles/fontawesome-pro-5.13.0-web/css/v4-shims.min.css" />
+    <link type="text/css" rel="stylesheet" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" href="/gettaxcalcbac/styles/site.css?v=3.355.202512191322" />
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/knockout-3.5.1.js"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/knockout.validation.js?v=2.0.4"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/jquery-3.5.1.js"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/json2.js"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/calendar.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/calendar-en.js"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/calendar-setup.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/fingerprint2.js"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/navResizer.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/backgroundtasks.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/commonFunctions.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/site.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/popupWindow.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/views/help.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/views/auditLog.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/views/adminVariable.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/locationUtils.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=" src="/gettaxcalcbac/javascript/appMaster.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+        const rootUrl = "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/";
+        const absolutePath = "/gettaxcalcbac/ClientTaxLogic";
+        const clientId = "98";
+        var isOnfocus = false;
+        var allowEnter = false;
+    <div id="divMasterPopups">
+        <div class="popDivWin" id="popDivOverride">
+            <div class="popDivWinHead" id="popDivOverrideHead">
+                <div id="popDivOverrideHeadTitle"></div>
+                <div class="popDivWinHeadClose"></div>
+            <div class="popWinBody" id="popDivOverrideBody">
+                <div class="field">
+                    <div class="label">User Login</div>
+                    <div class="inputs">
+                        <input type="text" id="txtUserLogin" name="txtUserLogin" value="" />
+            <div class="popDivWinFooter" id="popDivOverrideFooter">
+                <div class="popDivWinFooterButtons">
+                    <input class="PageButtonMedium" id="btnOverride" type="button" value="OK" name="btnOverride" />
+                    <input class="PageButtonPopDivClose" type="button" value="Cancel" />
+        <div class="popDivWin" id="popDivTasks">
+            <div class="popDivWinHead" id="popDivTasksHead">
+                <div id="popDivTasksHeadTitle"></div>
+                <div class="popDivWinHeadClose"></div>
+            <div class="popWinBody" id="popDivTasksBody">
+                <img id="imgTasksWait" src="/gettaxcalcbac/images/loader.gif" />
+            <div class="popDivWinFooter" id="popDivTasksFooter">
+                <div class="popDivWinFooterButtons">
+                    <input class="PageButtonPopDivClose" type="button" value="Close" />
+    <div id="site">
+        <div class="navbar"><header class="layout-header group" role="banner"><img class='kpmgBannerLogo' title="KPMG LINK GET Tax Calculator - US QA BAC" src="https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/images/newKpmgTopBranding.png" /><div class="app-detail"><span class="app-name">KPMG LINK GET Tax Calculator</span><span class="app-environment">US QA BAC</span></div></header><nav role="navigation"><ul class="menu-main-menu"><li class=""><a href="#" class='menuLinkPress' data-link='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions' data-menu='transactions/transactions/allAwards' data-additionalArgs=''>Transactions</a></li><li class="current"><a href="#" class='menuLinkPress' data-link='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home' data-menu='administration' data-additionalArgs=''>Client Admin</a></li><li class=""><a href="#" class='menuLinkPress' data-link='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home' data-menu='system' data-additionalArgs=''>System Settings</a></li></ul></nav><div class="user-menu"><ul><li class="nav-dropdown"><a id="lblCurrentClient" href="#">zE2E20260316<i class="whiteArrowDownIcon"></i></a><input type="text" placeholder="Start Typing..." id="clientSelectSearch" autocomplete="off" readonly class='hidden'><ul class="nav-dropdown-content client-dropdown"><li class="client-dropdown-separator">Active Clients</li><li data-client-id="VlNlXvi2pT8CnuJAcVNUohD2zGOi0GSvAv9Ru9gsm" data-client-code="G8hQx0x8tW6+IHVskG16PAb70qCSouZXBkrsl+cRczmNhtNca" class="pointer"><a>Bank of America-Pen Testing</a></li><li data-client-id="PZ6h3UH7WViBTDBYLPGaPBZ9QuIgeHFIxA4R0XjiN" data-client-code="rnNzXJQ7bundAjzAMrnsujHXtbJ/KlIjWJXioMl682xoaIWU2" class="pointer"><a>zE2E20260316</a></li></ul></li><li class="nav-dropdown get-id-drop-down"><a id='getIdSearchIcon' class="icon" title="GET ID quick search" href="#"><i class="fa fa-search fa-lg"></i></a><ul class="nav-dropdown-content"><li><select id="getClientIdSelect"><option value="" selected>Unknown</option><option value="t3hC0wF0b48flXujlttzCqhmsB+mhgmyQW125X2Zu">Bank of America-Pen Testing</option><option value="tAUA4EcL1gFbSEbNrtrJbCOhuEYDHpAsdA++h1VYr">zE2E20260316</option></select></li><li><span class="custom-textbox"><input type="text" id="getIdTextbox" class="get-id-txt" name="getIdTextbox" placeholder="GET Transaction ID"><a id='getIdSearch' href="#"><i class="arrow right"></i></a></span></li></ul></li><li><a id="backgroundTaskbtn" class="icon" href="#"><i id="tasksIcon" class="fa fa-cog fa-lg"></i></a></li><li><a class="icon" title="Home" href="https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home"><i class="fa fa-home fa-lg"></i></a></li><li><a class="icon" title="New Window" href="https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home" target="_blank"><i class="fa fa-clone fa-lg"></i></a></li><li class="nav-dropdown"><a href="#">Ankan  Bose (PenTest)<i class="whiteArrowDownIcon"></i></a><ul class="nav-dropdown-content"><li><a class='logOut' href="#">Log Out</a></li></ul></li></ul></div></div>
+        <div id="body">
+            <div id="menu"><div id="collapsed-menu" class='hidden' title ="Show Menu"><i class="menuExpandIcon"></i></div><div id="expanded-menu"><div class="row"><div class="col-10"> <h1>Client Admin</h1> </div><div class="col" id='expandedLeftMenu'><i class="menuCollapseIcon" title="Collapse Menu"></i></div></div><div class="menuHeader row" data-node='administration'><div class="col-10">Client Admin</div><div class="col"><i id="administrationArrow" class="menuDownArrow"></i></div></div><div id="administration" class="menu-content "><div class="menuItem openPage paddingLevelOne " data-url='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary' data-link-path='administration/administration/logicSummary' data-arg=''>Logic Summary</div><div class="menuItem openPage paddingLevelOne selected" data-url='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic' data-link-path='administration/administration/clientTaxLogic' data-arg=''>Tax Logic</div><div class="menuItem openPage paddingLevelOne " data-url='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CommonClientTaxLogic' data-link-path='administration/administration/commonClientTaxLogic' data-arg=''>Common Tax Logic</div></div></div></div>
+            <div id="content" class="sideMenuWidthOpened">
+                <div id="content-detail">
+<div class="mainButtons">
+<input class="auditLogButton" name="auditLogButton" data-id="ONXwDqdeSQk8TkA+vOFFnKJ2r0ZWf1BFvy6j3w+lHkxGx1Q==" type="button" value="Audit Log">
+<i class="fa helpIcon helpButton" name="HELP-ClientTaxLogic" data-help-key="HELP-ClientTaxLogic" title="Help"></i>
+<form action="/gettaxcalcbac/ClientTaxLogic" id="frmClientTaxLogic" method="get" name="frmClientTaxLogic"><input id="awardTypeKey" name="awardTypeKey" type="hidden" value="" /><input id="logicType" name="logicType" type="hidden" value="clientJurisdiction" />    <div id="taxLogicDropDowns">
+        <div class="row">
+            <div class="col-1">
+            <div class="col-3">
+                <select id="jurisdiction" name="jurisdiction"><option value="">Please select ...</option>
+<option value="AFG_IT">Afghanistan - Afghanistan Income Tax</option>
+<option value="AFG_SS">Afghanistan - Afghanistan Social Security</option>
+<option value="ALB_IT">Albania - Albania Income Tax</option>
+<option value="ALB_SS">Albania - Albanian Social Insurance</option>
+<option value="ALB_SS_HI">Albania - Albanian Health Insurance</option>
+<option value="DZA_IT">Algeria - Algeria Income Tax</option>
+<option value="DZA_SS">Algeria - Algeria Social Security</option>
+<option value="AND_IT">Andorra - Andorra Income Tax</option>
+<option value="AND_SS">Andorra - Andorra Social Security</option>
+<option value="AGO_IT">Angola - Angola Income Tax</option>
+<option value="AGO_SS">Angola - Angola Social Tax</option>
+<option value="ARG_IT">Argentina - Argentina Income Tax</option>
+<option value="ARG_SS">Argentina - Argentina Social Security (Blended)</option>
+<option value="ARG_SS_MA">Argentina - Argentina Social Security - Medical Assistance</option>
+<option value="ARG_SS_PF">Argentina - Argentina Social Security - Pension Fund System</option>
+<option value="ARG_SS_RF">Argentina - Argentina Social Security - Retirement Fund</option>
+<option value="ARM_IT">Armenia - Armenia Income Tax</option>
+<option value="ARM_SS">Armenia - Armenia Social Security</option>
+<option value="ABW_IT">Aruba - Aruba Income Tax</option>
+<option value="ABW_SS">Aruba - Aruba Social Security</option>
+<option value="AUS_SS">Australia - Australia Social Tax</option>
+<option value="AUS_IT">Australia - Australia Income Tax</option>
+<option value="AUT_IT">Austria - Austria Income Tax</option>
+<option value="AUT_SS">Austria - Austria Social Security (Blended)</option>
+<option value="AUT_SS_AI">Austria - Austria Social Security - Accident Insurance</option>
+<option value="AUT_SS_HI">Austria - Austria Social Security - Health Insurance</option>
+<option value="AUT_SS_PI">Austria - Austria Social Security - Pension Insurance</option>
+<option value="AUT_SS_UI">Austria - Austria Social Security - Unemployment Insurance</option>
+<option value="AZE_SS_MI">Azerbaijan - Azerbaijan Social Security - Medical Insurance</option>
+<option value="AZE_SS_UI">Azerbaijan - Azerbaijan Social Security - Unemployment Insurance</option>
+<option value="AZE_IT">Azerbaijan - Azerbaijan Income Tax</option>
+<option value="AZE_SS">Azerbaijan - Azerbaijan Social Tax</option>
+<option value="BHS_SS">Bahamas - Bahamas Social Security</option>
+<option value="BHS_IT">Bahamas - Bahamas Income Tax</option>
+<option value="BHR_IT">Bahrain - Bahrain Income Tax</option>
+<option value="BHR_SS">Bahrain - Bahrain Social Security</option>
+<option value="BGD_IT">Bangladesh - Bangladesh Income Tax</option>
+<option value="BGD_SS">Bangladesh - Bangladesh Social Security</option>
+<option value="BRB_IT">Barbados - Barbados Income Tax</option>
+<option value="BRB_SS">Barbados - Barbados Social Security</option>
+<option value="BLR_IT">Belarus - Belarus Income Tax</option>
+<option value="BLR_SS">Belarus - Belarus Social Security</option>
+<option value="BEL_SS">Belgium - Belgium Social Security</option>
+<option value="BEL_IT">Belgium - Belgium Income Tax</option>
+<option value="BEN_IT">Benin - Benin Income Tax</option>
+<option value="BEN_SS">Benin - Benin Social Security</option>
+<option value="BMU_IT">Bermuda - Bermuda  Income Tax</option>
+<option value="BMU_SS">Bermuda - Bermuda Social Security</option>
+<option value="BOL_SS_AFP">Bolivia - Bolivia Social Security - AFP Commission</option>
+<option value="BOL_SS_DD">Bolivia - Bolivia Social Security - Death and Disability</option>
+<option value="BOL_SS_MC">Bolivia - Bolivia Social Security - Mandatory Contribution</option>
+<option value="BOL_SS_SC">Bolivia - Bolivia Social Security - Solidarity Contribution</option>
+<option value="BOL_IT">Bolivia - Bolivia Income Tax</option>
+<option value="BOL_SS">Bolivia - Bolivia Social Security (Blended)</option>
+<option value="BIH_IT">Bosnia and Herzegovina - Bosnia and Herzegovina Income Tax</option>
+<option value="BIH_SS">Bosnia and Herzegovina - Bosnia and Herzegovina Social Security</option>
+<option value="BWA_IT">Botswana - Botswana Income Tax</option>
+<option value="BWA_SS">Botswana - Botswana Social Tax</option>
+<option value="BRA_SS">Brazil - Brazil Social Security</option>
+<option value="BRA_IT">Brazil - Brazil Income Tax</option>
+<option value="BRA_SS_FGTS">Brazil - Brazil ER Social Security - Employee Severance Fund</option>
+<option value="BRN_IT">Brunei - Brunei Darussalam Income Tax</option>
+<option value="BRN_SS">Brunei - Brunei Darussalam SS</option>
+<option value="BGR_IT">Bulgaria - Bulgaria Income Tax</option>
+<option value="BGR_SS">Bulgaria - Bulgaria Social Security</option>
+<option value="BFA_IT">Burkina Faso - Burkina Faso Income Tax</option>
+<option value="BFA_SS">Burkina Faso - Burkina Faso Social Security</option>
+<option value="KHM_IT">Cambodia - Cambodia Income Tax</option>
+<option value="KHM_SS">Cambodia - Cambodia Social Security</option>
+<option value="CMR_IT">Cameroon - Cameroon Income Tax</option>
+<option value="CMR_SS">Cameroon - Cameroon Social Security</option>
+<option value="CAN_SS_EI_ER">Canada - Canada Employment Insurance - Employer</option>
+<option value="CAN_SS_PC_ER">Canada - Canada Pension Contribution - Employer</option>
+<option value="CAN_SS_PCI">Canada - Canada Social Security - Basic Pension Contribution</option>
+<option value="CAN_SS_PCII">Canada - Canada Social Security - Additional Pension Contribution</option>
+<option value="CAN_EI">Canada - Canada Employment Insurance</option>
+<option value="CAN_IT">Canada - Canada Income Tax</option>
+<option value="CAN_PC">Canada - Canada Pension Contribution</option>
+<option value="CAN-AB_IT">Canada - Alberta Income Tax</option>
+<option value="CAN-BC_IT">Canada - British Columbia Income Tax</option>
+<option value="CAN-MB_IT">Canada - Manitoba Income Tax</option>
+<option value="CAN-NB_IT">Canada - New Brunswick Income Tax</option>
+<option value="CAN-NL_IT">Canada - Newfoundland and Labrador IT</option>
+<option value="CAN-NT_IT">Canada - Northwest Territories IT</option>
+<option value="CAN-NS_IT">Canada - Nova Scotia Income Tax</option>
+<option value="CAN-NU_IT">Canada - Nunavut Income Tax</option>
+<option value="CAN-ON_IT">Canada - Ontario Income Tax</option>
+<option value="CAN-PE_IT">Canada - Prince Edward Island IT</option>
+<option value="CAN-QC_IT">Canada - Quebec Income Tax</option>
+<option value="CAN-SK_IT">Canada - Saskatchewan Income Tax</option>
+<option value="CAN-YT_IT">Canada - Yukon Territory Income Tax</option>
+<option value="CYM_IT">Cayman Islands - Cayman Islands Income Tax</option>
+<option value="CYM_SS">Cayman Islands - Cayman Islands Social Security</option>
+<option value="CAF_IT">Central African Republic - Central African Republic Income Tax</option>
+<option value="CAF_SS">Central African Republic - Central African Republic Social Security</option>
+<option value="TCD_IT">Chad - Chad Income Tax</option>
+<option value="TCD_SS">Chad - Chad Social Security</option>
+<option value="CHL_SS_HI">Chile - Chile Social Security - Health Insurance</option>
+<option value="CHL_SS_PC">Chile - Chile Social Security - Pension Contribution</option>
+<option value="CHL_SS_UI">Chile - Chile Social Security - Unemployment Insurance</option>
+<option value="CHL_SS">Chile - Chile Social Security (Blended)</option>
+<option value="CHL_IT">Chile - Chile Income Tax</option>
+<option value="CHN_IT">China - China Income Tax</option>
+<option value="CHN_SS">China - China Social Security</option>
+<option value="COL_IT">Colombia - Colombia Income Tax</option>
+<option value="COL_SS">Colombia - Colombia Social Security (Blended)</option>
+<option value="COL_SS_MI">Colombia - Colombia Social Security - Medical Plan</option>
+<option value="COL_SS_PI">Colombia - Colombia Social Security - Pension Plan</option>
+<option value="COL_SS_PSF">Colombia - Colombia Social Security - Pension Solidarity Fund</option>
+<option value="COG_SS_CAMU">Congo - Congo Social Security - CAMU</option>
+<option value="COG_IT">Congo - Congo Income Tax</option>
+<option value="COG_SS">Congo - Congo Social Security</option>
+<option value="CRI_IT">Costa Rica - Costa Rica Income Tax</option>
+<option value="CRI_SS">Costa Rica - Costa Rica Social Security</option>
+<option value="HRV_IT">Croatia - Croatia Income Tax</option>
+<option value="HRV_SS">Croatia - Croatia Social Security</option>
+<option value="HRV_SS_PI">Croatia - Croatia Social Security - Pension Contribution Pillar I</option>
+<option value="HRV_SS_PII">Croatia - Croatia Social Security - Pension Contribution Pillar II</option>
+<option value="CUB_IT">Cuba - Cuba Income Tax</option>
+<option value="CUB_SS">Cuba - Cuba Social Security</option>
+<option value="CUW_IT">Cura&#231;ao - Curacao Income Tax</option>
+<option value="CUW_SS_OAWO">Cura&#231;ao - Curacao SS - Old Age Insurance</option>
+<option value="CUW_SS_GSI">Cura&#231;ao - Curacao SS - Sickness Insurance</option>
+<option value="CUW_SS_HI">Cura&#231;ao - Curacao SS - Health Insurance</option>
+<option value="CYP_IT">Cyprus - Cyprus Income Tax</option>
+<option value="CYP_SS">Cyprus - Cyprus Social Security</option>
+<option value="CYP_SS_ER_GHS">Cyprus - Cyprus Employer Social Security - General Healthcare System</option>
+<option value="CYP_SS_ER_RY">Cyprus - Cyprus Employer Social Security - Redundancy</option>
+<option value="CYP_SS_ER_SC">Cyprus - Cyprus Employer Social Security - Social Cohesion</option>
+<option value="CYP_SS_ER_SI">Cyprus - Cyprus Employer Social Security</option>
+<option value="CYP_SS_ER_TD">Cyprus - Cyprus Employer Social Security - Training and Development</option>
+<option value="CYP_SS_GHS">Cyprus - Cyprus Social Security - General Healthcare System</option>
+<option value="CZE_SS">Czech Republic - Czech Social Tax</option>
+<option value="CZE_IT">Czech Republic - Czech Income Tax</option>
+<option value="COD_IT">Democratic Republic of Congo - Democratic Republic of Congo Income Tax</option>
+<option value="COD_SS">Democratic Republic of Congo - Democratic Republic of Congo Social Security</option>
+<option value="DNK_IT">Denmark - Denmark Income Tax</option>
+<option value="DNK_SS">Denmark - Denmark Social Security</option>
+<option value="DOM_IT">Dominican Republic - Dominican Republic Income Tax</option>
+<option value="DOM_PP">Dominican Republic - Dominican Republic - Pension</option>
+<option value="DOM_FH">Dominican Republic - Dominican Republic - F. Health</option>
+<option value="DOM_TE">Dominican Republic - Dominican Republic - Tech Ed</option>
+<option value="ECU_IT">Ecuador - Ecuador Income Tax</option>
+<option value="ECU_SS">Ecuador - Ecuador Social Tax</option>
+<option value="EGY_IT">Egypt - Egypt Income Tax</option>
+<option value="EGY_SS">Egypt - Egypt Social Security</option>
+<option value="EGY_SS_ER">Egypt - Egypt Employer Social Security (blended)</option>
+<option value="SLV_SS">El Salvador - El Salvador Social Tax</option>
+<option value="SLV_IT">El Salvador - El Salvador Income Tax</option>
+<option value="GNQ_IT">Equatorial Guinea - Equatorial Guinea Income Tax</option>
+<option value="GNQ_SS">Equatorial Guinea - Equatorial Guinea SS</option>
+<option value="EST_IT">Estonia - Estonia Income Tax</option>
+<option value="EST_SS">Estonia - Estonia Social Security</option>
+<option value="SWZ_IT">Eswatini - Eswatini Income Tax</option>
+<option value="SWZ_SS">Eswatini - Eswatini Social Security</option>
+<option value="ETH_IT">Ethiopia - Ethiopia Income tax</option>
+<option value="ETH_SS">Ethiopia - Ethiopia Social Tax</option>
+<option value="FJI_IT">Fiji - Fiji Income Tax</option>
+<option value="FJI_SS">Fiji - Fiji Social Security</option>
+<option value="FIN_SS">Finland - Finland Social Security</option>
+<option value="FIN_IT">Finland - Finland Income Tax</option>
+<option value="FRA_SC">France - France Social Charge</option>
+<option value="FRA_CSG">France - France Social Security (CSG)</option>
+<option value="FRA_CRDS">France - France Social Security (CRDS)</option>
+<option value="FRA_IT">France - France Income Tax</option>
+<option value="FRA_SS">France - France Social Security</option>
+<option value="FRA_IT_ALT">France - France IT Alternative Method</option>
+<option value="GAB_IT">Gabon - Gabon Income Tax</option>
+<option value="GAB_SS_CNAMGS">Gabon - Gabon Social Security - CNAMGS</option>
+<option value="GAB_SS_CNSS">Gabon - Gabon Social Security - CNSS</option>
+<option value="GMB_IT">Gambia - Gambia Income Tax</option>
+<option value="GEO_IT">Georgia - Georgia Income Tax</option>
+<option value="GEO_SS">Georgia - Georgia Social Security</option>
+<option value="DEU_IT">Germany - Germany Income Tax</option>
+<option value="DEU_SS">Germany - Germany Social Tax</option>
+<option value="DEU_PEN">Germany - German Pension Insurance</option>
+<option value="DEU_UE">Germany - German Unemployment</option>
+<option value="DEU_HI">Germany - German Health Insurance</option>
+<option value="DEU_DOAI">Germany - German DOAI</option>
+<option value="GHA_IT">Ghana - Ghana Income Tax</option>
+<option value="GHA_SS">Ghana - Ghana Social Tax</option>
+<option value="GIB_IT">Gibraltar - Gibraltar Income Tax</option>
+<option value="GIB_SS">Gibraltar - Gibraltar Social Security</option>
+<option value="GRC_IT">Greece - Greece Income Tax</option>
+<option value="GRC_SS">Greece - Greece Social Security</option>
+<option value="GLP_IT">Guadeloupe - Guadeloupe Income Tax</option>
+<option value="GLP_SS">Guadeloupe - Guadeloupe Social Security (Blended)</option>
+<option value="GLP_SS_CRDS">Guadeloupe - Guadeloupe Social Security - CRDS</option>
+<option value="GLP_SS_CSG">Guadeloupe - Guadeloupe Social Security - CSG</option>
+<option value="GLP_SS_SC">Guadeloupe - Guadeloupe Social Security - Social Charge</option>
+<option value="GTM_IT">Guatemala - Guatemala Income Tax</option>
+<option value="GTM_SS">Guatemala - Guatemala Social Security</option>
+<option value="GGY_IT">Guernsey - Guernsey Income Tax</option>
+<option value="GGY_SS">Guernsey - Guernsey Social Security</option>
+<option value="GIN_IT">Guinea - Guinea Income Tax</option>
+<option value="GIN_SS_IL">Guinea - Guinea Social Security - Illness</option>
+<option value="GIN_SS_RDD">Guinea - Guinea Social Security - Retirement, Disability, Death</option>
+<option value="GUY_IT">Guyana - Guyana Income Tax</option>
+<option value="GUY_SS">Guyana - Guyana Social Security</option>
+<option value="HND_HI">Honduras - Honduras Health Insurance</option>
+<option value="HND_SS">Honduras - Honduras Social Security</option>
+<option value="HND_IT">Honduras - Honduras Income Tax</option>
+<option value="HKG_IT">Hong Kong - Hong Kong Income Tax</option>
+<option value="HKG_SS">Hong Kong - Hong Kong Social Security</option>
+<option value="HUN_IT">Hungary - Hungary Income Tax</option>
+<option value="HUN_SS">Hungary - Hungary Social Security</option>
+<option value="ISL_PC">Iceland - Iceland Pension Contribution</option>
+<option value="ISL_IT">Iceland - Iceland Income Tax</option>
+<option value="IND_SS">India - India Social Security</option>
+<option value="IND_IT">India - India Income Tax</option>
+<option value="IDN_SS">Indonesia - Indonesia Social Tax</option>
+<option value="IDN_IT">Indonesia - Indonesia Income Tax</option>
+<option value="IRN_IT">Iran - Iran Income Tax</option>
+<option value="IRN_SS">Iran - Iran Social Security</option>
+<option value="IRQ_IT">Iraq - Iraq Income Tax</option>
+<option value="IRQ_SS">Iraq - Iraq Social Tax</option>
+<option value="IRL_IT_USC">Ireland - Ireland Income Tax USC</option>
+<option value="IRL_PRSI_ER">Ireland - Ireland PRSI Employer</option>
+<option value="IRL_PRSI">Ireland - Ireland PRSI</option>
+<option value="IRL_HL">Ireland - Ireland Health Levy</option>
+<option value="IRL_IT">Ireland - Ireland Income Tax</option>
+<option value="IMN_IT">Isle of Man - Isle of Man Income Tax</option>
+<option value="IMN_SS">Isle of Man - Isle of Man Social Security</option>
+<option value="ISR_IT">Israel - Israel Income Tax</option>
+<option value="ISR_SS">Israel - Israel Social Security</option>
+<option value="ITA_SS">Italy - Italy Social Security</option>
+<option value="ITA_IT">Italy - Italy Income Tax</option>
+<option value="ITA_SS_SC">Italy - Italy Social Security - Surcharge</option>
+<option value="ITA-ER_IT">Italy - Emilia-Romagna Income Tax</option>
+<option value="ITA-ER-BO_IT">Italy - Bologna Income Tax</option>
+<option value="ITA-LA_IT">Italy - Lazio Income tax</option>
+<option value="ITA-LA-RO_IT">Italy - Rome Income Tax</option>
+<option value="ITA-LO">Italy - Lombardia Income tax</option>
+<option value="ITA-LO-MI">Italy - Milan Income Tax</option>
+<option value="ITA-PI_IT">Italy - Piemonte Income Tax</option>
+<option value="ITA-PI-TO_IT">Italy - Torino Income Tax</option>
+<option value="ITA-PU_IT">Italy - Puglia Income Tax</option>
+<option value="ITA-PU-BA_IT">Italy - Bari Income Tax</option>
+<option value="ITA-VN_IT">Italy - Veneto Income Tax</option>
+<option value="ITA-VN-VR_IT">Italy - Verona Income Tax</option>
+<option value="CIV_IT">Ivory Coast - C&#244;te d`Ivoire Income Tax</option>
+<option value="CIV_SS">Ivory Coast - C&#244;te d`Ivoire Social Security</option>
+<option value="JAM_IT">Jamaica - Jamaica Income Tax</option>
+<option value="JAM_SS">Jamaica - Jamaica Social Security</option>
+<option value="JAM_SS_ET">Jamaica - Jamaica Social Security - Education Tax</option>
+<option value="JAM_SS_NHT">Jamaica - Jamaica Social Security - National Housing Trust</option>
+<option value="JPN_SS_EI">Japan - Japan Social Security - Employment Insurance</option>
+<option value="JPN_SS_HI">Japan - Japan Social Security - Health Insurance</option>
+<option value="JPN_SS_WP">Japan - Japan Social Security - Welfare Pension Insurance</option>
+<option value="JPN_IT">Japan - Japan Income Tax</option>
+<option value="JPN_SS">Japan - Japan Social Security (Blended)</option>
+<option value="JEY_IT">Jersey - Jersey Income Tax</option>
+<option value="JEY_SS">Jersey - Jersey Social Security</option>
+<option value="JEY_SS_LTC">Jersey - Jersey Social Security - Long Term Care</option>
+<option value="JOR_IT">Jordan - Jordan Income Tax</option>
+<option value="JOR_SS">Jordan - Jordan Social Security</option>
+<option value="KAZ_IT">Kazakhstan - Kazakhstan Income Tax</option>
+<option value="KAZ_SS">Kazakhstan - Kazakhstan Social Security</option>
+<option value="KEN_IT">Kenya - Kenya Income Tax</option>
+<option value="KEN_SS">Kenya - Kenya Social Security</option>
+<option value="KWT_IT">Kuwait - Kuwait Income Tax</option>
+<option value="KWT_SS">Kuwait - Kuwait Social Security</option>
+<option value="KGZ_IT">Kyrgyzstan - Kyrgyzstan Income Tax</option>
+<option value="KGZ_SS">Kyrgyzstan - Kyrgyzstan Social Security</option>
+<option value="LAO_IT">Laos - Laos Income Tax</option>
+<option value="LAO_SS">Laos - Laos Social Security</option>
+<option value="LVA_IT">Latvia - Latvia Income Tax</option>
+<option value="LVA_SS">Latvia - Latvia Social Security</option>
+<option value="LBN_IT">Lebanon - Lebanon Income Tax</option>
+<option value="LBN_SS">Lebanon - Lebanon Social Security</option>
+<option value="LSO_IT">Lesotho - Lesotho Income Tax</option>
+<option value="LSO_SS">Lesotho - Lesotho Social Security</option>
+<option value="LBR_IT">Liberia - Liberia Income Tax</option>
+<option value="LBR_SS">Liberia - Liberia Social Security</option>
+<option value="LBY_IT">Libya - Libya Income Tax</option>
+<option value="LBY_SS">Libya - Libya Social Security</option>
+<option value="LIE_IT">Liechtenstein - Liechtenstein Income Tax</option>
+<option value="LIE_SS">Liechtenstein - Liechtenstein Social Security</option>
+<option value="LTU_IT">Lithuania - Lithuania Income Tax</option>
+<option value="LTU_SS">Lithuania - Lithuania Social Security</option>
+<option value="LUX_IT">Luxembourg - Luxembourg Income Tax</option>
+<option value="LUX_DI">Luxembourg - Luxembourg Social Security - Dependency Insurance</option>
+<option value="LUX_HI">Luxembourg - Luxembourg Social Security - Health Insurance</option>
+<option value="LUX_RI">Luxembourg - Luxembourg Social Security - Retirement Insurance</option>
+<option value="MAC_IT">Macau - Macau Income Tax</option>
+<option value="MAC_SS">Macau - Macau Social Security</option>
+<option value="MDG_IT">Madagascar - Madagascar Income Tax</option>
+<option value="MDG_SS_CNAPS">Madagascar - Madagascar Social Security - CNAPS</option>
+<option value="MDG_SS_MI">Madagascar - Madagascar Social Security - Medical Insurance</option>
+<option value="MWI_IT">Malawi - Malawi Income Tax</option>
+<option value="MWI_SS">Malawi - Malawi Social Tax</option>
+<option value="MYS_IT">Malaysia - Malaysia Income Tax</option>
+<option value="MYS_SS">Malaysia - Malaysia Social Security</option>
+<option value="MDV_IT">Maldives - Maldives Income Tax</option>
+<option value="MDV_SS">Maldives - Maldives Social Security</option>
+<option value="MLI_CFE">Mali - Mali CFE - Lump-sum contribution from the Employer</option>
+<option value="MLI_IT">Mali - Mali Income Tax</option>
+<option value="MLI_SS">Mali - Mali Social Security (Blended)</option>
+<option value="MLI_SS_ER">Mali - Mali Social Security Employer</option>
+<option value="MLI_SS_HI">Mali - Mali Social Security - Compulsory Health Insurance</option>
+<option value="MLI_SS_PI">Mali - Mali Social Security - Old Age</option>
+<option value="MLI_TEJ">Mali - Mali TEJ - Youth Employment Tax</option>
+<option value="MLI_TFP">Mali - Mali TFP - Professional Training Tax</option>
+<option value="MLI_TL">Mali - Mali TL - Housing Tax</option>
+<option value="MLT_IT">Malta - Malta Income Tax</option>
+<option value="MLT_SS">Malta - Malta Social Security</option>
+<option value="MRT_HI">Mauritania - Mauritania Health Insurance</option>
+<option value="MRT_IT">Mauritania - Mauritania Income Tax</option>
+<option value="MRT_SS">Mauritania - Mauritania Social Security</option>
+<option value="MUS_SS_CSG">Mauritius - Mauritius Social Security - Contribution Sociale Generalisee</option>
+<option value="MUS_SS_NSF">Mauritius - Mauritius Social Security - National Savings Fund</option>
+<option value="MUS_IT">Mauritius - Mauritius Income Tax</option>
+<option value="MUS_SS">Mauritius - Mauritius Social Tax (Blended)</option>
+<option value="MEX_IT">Mexico - Mexico Income Tax</option>
+<option value="MEX_SS">Mexico - Mexico Social Tax</option>
+<option value="MDA_SS_MA">Moldova - Moldova Social Security - Medical Assistance</option>
+<option value="MDA_IT">Moldova - Moldova Income Tax</option>
+<option value="MCO_SS_BR">Monaco - Monaco SS - Basic Retirement</option>
+<option value="MCO_SS_UE">Monaco - Monaco SS - Unemployment</option>
+<option value="MCO_SS_CR">Monaco - Monaco SS - Comp Retirement</option>
+<option value="MCO_IT">Monaco - Monaco Income Tax</option>
+<option value="MNG_IT">Mongolia - Mongolia Income Tax</option>
+<option value="MNG_SS">Mongolia - Mongolia Social Security</option>
+<option value="MNE_IT">Montenegro - Montenegro Income Tax</option>
+<option value="MNE_SS_HI">Montenegro - Montenegro SS Health Insurance</option>
+<option value="MNE_SS_PEN">Montenegro - Montenegro SS - Pension and DI</option>
+<option value="MNE_SS_UE">Montenegro - Montenegro SS - UI</option>
+<option value="MAR_HC">Morocco - Morocco Healthcare</option>
+<option value="MAR_IT">Morocco - Morocco Income Tax</option>
+<option value="MAR_SS">Morocco - Morocco Social Security</option>
+<option value="MOZ_IT">Mozambique - Mozambique Income Tax</option>
+<option value="MOZ_SS">Mozambique - Mozambique Social Security</option>
+<option value="MMR_IT">Myanmar - Myanmar Income Tax</option>
+<option value="MMR_SS">Myanmar - Myanmar Social Security</option>
+<option value="NAM_IT">Namibia - Namibia Income Tax</option>
+<option value="NAM_SS">Namibia - Namibia Social Security</option>
+<option value="NLD_SS">Netherlands - Netherlands Social Tax</option>
+<option value="NLD_IT">Netherlands - Netherlands Income Tax</option>
+<option value="NCL_IT">New Caledonia - New Caledonia Income Tax</option>
+<option value="NCL_SS">New Caledonia - New Caledonia Social Security</option>
+<option value="NZL_SS_PC">New Zealand - New Zealand Social Security - Pension Contribution (KiwiSaver)</option>
+<option value="NZL_SS">New Zealand - New Zealand Social Security</option>
+<option value="NZL_IT">New Zealand - New Zealand Income Tax</option>
+<option value="NIC_IT">Nicaragua - Nicaragua Income Tax</option>
+<option value="NIC_SS">Nicaragua - Nicaragua Social Security</option>
+<option value="NER_IT">Niger - Niger Income Tax</option>
+<option value="NER_SS">Niger - Niger Social Security</option>
+<option value="NGA_IT">Nigeria - Nigeria Income Tax</option>
+<option value="NGA_SS">Nigeria - Nigeria Social Security</option>
+<option value="MKD_IT">North Macedonia - North Macedonia Income Tax</option>
+<option value="MKD_SS">North Macedonia - North Macedonia Social Security</option>
+<option value="NOR_IT">Norway - Norway Income Tax</option>
+<option value="NOR_SS">Norway - Norway Social Security</option>
+<option value="OMN_IT">Oman - Oman Income Tax</option>
+<option value="OMN_SS">Oman - Oman Social Security</option>
+<option value="OTH_SS">Other - Other Social Security</option>
+<option value="OTH_IT">Other - Other Income Tax</option>
+<option value="OTH_SS_ER">Other - Other Employer Social Security</option>
+<option value="OTH-OR_SS">Other - Other Region Social Security</option>
+<option value="OTH-OR_IT">Other - Other Region Income Tax</option>
+<option value="OTH-OR-OM_IT">Other - Other City Income Tax</option>
+<option value="OTH-OS_IT">Other - Other State Income Tax</option>
+<option value="OTH-OS_SS_ER">Other - Other State Employer Social Security</option>
+<option value="OTH-OS_OM_IT">Other - Other US Muni Income Tax</option>
+<option value="PAK_IT">Pakistan - Pakistan Income Tax</option>
+<option value="PAK_SS">Pakistan - Pakistan Social Security</option>
+<option value="PAN_SS">Panama - Panama Social Tax</option>
+<option value="PAN_IT">Panama - Panama Income Tax</option>
+<option value="PNG_IT">Papua New Guinea - Papua New Guinea Income Tax</option>
+<option value="PNG_SS">Papua New Guinea - Papua New Guinea Social Security</option>
+<option value="PRY_IT">Paraguay - Paraguay Income Tax</option>
+<option value="PRY_SS">Paraguay - Paraguay Social Security</option>
+<option value="PER_IT">Peru - Peru Income Tax</option>
+<option value="PER_SS">Peru - Peru SocialTax</option>
+<option value="PHL_SS">Philippines - Philippines Social Tax</option>
+<option value="PHL_IT">Philippines - Philippines Income Tax</option>
+<option value="POL_SS">Poland - Poland Social Tax</option>
+<option value="POL_IT">Poland - Poland Income Tax</option>
+<option value="POL_DF">Poland - Poland SS - Disability Fund</option>
+<option value="POL_HI">Poland - Poland HI</option>
+<option value="POL_IF">Poland - Poland SS - Illness Fund</option>
+<option value="POL_PF">Poland - Poland SS - Pension Fund</option>
+<option value="PRT_SS">Portugal - Portugal Social Security</option>
+<option value="PRT_IT">Portugal - Portugal Income Tax</option>
+<option value="PRI_SS">Puerto Rico - Puerto Rico Medicare</option>
+<option value="PRI_IT">Puerto Rico - Puerto Rico Income Tax</option>
+<option value="PRI_FICA">Puerto Rico - Puerto Rico FICA</option>
+<option value="PRI_ED">Puerto Rico - Puerto Rico Social Security - Employee Disability</option>
+<option value="QAT_IT">Qatar - Qatar Income Tax</option>
+<option value="QAT_SS">Qatar - Qatar Social Security</option>
+<option value="REU_SS_CRDS">R&#233;union - Reunion Social Security - CRDS</option>
+<option value="REU_SS_CSG">R&#233;union - Reunion Social Security - CSG</option>
+<option value="REU_SS_SC">R&#233;union - Reunion Social Security - Social Charge</option>
+<option value="REU_IT">R&#233;union - Reunion Income Tax</option>
+<option value="REU_SS">R&#233;union - Reunion Social Security (Blended)</option>
+<option value="ROU_SS">Romania - Romania Social Tax</option>
+<option value="ROU_IT">Romania - Romania Income Tax</option>
+<option value="RUS_IT">Russian Federation - Russian Federation Income Tax</option>
+<option value="RUS_SS">Russian Federation - Russian Federation Social Security</option>
+<option value="RWA_IT">Rwanda - Rwanda Income Tax</option>
+<option value="RWA_SS">Rwanda - Rwanda Social Security</option>
+<option value="RWA_SS_CBHI">Rwanda - Rwanda Social Security - Community Based Health Insurance</option>
+<option value="KNA_SS">Saint Kitts and Nevis - Saint Kitts Social Security</option>
+<option value="KNA_IT">Saint Kitts and Nevis - Saint Kitts Income Tax</option>
+<option value="STP_IT">Sao Tome and Principe - Sao Tome and Principe IT</option>
+<option value="STP_SS">Sao Tome and Principe - Sao Tome and Principe SS</option>
+<option value="SAU_IT">Saudi Arabia - Saudi Arabia Income Tax</option>
+<option value="SAU_SS">Saudi Arabia - Saudi Arabia Social Security</option>
+<option value="SEN_IT">Senegal - Senegal Income Tax</option>
+<option value="SEN_SS">Senegal - Senegal Social Security</option>
+<option value="SRB_IT">Serbia - Serbia Income Tax</option>
+<option value="SRB_SS">Serbia - Serbia Social Security</option>
+<option value="SYC_SS_ER">Seychelles - Seychelles Employer SS (NMBT)</option>
+<option value="SYC_IT">Seychelles - Seychelles Income Tax</option>
+<option value="SYC_SS">Seychelles - Seychelles Social Security</option>
+<option value="SLE_IT">Sierra Leone - Sierra Leone Income Tax</option>
+<option value="SLE_SS">Sierra Leone - Sierra Leone Social Security</option>
+<option value="SGP_SS">Singapore - Singapore Social Security</option>
+<option value="SGP_IT">Singapore - Singapore Income Tax</option>
+<option value="SVK_IT">Slovakia - Slovakia Income Tax</option>
+<option value="SVK_PI">Slovakia - Slovakia Social Security - Pension Insurance</option>
+<option value="SVK_HI">Slovakia - Slovakia Social Security - Health Insurance</option>
+<option value="SVK_DI">Slovakia - Slovakia Social Security - Disability Insurance</option>
+<option value="SVK_SLI">Slovakia - Slovakia Social Security - Sick Leave Insurance</option>
+<option value="SVK_UI">Slovakia - Slovakia Social Security - Unemployment Insurance</option>
+<option value="SVN_IT">Slovenia - Slovenia Income Tax</option>
+<option value="SVN_SS">Slovenia - Slovenia Social Security</option>
+<option value="ZAF_SDL">South Africa - South Africa SDL</option>
+<option value="ZAF_SS">South Africa - South Africa Social Tax</option>
+<option value="ZAF_IT">South Africa - South Africa Income Tax</option>
+<option value="KOR_IT">South Korea - Korea Income Tax</option>
+<option value="KOR_SS_NP">South Korea - Korea SS (National Pension)</option>
+<option value="KOR_SS_NH">South Korea - Korea SS (National Health)</option>
+<option value="KOR_SS_EI">South Korea - Korea SS Employment Insurance</option>
+<option value="KOR_RT">South Korea - South Korea Resident Tax</option>
+<option value="ESP_SS_GR">Spain - Spain Social Security - General Risks</option>
+<option value="ESP_SS_MEI">Spain - Spain Social Security - Intergenerational Equity Mechanism</option>
+<option value="ESP_SS_PET">Spain - Spain Social Security - Professional Education and Training</option>
+<option value="ESP_SS_SSC">Spain - Spain Social Security - Solidarity Charge</option>
+<option value="ESP_SS_UI">Spain - Spain Social Security - Unemployment Insurance</option>
+<option value="ESP_IT">Spain - Spain Income Tax</option>
+<option value="ESP_SS">Spain - Spain Social Security (Blended)</option>
+<option value="LKA_IT">Sri Lanka - Sri Lanka Income Tax</option>
+<option value="LKA_SS">Sri Lanka - Sri Lanka Social Security</option>
+<option value="SDN_IT">Sudan - Sudan Income Tax</option>
+<option value="SDN_SS">Sudan - Sudan Social Security</option>
+<option value="SUR_IT">Suriname - Suriname Income Tax</option>
+<option value="SUR_SS">Suriname - Suriname Social Security</option>
+<option value="SWE_SS">Sweden - Sweden Social Tax</option>
+<option value="SWE_IT">Sweden - Sweden Income Tax</option>
+<option value="CHE_IT">Switzerland - Switzerland Income Tax</option>
+<option value="CHE_SS">Switzerland - Switzerland Social Security</option>
+<option value="CHE-AG_IT">Switzerland - Aargau Income Tax</option>
+<option value="CHE-AR_IT">Switzerland - Appenzell Ausserrhoden IT</option>
+<option value="CHE-AI_IT">Switzerland - Appenzell Innerrhoden IT</option>
+<option value="CHE-BL_IT">Switzerland - Basel-Land Income tax</option>
+<option value="CHE-BS_IT">Switzerland - Basel-Stadt Income Tax</option>
+<option value="CHE-BE_IT">Switzerland - Berne Income Tax</option>
+<option value="CHE-FR_IT">Switzerland - Fribourg Income Tax</option>
+<option value="CHE-GE_IT">Switzerland - Geneva Income Tax</option>
+<option value="CHE-GL_IT">Switzerland - Glarus Income Tax</option>
+<option value="CHE-GR_IT">Switzerland - Graubunden Income Tax</option>
+<option value="CHE-JU_IT">Switzerland - Jura Income Tax</option>
+<option value="CHE-LU_IT">Switzerland - Luzern Income Tax</option>
+<option value="CHE-NE_IT">Switzerland - Neuchatel Income Tax</option>
+<option value="CHE-NW_IT">Switzerland - Nidwalden Income Tax</option>
+<option value="CHE-OW_IT">Switzerland - Obwalden Income Tax</option>
+<option value="CHE-OR_IT">Switzerland - Generic Swiss Canton</option>
+<option value="CHE-SH_IT">Switzerland - Schaffhausen Income Tax</option>
+<option value="CHE-SZ_IT">Switzerland - Schwyz Income Tax</option>
+<option value="CHE-SO_IT">Switzerland - Solothurn Income Tax</option>
+<option value="CHE-SG_IT">Switzerland - St Gallen Income Tax</option>
+<option value="CHE-TG_IT">Switzerland - Thurgau Income Tax</option>
+<option value="CHE-TI_IT">Switzerland - Ticino Income Tax</option>
+<option value="CHE-UR_IT">Switzerland - Uri Income Tax</option>
+<option value="CHE-VS_IT">Switzerland - Valais Income Tax</option>
+<option value="CHE-VD_IT">Switzerland - Vaud Income Tax</option>
+<option value="CHE-ZG_IT">Switzerland - Zug Income Tax</option>
+<option value="CHE-ZH_IT">Switzerland - Zurich Income Tax</option>
+<option value="TWN_IT">Taiwan, Republic of China (ROC) - Taiwan Income Tax</option>
+<option value="TWN_SS">Taiwan, Republic of China (ROC) - Taiwan SS (Labour Insurance)</option>
+<option value="TWN_HI">Taiwan, Republic of China (ROC) - Taiwan SS (Health Insurance)</option>
+<option value="TJK_IT">Tajikistan - Tajikistan Income Tax</option>
+<option value="TJK_SS">Tajikistan - Tajikistan Social Security</option>
+<option value="TZA_SDL">Tanzania - Tanzania SDL</option>
+<option value="TZA_IT">Tanzania - Tanzania Income Tax</option>
+<option value="TZA_SS">Tanzania - Tanzania Social Security</option>
+<option value="THA_SS">Thailand - Thailand Social Tax</option>
+<option value="THA_IT">Thailand - Thailand Income Tax</option>
+<option value="TGO_IT">Togo - Togo Income Tax</option>
+<option value="TGO_SS">Togo - Togo Social Security</option>
+<option value="TGO_SS_UHI">Togo - Togo Social Security - Universal Health Insurance</option>
+<option value="TTO_IT">Trinidad and Tobago - Trinidad and Tobago Income Tax</option>
+<option value="TTO_SS_HS">Trinidad and Tobago - Trinidad and Tobago SS HS</option>
+<option value="TTO_SS_NI">Trinidad and Tobago - Trinidad and Tobago SS NI</option>
+<option value="TUN_IT">Tunisia - Tunisia Income Tax</option>
+<option value="TUN_SS">Tunisia - Tunisia Social Security</option>
+<option value="TUR_SS">Turkey - Turkey Social Security (Blended)</option>
+<option value="TUR_IT">Turkey - Turkey Income Tax</option>
+<option value="TUR_SS_DI">Turkey - Turkey Social Security - Disability and Old Age</option>
+<option value="TUR_SS_SI">Turkey - Turkey Social Security - Sickness</option>
+<option value="TUR_SS_UI">Turkey - Turkey Social Security - Unemployment</option>
+<option value="TKM_IT">Turkmenistan - Turkmenistan Income Tax</option>
+<option value="TKM_SS">Turkmenistan - Turkmenistan Social Tax</option>
+<option value="USA-GA_UI">Tuvalu - Georgia Disability Insurance (to delete)</option>
+<option value="HUN_HCC">Tuvalu - Hungary Health Care</option>
+<option value="MDA_SS">Tuvalu - Moldova Social Security - to delete</option>
+<option value="GRC_SC">Tuvalu - To be deleted</option>
+<option value="ITA_IT_FS">Tuvalu - Italy - FS tax - to delete</option>
+<option value="USA-WA_MLI">Tuvalu - Washington SS - Medical Leave Insurance (inactive)to delete</option>
+<option value="USA-OR_WCT">Tuvalu - Oregon SS - Employee Worker Compensation (to delete)</option>
+<option value="USA-WA_EWC">Tuvalu - Washington SS - Employee Worker Compensation - to delete</option>
+<option value="GBR_SS_ER_HSC">Tuvalu - UK Employer Social Security - Health and Social Care to delete</option>
+<option value="GBR_SS_HSC">Tuvalu - UK Social Security - Health and Social Care to delete</option>
+<option value="HUN_HL">Tuvalu - Hungary Health - to delete</option>
+<option value="HUN_UE">Tuvalu - Hungary Unemployment - to delete</option>
+<option value="HUN_PEN">Tuvalu - Hungary Pension - to delete</option>
+<option value="UGA_IT">Uganda - Uganda Income Tax</option>
+<option value="UGA_SS">Uganda - Uganda Social Security</option>
+<option value="UKR_SS">Ukraine - Ukraine Social Tax</option>
+<option value="UKR_IT">Ukraine - Ukraine Income Tax</option>
+<option value="ARE_IT">United Arab Emirates - United Arab Emirates IT</option>
+<option value="ARE_SS">United Arab Emirates - United Arab Emirates SS</option>
+<option value="GBR_SS">United Kingdom - UK Social Security</option>
+<option value="GBR_IT">United Kingdom - UK Income Tax</option>
+<option value="GBR_SS_EER">United Kingdom - UK EE Paid ER Social Security</option>
+<option value="GBR_SS_ER">United Kingdom - UK Employer Social Security</option>
+<option value="USA_SS-A">United States - USA FICA Medicare Additional</option>
+<option value="USA_SS_ER_FICA">United States - USA Employer Social Security - FICA</option>
+<option value="USA_SS_ER_FUTA">United States - USA Employer Social Security - FUTA</option>
+<option value="USA_SS_ER_MED">United States - USA Employer Social Security - Medicare</option>
+<option value="USA_FICA">United States - USA FICA Social Security</option>
+<option value="USA_SS">United States - USA FICA Medicare</option>
+<option value="USA_IT">United States - USA Income Tax</option>
+<option value="USA-AL_IT">United States - Alabama Income Tax</option>
+<option value="USA-AK_IT">United States - Alaska Income Tax</option>
+<option value="USA-AK_UI">United States - Alaska Unemployment Insurance</option>
+<option value="USA-AZ_IT">United States - Arizona Income Tax</option>
+<option value="USA-AR_IT">United States - Arkansas Income Tax</option>
+<option value="USA-CA_IT">United States - California Income tax</option>
+<option value="USA-CA_DI">United States - California DI</option>
+<option value="USA-CO_FMLI">United States - Colorado SS - Family and Medical Leave Insurance</option>
+<option value="USA-CO_IT">United States - Colorado Income Tax</option>
+<option value="USA-CT_IT">United States - Connecticut Income Tax</option>
+<option value="USA-CT_FLI">United States - Connecticut SS - Family Leave Insurance</option>
+<option value="USA-DE_SS-PFLT">United States - Delaware SS - Paid Family Leave Tax</option>
+<option value="USA-DE_SS-PLB">United States - Delaware SS - Parental Leave Benefit</option>
+<option value="USA-DE_IT">United States - Delaware Income Tax</option>
+<option value="USA-DE-WIL_IT">United States - Wilmington Income Tax</option>
+<option value="USA-FL_IT">United States - Florida Income Tax</option>
+<option value="USA-GA_IT">United States - Georgia Income Tax</option>
+<option value="USA-HI_IT">United States - Hawaii Income Tax</option>
+<option value="USA-HI_DI">United States - Hawaii SS - Disability Insurance</option>
+<option value="USA-HI_ETT">United States - Hawaii SS - Employment Training Tax</option>
+<option value="USA-ID_IT">United States - Idaho Income Tax</option>
+<option value="USA-IL_IT">United States - Illinois Income Tax</option>
+<option value="USA-IN_IT">United States - Indiana Income Tax</option>
+<option value="USA-IN-MAR_IT">United States - Marion County Income Tax</option>
+<option value="USA-IA_IT">United States - Iowa Income Tax</option>
+<option value="USA-KS_IT">United States - Kansas Income Tax</option>
+<option value="USA-KY_IT">United States - Kentucky Income Tax</option>
+<option value="USA-KY-LUI_IT">United States - Louisville Income Tax</option>
+<option value="USA-KY-DAV_IT">United States - Daviess County Income Tax</option>
+<option value="USA-LA_IT">United States - Louisiana Income Tax</option>
+<option value="USA-ME_IT">United States - Maine Income Tax</option>
+<option value="USA-ME_FMLI">United States - Maine SS - Family and Medical Leave Insurance</option>
+<option value="USA-MD_IT">United States - Maryland Income Tax</option>
+<option value="USA-MA_IT">United States - Massachusetts Income Tax</option>
+<option value="USA-MA_FML">United States - Massachusetts Family Medical Leave</option>
+<option value="USA-MA_PML">United States - Massachusetts Personal Medical Leave</option>
+<option value="USA-MI-BTL_IT">United States - Battle Creek Income Tax</option>
+<option value="USA-MI_IT">United States - Michigan Income Tax</option>
+<option value="USA-MN_IT">United States - Minnesota Income Tax</option>
+<option value="USA-MN_SS-PFL">United States - Minnesota SS - Paid Family Leave Tax</option>
+<option value="USA-MN_SS-PFML">United States - Minnesota SS - Paid Family and Medical Leave</option>
+<option value="USA-MN_SS-PML">United States - Minnesota SS - Paid Medical Leave Tax</option>
+<option value="USA-MS_IT">United States - Mississippi Income Tax</option>
+<option value="USA-MO_IT">United States - Missouri Income Tax</option>
+<option value="USA-KSC_IT">United States - Kansas City Income Tax</option>
+<option value="USA-MT_IT">United States - Montana Income Tax</option>
+<option value="USA-NE_IT">United States - Nebraska Income Tax</option>
+<option value="USA-NV_IT">United States - Nevada Income Tax</option>
+<option value="USA-NH_IT">United States - New Hampshire Income Tax</option>
+<option value="USA-NJ_IT">United States - New Jersey Income Tax</option>
+<option value="USA-NJ_DI">United States - New Jersey DI</option>
+<option value="USA-NJ_UI">United States - New Jersey UI</option>
+<option value="USA-NJ_FLI">United States - New Jersey FLI</option>
+<option value="USA-NJ_SS-WDF">United States - New Jersey SS - Workforce Development Fund</option>
+<option value="USA-NM_IT">United States - New Mexico Income Tax</option>
+<option value="USA-NY_IT">United States - New York Income Tax</option>
+<option value="USA-NY-NYC_IT">United States - New York City Tax</option>
+<option value="USA-NY_PFL">United States - New York Paid Family Leave Tax</option>
+<option value="USA-NY-YON_IT">United States - Yonkers Income Tax</option>
+<option value="USA-NY_DI">United States - New York Disability Insurance</option>
+<option value="USA-NC_IT">United States - North Carolina Income Tax</option>
+<option value="USA-ND_IT">United States - North Dakota Income Tax</option>
+<option value="USA-OH_IT">United States - Ohio Income Tax</option>
+<option value="USA-OH-CIN">United States - Cincinnati Income Tax</option>
+<option value="USA-OH-BKV_IT">United States - Brecksville Income Tax</option>
+<option value="USA-OH-COL">United States - Columbus Income Tax</option>
+<option value="USA-OH-WST">United States - Westerville Income Tax</option>
+<option value="USA-OH-BRK">United States - Brook Park Income Tax</option>
+<option value="USA-OH-TOL">United States - Toledo Income Tax</option>
+<option value="USA-OK_IT">United States - Oklahoma Income Tax</option>
+<option value="USA-OR_IT">United States - Oregon Income Tax</option>
+<option value="USA-OR_FMLI">United States - Oregon SS - Family and Medical Leave Insurance</option>
+<option value="USA-OR_STT">United States - Oregon SS - Statewide Transit Tax</option>
+<option value="USA-PA-PIT_IT">United States - Pittsburgh Income Tax</option>
+<option value="USA-PA-M7P_IT">United States - Moon Township Income Tax</option>
+<option value="USA-PA-SF3_IT">United States - Smithfield/Georges Township IT</option>
+<option value="USA-PA_UI">United States - Pennsylvania UI</option>
+<option value="USA-PA_IT">United States - Pennsylvania Income Tax</option>
+<option value="USA-PA-PHI_IT">United States - Philadelphia Income Tax</option>
+<option value="USA-PR_IT">United States - Puerto Rico State Income Tax</option>
+<option value="USA-RI_DI">United States - Rhode Island SS - Disability Insurance</option>
+<option value="USA-RI_IT">United States - Rhode Island Income Tax</option>
+<option value="USA-SC_IT">United States - South Carolina Income Tax</option>
+<option value="USA-SD_IT">United States - South Dakota Income Tax</option>
+<option value="USA-TN_IT">United States - Tennessee Income Tax</option>
+<option value="USA-TX_IT">United States - Texas Income Tax</option>
+<option value="USA-UT_IT">United States - Utah Income Tax</option>
+<option value="USA-VT_IT">United States - Vermont Income Tax</option>
+<option value="USA-VA_IT">United States - Virginia Income Tax</option>
+<option value="USA-WA_IT">United States - Washington Income Tax</option>
+<option value="USA-WA_FMLI">United States - Washington SS - Family and Medical Leave Insurance</option>
+<option value="USA-WA_SS-FLI">United States - Washington SS - Family Leave Insurance</option>
+<option value="USA-WA_SS-LTCI">United States - Washington SS - Long Term Care Insurance</option>
+<option value="USA-WA_SS-MLI">United States - Washington SS - Medical Leave Insurance</option>
+<option value="USA-DC_IT">United States - District of Columbia IT</option>
+<option value="USA-WV_IT">United States - West Virginia Income Tax</option>
+<option value="USA-WI_IT">United States - Wisconsin Income Tax</option>
+<option value="USA-WY_IT">United States - Wyoming Income Tax</option>
+<option value="URY_IT">Uruguay - Uruguay Income Tax</option>
+<option value="URY_SS_HI">Uruguay - Uruguay Social Security - Health Insurance</option>
+<option value="URY_SS_PF">Uruguay - Uruguay Social Security - Pension Fund</option>
+<option value="URY_SS_LRF">Uruguay - Uruguay Social Security - Labor Reconversion Fund</option>
+<option value="UZB_IT">Uzbekistan - Uzbekistan Income Tax</option>
+<option value="UZB_SS">Uzbekistan - Uzbekistan Social Security Tax</option>
+<option value="VEN_IT">Venezuela - Venezuela Income Tax</option>
+<option value="VEN_SS">Venezuela - Venezuela Social Security</option>
+<option value="VNM_SS">Vietnam - Vietnam Social Security (Blended)</option>
+<option value="VNM_IT">Vietnam - Vietnam Income Tax</option>
+<option value="VNM_SS_HI">Vietnam - Vietnam Social Security - Health Insurance</option>
+<option value="VNM_SS_SI">Vietnam - Vietnam Social Security - Social Insurance</option>
+<option value="VNM_SS_UI">Vietnam - Vietnam Social Security - Unemployment Insurance</option>
+<option value="VIR_SS">Virgin Islands, U.S. - US Virgin Islands SS</option>
+<option value="VIR-IT">Virgin Islands, U.S. - Virgin Islands, US Income Tax</option>
+<option value="YEM_IT">Yemen - Yemen Income Tax</option>
+<option value="YEM_SS">Yemen - Yemen Social Security</option>
+<option value="ZMB_HI">Zambia - Zambia Social Security - Health Insurance</option>
+<option value="ZMB_IT">Zambia - Zambia Income Tax</option>
+<option value="ZMB_SS">Zambia - Zambia Social Security - Pension Insurance</option>
+<option value="ZWE_IT">Zimbabwe - Zimbabwe Income Tax</option>
+<option value="ZWE_SS">Zimbabwe - Zimbabwe Social Security</option>
+<option value="ZNC_IT">zz Non Treaty Country - zz Non Treaty Country Income Tax</option>
+<option value="ZNC_SS">zz Non Treaty Country - zz Non Treaty Country Social Security</option>
+<option value="ZTC_IT">zz Treaty Country - zz Treaty Country Income Tax</option>
+<option value="ZTC_SS">zz Treaty Country - zz Treaty Country Social Security</option>
+        <div class="row">
+            <div class="col-1">
+            <div class="col-3">
+                <select id="planCode" name="planCode" disabled>
+                    <option value="">Please Select...</option>
+                        <option value="OPU" data-awardType="OP" >OPU - Option Exercise</option>
+                        <option value="RSU" data-awardType="RSU" >RSU - Restricted Stock Unit Vest</option>
+                        <option value="CIP" data-awardType="CI" >CIP - Cash Incentive Distribution</option>
+                        <option value="1234" data-awardType="OG" >1234 - Option Grant</option>
+            <div class="col-1 logicSubPlanCodeLabel">
+            <div class="col-3">
+                <select id="planSubCode" name="planSubCode" disabled>
+                    <option value="">Please Select...</option>
+<div id="taxLogicCollections">
+<script nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+        var selectedLogic = $(event.target);
+        var functionKey = selectedLogic.attr("id").replace("-imgExpand", "");
+        if ($('#' + functionKey + '-imgExpand').hasClass("arrowUpIcon") == false) {
+        var selectedLogic = $(event.target);
+        var functionKey = selectedLogic.attr("functionKey");
+        var selectedValue = $("input[functionKey='" + functionKey + "']:checked").val();
+        if (selectedValue === "False") {
+        else if (selectedValue === "True") {
+        var selectedLogic = $(event.target);
+        var functionKey = selectedLogic.attr("id").replace("-addLogic", "");
+        if ($('#' + functionKey + '-addLogic').is(':checked') === true) {
+        var selectedLogic = $(event.target);
+        var key = selectedLogic.attr("id").replace("-save", "");
+        var model = $("#" + key + "-frmTaxLogic *").serializeArray();
+        var selectedLogic = $(event.target);
+        var liabilityType = selectedLogic.attr("id").replace("-saveNote", "");
+        var key = selectedLogic.attr("id").replace("-saveNote", "-NoteSection");
+        var model = $("#" + liabilityType + "-frmTaxLogicNote *").serializeArray();
+        var confirmChange = true;
+        if ($('#serverDesignation').val() == 'PRODUCTION') {
+            confirmChange = confirm('You are about to make tax logic changes directly to a production server, are you sure you wish to continue?');
+                    if (response.messageType == "Error") {
+        var selectedLogic = $(event.target);
+        var key = selectedLogic.attr("id").replace("-back", "");
+        var disabled = $("#" + key + "-frmTaxLogic").find(':input:disabled').removeAttr('disabled');
+        var model = $("#" + key + "-frmTaxLogicHistory *").serializeArray();
+        var selectedLogic = $(event.target);
+        var key = selectedLogic.attr("id").replace("-forward", "");
+        var model = $("#" + key + "-frmTaxLogicHistory *").serializeArray();
+                var effectiveTo = $("#" + key + "-frmTaxLogic input[name=effectiveTo]").val();
+<form action="/gettaxcalcbac/ClientTaxLogic" id="frmPostClientTaxLogic" method="post" name="frmPostClientTaxLogic"><input name="__RequestVerificationToken" type="hidden" value="Kbf3y3gMTFIRoz3jGBdyh6d05IIcIBoLIPIKTln_FatXyMjbC4Oyh1-H3Z1HnlGwPVmTTuWi7q5uG_3T1o9dkKbjoMBUM5YJDiFE0_NKkJ41" /><input id="awardTypeKey" name="awardTypeKey" type="hidden" value="" /><input id="logicType" name="logicType" type="hidden" value="clientJurisdiction" /><input id="planCode" name="planCode" type="hidden" value="" /><input id="jurisdiction" name="jurisdiction" type="hidden" value="" /><input id="planSubCode" name="planSubCode" type="hidden" value="" /></form>
+<style nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+<script nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+        var form = document.getElementById("frmClientTaxLogic");
+        var selectedAwardType = $("#planCode option:selected").attr("data-awardType");
+        form.action = "/gettaxcalcbac/ClientTaxLogic";
+        var form = document.getElementById("frmClientTaxLogic");
+        form.action = "/gettaxcalcbac/ClientTaxLogic/Refresh";
+        var form = document.getElementById("frmPostClientTaxLogic");
+        form.action = action;
+                    <div class="feedbackOuter">
+                        <div class="feedbackInner" id="feedbackInner">
+                <div id="footer">
+                        <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">var theDate = new Date(); document.write(theDate.getFullYear());</script>
+                        <a class="js-privacy-window">Privacy</a> | <a class="js-legal-window">Legal</a>
+    <form id="frmNAV" name="frmNAV" action="" method="post">
+        <input type="hidden" id="txtTreeViewSelection" name="txtTreeViewSelection" />
+        <input type="hidden" id="txtShowRSS" name="txtShowRSS" />
+        <input type="hidden" id="txtAdditionalArg" name="txtAdditionalArg" />
+        <input type="hidden" id="txtExpandedMenus" name="txtExpandedMenus" />
+        <input type="hidden" id="ctl00_txtPageKey" value="665153881ee34f1ba588b056b0f3abeb">
+    <form id="quickSearchForm" name="quickSearchForm" action="/gettaxcalcbac/Home/QuickSearch" method="post">
+        <input type="hidden" id="quickSearchType" name="quickSearchType" />
+        <input type="hidden" id="quickSearchValue" name="quickSearchValue" />
+        <input type="hidden" id="quickSearchClientId" name="quickSearchClientId" />
+<form action="/gettaxcalcbac/ClientSelect/ViewClient" id="frmSwitchClient" method="post" name="frmSwitchClient"><input name="__RequestVerificationToken" type="hidden" value="REDJIFEo__jk5Lqb7vwf8eSVkT109J1j0m8bnKKPX8HXP2oKZQqP3mQEgPrI4mdzolsNsWqCLtL3bh5_7Glhyg6XvM-nRMs3DKbkOX_f9Ro1" />            <input type="hidden" class="js-switch-client-id" id="Client.id" name="Client.id" />
+            <input type="hidden" class="js-switch-client-code" id="Client.code" name="Client.code" />
+</form><form Id="logOutForm" Name="logOutForm" action="/gettaxcalcbac/LogOut" method="post"><input name="__RequestVerificationToken" type="hidden" value="q4dv_hZkoY4_cP_tm9tsrPAphCsTiaV19V3cNaCJxe7cH5JYzaB0-lTWpJwOaF7nTJi3bQV76vIqQFeNJVg1C-cqr5NPBb_vuaRKhIJh1Os1" /></form>
+    <form id="adminOverrideForm" name="adminOverrideForm">
+        <input type="hidden" id="userLogin" name="userLogin" />
+    <div id="timeoutMaster" class="hidden" data-id="kcXo/pOCd6hfEF7D5kkuzH/EMVZwoTv5hOLwiZI3ZJ/aoM4plNUZw5x1yDq9Y1Uh+LRCr1A==">
+        <div class="timeoutBackground"></div>
+        <div class="timeoutMessage">
+            <input type="button" value="Continue" class="PageButtonMedium js-reset-timeout">
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+                window.open('https://kpmg.com/us/en/home/misc/privacy.html', '', 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,width=550,height=500,screenX=0,screenY=0,left=100,top=100'); void ('');
+                window.open('http://www.us.kpmg.com/legal.html', '', 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,width=550,height=500,screenX=0,screenY=0,left=100,top=100'); void ('');
+                if (info.active == false || info.expiresIn <= 0) {
+                if (info.active == false || info.expiresIn <= 0) {
+        var timeoutTimer = 0;
+            if (expiresIn <= 120) {
+                timeoutTimer = setTimeout(checkTimeout, expiresIn * 1000);
+                timeoutTimer = setTimeout(checkTimeout, (expiresIn - 120) * 1000);
+            var sectionToShow = $(element).data("node");
+            var opening = $("#" + sectionToShow + "Arrow").hasClass("menuRightArrow") == true;
+    <script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+            var checking = event.target.checked;
+            if (checking === false) {
+            else if ($('.selectCheckBox:checked').length == $('.selectCheckBox').length) {
+            var checked = $(".selectAllCheckBox").prop("checked");
+            if (checked === true) {
+<script type="text/javascript" nonce="KOFlo+hOUAy7jFr3kOHS/GpBSQeYG9iFDODhWraGGd4=">
+<div id="pageLoader" class="hidden">
+    <div><img alt="Please Wait..." id="imgLoader" src="/gettaxcalcbac/images/loader.gif" /></div>
