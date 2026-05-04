@@ -1,638 +1,596 @@
-Story 1: akamaivalidator
-Title: Implement UCAS Debugger Logging in akamaivalidator Lambda
-Description:
-Enhance the akamaivalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of Akamai configurations retrieved, Number of validations performed, Number of pass/fail results
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), query_data(), build_result()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 2: codeqlalertsvalidator
-Title: Implement UCAS Debugger Logging in codeqlalertsvalidator Lambda
-Description:
-Enhance the codeqlalertsvalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of CodeQL alerts retrieved, Number of alerts processed, Number of critical/high/medium/low alerts
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), fetch_alerts(), process_alerts()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 3: control
-Title: Implement UCAS Debugger Logging in control Lambda
-Description:
-Enhance the control Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of controls processed, Number of requirements evaluated, Number of control mappings retrieved
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: process_control(), map_requirements(), validate_mapping()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, core-service
-
-Story 4: cwemapping
-Title: Implement UCAS Debugger Logging in cwemapping Lambda
-Description:
-Enhance the cwemapping Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of CWE mappings processed, Number of successful mappings, Number of unmapped CWEs
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: map_cwe(), retrieve_mappings(), validate_mapping()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 2
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 5: dispatch
-Title: Implement UCAS Debugger Logging in dispatch Lambda
-Description:
-Enhance the dispatch Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of events received, Number of events routed, Routing destinations breakdown
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: dispatch_event(), route_to_validator(), determine_routing()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, core-service
-
-Story 6: ghasvalidator
-Title: Implement UCAS Debugger Logging in ghasvalidator Lambda
-Description:
-Enhance the ghasvalidator Lambda (GitHub Advanced Security) with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of GHAS alerts retrieved, Number of repositories scanned, Number of vulnerabilities by severity
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), fetch_ghas_alerts(), process_vulnerabilities()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 7: gitleaksvalidator
-Title: Implement UCAS Debugger Logging in gitleaksvalidator Lambda
-Description:
-Enhance the gitleaksvalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of Gitleaks findings retrieved, Number of secrets detected, Number of false positives filtered
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), fetch_findings(), filter_false_positives()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, security
-
-Story 8: onboardedvalidator
-Title: Implement UCAS Debugger Logging in onboardedvalidator Lambda
-Description:
-Enhance the onboardedvalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of onboarded applications checked, Number of validation checks performed, Number of pass/fail results
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), check_onboarding_status(), verify_requirements()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 2
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 9: override
-Title: Implement UCAS Debugger Logging in override Lambda
-Description:
-Enhance the override Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of override requests processed, Number of approvals/rejections, Override types breakdown
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: process_override(), validate_override(), apply_override()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, governance
-
-Story 10: pipelinevalidator
-Title: Implement UCAS Debugger Logging in pipelinevalidator Lambda
-Description:
-Enhance the pipelinevalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of pipelines validated, Number of pipeline stages evaluated, Number of pass/fail results by stage
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), check_pipeline_config(), evaluate_stages()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 11: prescription
-Title: Implement UCAS Debugger Logging in prescription Lambda
-Description:
-Enhance the prescription Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of prescriptions generated, Number of remediation actions recommended, Prescription types breakdown
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: generate_prescription(), analyze_findings(), recommend_actions()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 12: resolver
-Title: Implement UCAS Debugger Logging in resolver Lambda
-Description:
-Enhance the resolver Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of resolution attempts, Number of successful resolutions, Number of conflicts detected
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: resolve(), detect_conflicts(), apply_resolution()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, core-service
-
-Story 13: scoring
-Title: Implement UCAS Debugger Logging in scoring Lambda
-Description:
-Enhance the scoring Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of scores calculated, Score distribution (high/medium/low), Number of scoring factors evaluated
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: calculate_score(), evaluate_factors(), aggregate_scores()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 14: servicenow
-Title: Implement UCAS Debugger Logging in servicenow Lambda
-Description:
-Enhance the servicenow Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of ServiceNow tickets created, Number of API calls made, Number of successful/failed operations
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: create_ticket(), update_ticket(), query_servicenow()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement, integration
-
-Story 15: ucasmanager
-Title: Implement UCAS Debugger Logging in ucasmanager Lambda
-Description:
-Enhance the ucasmanager Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of management operations performed, Number of resources managed, Operation types breakdown
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: manage_resources(), perform_operation(), validate_state()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, core-service
-
-Story 16: udcrmrx
-Title: Implement UCAS Debugger Logging in udcrmrx Lambda
-Description:
-Enhance the udcrmrx Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of UDCRM operations processed, Number of prescriptions generated, Operation success rate
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: process_udcrm(), generate_rx(), validate_operation()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement
-
-Story 17: validation
-Title: Implement UCAS Debugger Logging in validation Lambda
-Description:
-Enhance the validation Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of validations performed, Number of pass/fail results, Validation types breakdown
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), execute_validation(), aggregate_results()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, core-service
-
-Story 18: validator_template
-Title: Implement UCAS Debugger Logging in validator_template
-Description:
-Enhance the validator_template with UCAS Debugger functionality using AWS Lambda Powertools to create a standardized logging template for all future validators. This will improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Template-specific metrics (configurable), Number of operations performed, Success/failure counts
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-Template includes inline comments for customization
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), process_data(), build_result()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-Document customization points for specific validator needs
-
-Definition of Done:
-
-Template code updated with logging
-CloudWatch logs show structured JSON format
-Documentation updated with usage examples
-Code review approved
-Template tested with sample validator
-
-Story Points: 5
-Priority: High
-Labels: ucas-debugger, logging, lambda, enhancement, template, core-service
-
-Story 19: venafivalidator
-Title: Implement UCAS Debugger Logging in venafivalidator Lambda
-Description:
-Enhance the venafivalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
-Acceptance Criteria:
-
-All main methods log method_start with timestamp
-All main methods log method_stop with duration
-Key metrics logged: Number of Venafi certificates checked, Number of certificate validations performed, Number of expired/expiring certificates detected
-Structured JSON logging format
-Lambda context automatically injected
-No performance degradation (less than 50ms overhead)
-
-Technical Notes:
-
-Use aws-lambda-powertools[all] package
-Instrument: validate(), fetch_certificates(), check_expiry()
-Log level: INFO for start/stop, DEBUG for detailed metrics
-Include correlation_id for request tracing
-
-Definition of Done:
-
-Code deployed to dev environment
-CloudWatch logs show structured JSON format
-All acceptance criteria validated through manual testing
-Code review approved
-Documentation updated
-
-Story Points: 3
-Priority: Medium
-Labels: ucas-debugger, logging, lambda, enhancement, security
-
-Summary
-PriorityCountStory Points TotalHigh724Medium1236Total1960
-Recommended Implementation Order
-Phase 1 - Core Services (Sprint 1)
-
-validator_template (5 pts)
-dispatch (3 pts)
-control (3 pts)
-validation (3 pts)
-resolver (3 pts)
-
-Phase 2 - Security Validators (Sprint 2)
-6. gitleaksvalidator (3 pts)
-7. venafivalidator (3 pts)
-8. ghasvalidator (3 pts)
-9. codeqlalertsvalidator (3 pts)
-Phase 3 - Other Validators (Sprint 3)
-10. akamaivalidator (3 pts)
-11. pipelinevalidator (3 pts)
-12. onboardedvalidator (2 pts)
-13. cwemapping (2 pts)
-Phase 4 - Supporting Services (Sprint 4)
-14. ucasmanager (3 pts)
-15. override (3 pts)
-16. prescription (3 pts)
-17. scoring (3 pts)
-18. servicenow (3 pts)
-19. udcrmrx (3 pts)
+GET /gettaxcalcbac/clientselect HTTP/2
+Host: qa.gmsgetb.kpmglinkgo.com
+Cookie: TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc; TC-BAC-DEV-XSRF=d2c6ffad61a64e4bbed5a24ed29624d3; OpenIdConnect.nonce.bfsmfHBYeq2MY5dwdRxsiC2r5b0Sfxz9EF1Ur59L3pU%3D=bHZ5Mmx4Mi1pYnhPZEdRQk1uS0xTczV5c051c1dhaHFhWENfblZCWHB1MUVkSFFsTEZGcmQtUExVdzA0SzUtRWRzeTZQMmt0SV9NNTlQQ3F3Q25WRnpRZlN4TzFBLUN4aUNqdEhNRktvRW5Qa0wxeEpCTVp3emNIcWRZdXpKdE8xNDNzcklVa1NoMEVaN3J6SHhhSWRUVHIxZ1d5bXEwajByZUtNYndXb1Y5SWlyZFhwX21pdzVuR2lFMUxWcEw2MFNmYklFT3ladXVfYWc3NW9HaGxONl9tMVhISXdxMnJIdlBiTkxETUZQTQ%3D%3D; .AspNet.Cookies=k0ysvwRvweN_P5s7YtnoNY4fgA5g32tHB4k2RBRodO3icOOVsNa90jky6M1juZSvyU8d1PiVzuf4GXU9ARGlY6Q1mX7-L6IBe39w4mnN0ABvwtuWGsP0uXJujgezbJy3eM5TF0McAmxoRBqjlA9zUz6IMuXbauEXLmX9rVbEkz3HjUGKR5EqWP4INHvkDwrsmMeoRT9p3Z5r4tMFBJtE7f7pHTe1EkwBlQY7_RLU96LI4keSO_MQWVSCodQQK7Yor2EqWsIxbgDTIYi73hzQGKYdPCjbGpSmHExaQdHiIFDODRsl1_Hg7i17xfhVnDahqomjj_-FJ6eFvy5pZLLJuBTHEipXbBxeaeXedBjtV-yuXOBABiPxRHPYt0B5ejUfr_I344V7GT9Z76MfUETwXYZnyEMwq50l4XbgUx_HiwhUDSwXV8I3xcM8STw-TbrQqg3TH3vmUZRI_YeH8Ejb5-sOMzfcNJCf1KnCsIdZKknU67DTYxX_n9Aqv-qdOGvXEsBIvmWCTzoO-l4CY-Jss4WCof8YCWRgq1oFZKiMIT5FubT49xkzS70sQelM9Lj8mYiCL9_9B0H0LDMa3iKFxbDlYah-xVc1XzUpNZezuI3kIYOporoevoA4XTIdq1HmjJqmhN_cDOca-YtA5fjyMnhg5RfFiSOL4nkwj9hvhP2tuKMJt06LAiZggl_x2XbUNH1xsGqMXFhXzqG5tdgOdg8gkfDU5SEPSrh6ukRMigsMhfD_Fi1eiSBJjv4gFEUOtuW4tNa_C6g-69IdiwAlUiwyn4jOPFLvTTrvaMGF8Jli7OHYY-k3CxTUb3JeOYtzFG3VEdyJ4c5__HUlfuSmzg-CbgAFFXG-J1UFxdLhDw8X7zxW2ROWdwYiTJyVWt1nCnFtphpPBCPsYHIJv5M4X-CRA3In-ekVlBWeiztotaa42mJtaD5Q9kA3XUNFmGcKBwoB4O3Zle--dpurTZ4vJzkMEKHrS0kwtDVNxUtASMCVNmIaXhsItHC04ucBJGrv4KN3Uq2XwLJXOdO97c58VsOTOUg70tadjhCtwZjCVN7bNIadKV_QVw_o1bFcZ1yJ1ndpFT0d08IxN8GEYWC_ie62AKTUkg-Drz4UZqG4eVuy8HyQcjxT6zIlioRBsOcK6kbRcICKoXssxZDcV7gV8s18qG-zHicExDiUoC8rVBWQwiDqBXmvOhDv1S8WrSkKyqIBvZdv89XdY2FtB3m-0erAlw5D-B_L33ncY9piZ6-qjQgUDbAvegsyqLQFBINZ9BabuzHQGV9fZ1ZyIc9edhBP4KRVJezR05IZeOkLbYVmadGDnG5oclurIRh2fjvp59cwzZNZt8DO279YE0bmYLd_ilE8Cay7fWh-EWNq-vlwqvKBkVIIRbzt0vazzBHZHsTHma304SKOVTr_b76wgSTg8Fs0L7VaTjSR0xUiYDX6Hm9_RPzWF9VLksHJaUzz2sIxarjCvrsHG9sDp_2-4flxqFN61FmG7vVT9TxVk0Q; __RequestVerificationToken_L2dldHRheGNhbGNiYWM1=Cl41ZHAw2LL3K-2nmHOdFm-Udt1GvwjWoOOlzhSK7seBN7qbf8yCjMrb3YWhmHqFc9NCSeEoaLC_qpBR4xTkkrCJ_MURJY8F_Hzuqkr5qLQ1
+Cache-Control: max-age=0
+Sec-Ch-Ua: "Not-A.Brand";v="24", "Chromium";v="146"
+Sec-Ch-Ua-Mobile: ?0
+Sec-Ch-Ua-Platform: "Windows"
+Accept-Language: en-US,en;q=0.9
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Sec-Fetch-Site: cross-site
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: https://login.microsoftonline.com/
+Accept-Encoding: gzip, deflate, br
+Priority: u=0, i
+
+
+
+HTTP/2 200 OK
+Date: Mon, 04 May 2026 16:18:21 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 28810
+Cache-Control: no-cache, no-store
+Expires: -1
+Pragma: no-cache
+Set-Cookie: TC-BAC-DEV-XSRF=d2c6ffad61a64e4bbed5a24ed29624d3; path=/gettaxcalcbac; secure; HttpOnly
+Vary: Accept-Encoding
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Frame-Options: SAMEORIGIN
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=' 'strict-dynamic'; style-src 'self' 'nonce-RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs='; img-src 'self'; report-uri /gettaxcalcbac/WebService/CspReport;
+X-Xss-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Azure-Ref: 20260504T161821Z-r1999c7fc5dzthzwhC1TEB29u40000000es0000000009u9c
+X-Cache: CONFIG_NOCACHE
+Accept-Ranges: bytes
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9,EmulateIE10,EmulateIE11" />
+    <meta http-equiv="Page-Enter" content="RevealTrans(Duration=0, transition=0)" />
+    <meta http-equiv="Content-Type" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Pragma-directive" content="no-cache" />
+    <meta http-equiv="cache-directive" content="no-cache" />
+    <meta name="csp-nonce" content="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+
+        <title>Client Select</title>
+
+    <!-- Thrid Party Styles -->
+    <link type="text/css" rel="stylesheet" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" href="/gettaxcalcbac/styles/flags.css?v=1.1" />
+    <link type="text/css" rel="stylesheet" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" href="/gettaxcalcbac/styles/calendar-blue.css?v=3.355.202512191322" />
+    <link type="text/css" rel="stylesheet" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" href="/gettaxcalcbac/styles/fontawesome-pro-5.13.0-web/css/all.min.css" />
+    <link type="text/css" rel="stylesheet" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" href="/gettaxcalcbac/styles/fontawesome-pro-5.13.0-web/css/v4-shims.min.css" />
+    
+
+    <!-- Site Style -->
+    <link type="text/css" rel="stylesheet" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" href="/gettaxcalcbac/styles/site.css?v=3.355.202512191322" />
+
+    <!-- Third Party Scripts -->
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/knockout-3.5.1.js"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/knockout.validation.js?v=2.0.4"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/jquery-3.5.1.js"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/json2.js"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/calendar.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/calendar-en.js"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/calendar-setup.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/fingerprint2.js"></script>
+    
+
+    <!-- Site Scripts -->
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/navResizer.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/backgroundtasks.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/commonFunctions.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/site.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/popupWindow.js?v=3.355.202512191322"></script>
+    <!-- Common -->
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/views/help.js?v=3.355.202512191322"></script>
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/views/auditLog.js?v=3.355.202512191322"></script>
+
+    <!-- View Specific -->
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/views/adminVariable.js?v=3.355.202512191322"></script>
+
+    <!-- LJR what is this one? -->
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/locationUtils.js?v=3.355.202512191322"></script>
+
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=" src="/gettaxcalcbac/javascript/appMaster.js?v=3.355.202512191322"></script>
+
+    <!-- Global Variables -->
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+        const rootUrl = "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/";
+        const absolutePath = "/gettaxcalcbac/clientselect";
+        const clientId = "";
+        var isOnfocus = false;
+        var allowEnter = false;
+    </script>
+</head>
+<body>
+    <div id="divMasterPopups">
+        <!-- User to view -->
+        <div class="popDivWin" id="popDivOverride">
+            <div class="popDivWinHead" id="popDivOverrideHead">
+                <div id="popDivOverrideHeadTitle"></div>
+                <div class="popDivWinHeadClose"></div>
+            </div>
+            <div class="popWinBody" id="popDivOverrideBody">
+                <div class="field">
+                    <div class="label">User Login</div>
+                    <div class="inputs">
+                        <input type="text" id="txtUserLogin" name="txtUserLogin" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="popDivWinFooter" id="popDivOverrideFooter">
+                <div class="popDivWinFooterButtons">
+                    <input class="PageButtonMedium" id="btnOverride" type="button" value="OK" name="btnOverride" />
+                    <input class="PageButtonPopDivClose" type="button" value="Cancel" />
+                </div>
+            </div>
+        </div>
+        <!--- Background Tasks -->
+        <div class="popDivWin" id="popDivTasks">
+            <div class="popDivWinHead" id="popDivTasksHead">
+                <div id="popDivTasksHeadTitle"></div>
+                <div class="popDivWinHeadClose"></div>
+            </div>
+            <div class="popWinBody" id="popDivTasksBody">
+                <img id="imgTasksWait" src="/gettaxcalcbac/images/loader.gif" />
+            </div>
+            <div class="popDivWinFooter" id="popDivTasksFooter">
+                <div class="popDivWinFooterButtons">
+                    <input class="PageButtonPopDivClose" type="button" value="Close" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="site">
+        <div class="navbar"><header class="layout-header group" role="banner"><img class='kpmgBannerLogo' title="KPMG LINK GET Tax Calculator - US QA BAC" src="https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/images/newKpmgTopBranding.png" /><div class="app-detail"><span class="app-name">KPMG LINK GET Tax Calculator</span><span class="app-environment">US QA BAC</span></div></header><nav role="navigation"><ul class="menu-main-menu"><li class="current"><a href="#" class='menuLinkPress' data-link='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home' data-menu='system' data-additionalArgs=''>System Settings</a></li></ul></nav><div class="user-menu"><ul><li class="nav-dropdown"><a id="lblCurrentClient" href="#">No Client Selected<i class="whiteArrowDownIcon"></i></a><input type="text" placeholder="Start Typing..." id="clientSelectSearch" autocomplete="off" readonly class='hidden'><ul class="nav-dropdown-content client-dropdown"><li class="client-dropdown-separator">Active Clients</li><li data-client-id="uh/n6LcsZyCr/KWI+uMSoCUBBMix5VtctPLi2kx+7" data-client-code="znpr8RB1rR6IAm9imzXd1mWbIdyytBqGpkWZjjqTaX8cZAFJI" class="pointer"><a>Bank of America-Pen Testing</a></li><li data-client-id="U5zLyNFh/tm8SWls7UHHssnoGDLkhVedMQ3Z+oTgN" data-client-code="9OAjeeovD8FpQ0e/79Bp7SDAIzMcFa0Zbz9Xmh3vbL5U1MFRw" class="pointer"><a>zE2E20260316</a></li></ul></li><li class="nav-dropdown get-id-drop-down"><a id='getIdSearchIcon' class="icon" title="GET ID quick search" href="#"><i class="fa fa-search fa-lg"></i></a><ul class="nav-dropdown-content"><li><select id="getClientIdSelect"><option value="" selected>Unknown</option><option value="BD62KSkIFy5/PAfrzBN82MKK5cXl4yvSJcdQaJzrK">Bank of America-Pen Testing</option><option value="0Q4Ofn3oONRjGO8vY02Co9m3uSSdU2dkLwEz2pYAm">zE2E20260316</option></select></li><li><span class="custom-textbox"><input type="text" id="getIdTextbox" class="get-id-txt" name="getIdTextbox" placeholder="GET Transaction ID"><a id='getIdSearch' href="#"><i class="arrow right"></i></a></span></li></ul></li><li><a class="icon" title="Home" href="https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home"><i class="fa fa-home fa-lg"></i></a></li><li><a class="icon" title="New Window" href="https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home" target="_blank"><i class="fa fa-clone fa-lg"></i></a></li><li class="nav-dropdown"><a href="#">Ankan  Bose (PenTest)<i class="whiteArrowDownIcon"></i></a><ul class="nav-dropdown-content"><li><a class='logOut' href="#">Log Out</a></li></ul></li></ul></div></div>
+        <div id="body">
+
+            <div id="menu"><div id="collapsed-menu" class='hidden' title ="Show Menu"><i class="menuExpandIcon"></i></div><div id="expanded-menu"><div class="row"><div class="col-10"> <h1>System Settings</h1> </div><div class="col" id='expandedLeftMenu'><i class="menuCollapseIcon" title="Collapse Menu"></i></div></div><div class="menuHeader row" data-node='system'><div class="col-10">System Settings</div><div class="col"><i id="systemArrow" class="menuDownArrow"></i></div></div><div id="system" class="menu-content "><div class="menuItem openPage paddingLevelOne selected" data-url='https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect' data-link-path='system/system/clientSelect' data-arg=''>Select Client</div></div></div></div>
+            <div id="content" class="sideMenuWidthOpened">
+                <div id="content-detail">
+                    
+
+
+
+<form action="/gettaxcalcbac/ClientSelect" id="frmClientSelect" method="post" name="frmClientSelect"><input name="__RequestVerificationToken" type="hidden" value="vniXpYAl64nWkRnwrmtr7T0i6qzggXWX2AlEBXYVfrXJpDC24JgTRoeJh-FEGoX8WBwm68qE-38T5epNsefFOzINB5CVKDNANBP-_Tj2EC7Y34TSW0o7nJvmj2VCi0614arimtj1NIZeATKGmwQFHg2" />    <input type="hidden" id="client_id" name="client.Id" value='' />
+    <input type="hidden" id="client_code" name="client.code" value='' />
+    <input type="hidden" id="client_shardName" name="client.ShardName" value='0' />
+    <input type="hidden" id="client_active" name="client.Active" />
+    <input type="hidden" id="selectedTab" name="SelectedTab" value="Active" />
+</form>
+
+<h1>Client Select</h1>
+<div id="divClientSelect">
+
+
+
+<table id="ClientSelectTable" class="grdTable">
+    <tr class="grdHead">
+        <td>Id</td>
+        <td>Name</td>
+        <td>Code</td>
+        <td>Shard name </td>
+    </tr>
+        <tr class="tableRow">
+            <td>30</td>
+            <td><a class="js-view-client" data-encryptedId="sMj31jU79N4EqnsSLstsi3TZywsHxA4607NUEAzcV" data-shard-name="Main" data-client-code="W/QeBpEaLD2ZB2EDeWTGkanRZZbVI1JR0FxH5pwKynrK1Z5fA">Bank of America-Pen Testing</a></td>
+            <td>1003814T</td>
+            <td>Main</td>
+        </tr>
+        <tr class="tableRow">
+            <td>98</td>
+            <td><a class="js-view-client" data-encryptedId="h1JabNuQChMprailthC4EINkzIaZTFkqgGDdw6lBL" data-shard-name="Main" data-client-code="y9f+h0uYRfs/K/Vyxy9aBy7MwHRtU/tJx+bkkoET7RzlV69Nu">zE2E20260316</a></td>
+            <td>20260316</td>
+            <td>Main</td>
+        </tr>
+</table>
+</div>
+
+
+<style nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+    #js-add-client {
+        width: 80px;
+    }
+
+    #bannerTabActive {
+        margin-left: 10px;
+    }
+
+    #popDivClient {
+        left: 58px;
+        top: 54px;
+    }
+
+    #clientName {
+        width: 200px;
+    }
+
+    #clientCode {
+        width: 200px;
+    }
+
+    #clientPassword {
+        width: 200px;
+    }
+
+    #clientNameInputField {
+        width: 200px;
+    }
+
+    #clientNameInputField {
+        width: 200px;
+    }
+
+    #clientPasswordInputField {
+        width: 200px;
+    }
+
+    #ClientSelectTable td:first-child {
+        /* Styles for Id column */
+        width: 20px;
+    }
+
+    #ClientSelectTable td:nth-child(2) {
+        /* Styles for Name column */
+        width: 250px;
+    }
+
+    #ClientSelectTable td:nth-child(3) {
+        /* Styles for Code column */
+        width: 120px;
+    }
+
+    #ClientSelectTable td:nth-child(4) {
+        /* Styles for Password column */
+        width: 100px;
+    }
+
+    #ClientSelectTable td:nth-child(5) {
+        /* Styles for Control column */
+        width: 30px;
+    }
+
+    #ClientSelectTable td:nth-child(6) {
+        /* Styles for Edit column */
+        width: 30px;
+    }
+
+    #ClientSelectTable td:nth-child(7) {
+        /* Styles for Delete column */
+        width: 30px;
+    }
+
+    #ClientSelectTable td:nth-child(8) {
+        /* Styles for Active column */
+        width: 30px;
+    }
+</style>
+                    <div class="feedbackOuter">
+                        <div class="feedbackInner" id="feedbackInner">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div id="footer">
+                    <p>GET Tax Calc 3.355  (19 Dec 2025) : Page Load Time: 15.5579ms</p>
+                    <p>
+                        &copy;
+                        <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">var theDate = new Date(); document.write(theDate.getFullYear());</script>
+                        KPMG International Cooperative ("KPMG International"), a Swiss entity. Member firms of the KPMG network of independent firms are affiliated with KPMG International.
+                        KPMG International provides no client services. No member firm has any authority to obligate or bind KPMG International or any other member firm vis-à-vis third parties,
+                        nor does KPMG International have any such authority to obligate or bind any member firm. All rights reserved.
+                        The KPMG name and logo are registered trademarks or trademarks of KPMG International.
+                    </p>
+                    <p>
+                        <a class="js-privacy-window">Privacy</a> | <a class="js-legal-window">Legal</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <form id="frmNAV" name="frmNAV" action="" method="post">
+        <input type="hidden" id="txtTreeViewSelection" name="txtTreeViewSelection" />
+        <input type="hidden" id="txtShowRSS" name="txtShowRSS" />
+        <input type="hidden" id="txtAdditionalArg" name="txtAdditionalArg" />
+        <input type="hidden" id="txtExpandedMenus" name="txtExpandedMenus" />
+        <input type="hidden" id="ctl00_txtPageKey" value="d2c6ffad61a64e4bbed5a24ed29624d3">
+    </form>
+
+    <form id="quickSearchForm" name="quickSearchForm" action="/gettaxcalcbac/Home/QuickSearch" method="post">
+        <input type="hidden" id="quickSearchType" name="quickSearchType" />
+        <input type="hidden" id="quickSearchValue" name="quickSearchValue" />
+        <input type="hidden" id="quickSearchClientId" name="quickSearchClientId" />
+    </form>
+
+<form action="/gettaxcalcbac/ClientSelect/ViewClient" id="frmSwitchClient" method="post" name="frmSwitchClient"><input name="__RequestVerificationToken" type="hidden" value="wudO8VPSSfe5MiToIBS8vbk3KQ8k8t79-BB1G_KD1YYElMqW9IGvRXuYKAlPUi3esO1zbBRMSMV7RzHI8akc9YtXQQVhli2ipUsfjg9wZ6WNQaG-4lzb4Z0o43psNKtS7jOnLp5HKjCr27de3fGoIA2" />            <input type="hidden" class="js-switch-client-id" id="Client.id" name="Client.id" />
+            <input type="hidden" class="js-switch-client-code" id="Client.code" name="Client.code" />
+</form><form Id="logOutForm" Name="logOutForm" action="/gettaxcalcbac/LogOut" method="post"><input name="__RequestVerificationToken" type="hidden" value="uD_QLWJvb43jc1PYMyU6AcoazSDHnc_ceQ3ANXHqbsglu1NSW4lOz3cL7kdvpgfWndsiuVr85OpMSkEm3eX1-D7ACxLfRPxHIKyJS8nDPQ_q098Gx5btCtfC8UXqCZ_Du-GnRyzMSq2BjrswZOkdLA2" /></form>
+    <form id="adminOverrideForm" name="adminOverrideForm">
+        <input type="hidden" id="userLogin" name="userLogin" />
+    </form>
+
+    <div id="timeoutMaster" class="hidden" data-id="ktRPjmXluYuOfwK+rkIvKLWnzDeJe0SQzMrBbDv1xRWCETVbjDyZHhEqErmPzwlGlW1FsJw==">
+        <div class="timeoutBackground"></div>
+        <div class="timeoutMessage">
+            <h1>Warning!</h1>
+            Your KPMG GET Tax Calculator session has been inactive and is about to expire.<br>
+            <br>
+            To continue working within KPMG GET Tax Calculator, please click Continue.<br>
+            <br>
+            <input type="button" value="Continue" class="PageButtonMedium js-reset-timeout">
+        </div>
+    </div>
+
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+
+        $(document).ready(function () {
+            checkTimeout();
+            $(".js-reset-timeout").on('click', function () {
+                resetTimeout();
+            });
+            $(".js-privacy-window").on('click', function () {
+                window.open('https://kpmg.com/us/en/home/misc/privacy.html', '', 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,width=550,height=500,screenX=0,screenY=0,left=100,top=100'); void ('');
+            });
+            $(".js-legal-window").on('click', function () {
+                window.open('http://www.us.kpmg.com/legal.html', '', 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,width=550,height=500,screenX=0,screenY=0,left=100,top=100'); void ('');
+            });
+        });
+
+        function resetTimeout() {
+            $("#timeoutMaster").hide();
+            $.post(rootUrl + "session/keepalive", function (info) {
+                if (info.active == false || info.expiresIn <= 0) {
+                    logOut();
+                    return;
+                }
+                scheduleTimeout(info.expiresIn);
+            });
+        }
+
+        function checkTimeout() {
+            $.post(rootUrl + "session/info", { id: $("#timeoutMaster").attr("data-id") }, function (info) {
+                if (info.active == false || info.expiresIn <= 0) {
+                    logOut();
+                    return;
+                }
+                scheduleTimeout(info.expiresIn);
+            });
+        }
+
+        var timeoutTimer = 0;
+        function scheduleTimeout(expiresIn) {
+            clearTimeout(timeoutTimer);
+            if (expiresIn <= 120) {
+                $("#timeoutMaster").show();
+                timeoutTimer = setTimeout(checkTimeout, expiresIn * 1000);
+            } else {
+                $("#timeoutMaster").hide();
+                timeoutTimer = setTimeout(checkTimeout, (expiresIn - 120) * 1000);
+            }
+        }
+
+        function showSelectedSection(element) {
+            var sectionToShow = $(element).data("node");
+            var opening = $("#" + sectionToShow + "Arrow").hasClass("menuRightArrow") == true;
+            if (opening) {
+                $("#" + sectionToShow + "Arrow").removeClass().addClass("menuDownArrow");
+                $("#" + sectionToShow).css("display", "block");
+            }
+            else {
+                $("#" + sectionToShow + "Arrow").removeClass().addClass("menuRightArrow");
+                $("#" + sectionToShow).css("display", "none");
+
+            }
+        }
+
+    </script>
+
+    
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+        var container = $('#divClient');
+
+        $(document).ready(function () {
+            setSelectedTab('Active');
+            bindEvents();
+        });
+
+        $(document).on('click', '.js-edit-client', function () { editClient($(this).data('encryptedid'), $(this).data('shard-name'), $(this).data('client-code')); });
+        $(document).on('click', '.js-view-client', function () { viewClient($(this).data('encryptedid'), $(this).data('shard-name'), $(this).data('client-code')); });
+        $(document).on('click', '.js-control-client', function () { viewControlClient($(this).data('encryptedid'), $(this).data('shard-name'), $(this).data('client-code')); });
+        $(document).on('click', '.js-delete-client', function () { deleteClient($(this).data('encryptedid'), $(this).data('shard-name'), $(this).data('client-code')); });
+        $(document).on('click', '.js-update-active-state', function () { updateActiveState($(this).data('encryptedid'), $(this).data('shard-name'), $(this).data('client-code'), $(this).data('isactive')); });
+
+        function bindEvents() {
+            $('#js-add-client').on('click', function() { showAddPopup() });
+            $('#js-download-clients').on('click', function () { downloadClients() });
+            $('#divTabMiddleActive').on('click', function() { changeTab('Active'); });
+            $('#divTabMiddleInactive').on('click', function() { changeTab('Inactive'); });
+        }
+
+        function setSelectedTab(selectedTab) {
+            $('#selectedTab').val(selectedTab);
+            $(".tabTitle").removeClass("selectedTab");
+            $(".tabTitle[data-tab-key='" + selectedTab + "']").addClass("selectedTab");
+        }
+
+        function updateList() {
+            const frm = document.getElementById("frmClientSelect");
+            $.ajax({
+                type: "POST",
+                url: "/gettaxcalcbac/clientselect/List",
+                data: $(frm).serializeArray(),
+                dataType: "html",
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                success: function (result) {
+                    $("#divClientSelect").html(result);
+                },
+                error: function (data) {
+                }
+            });
+        }
+
+        function changeTab(selectedTab) {
+            setSelectedTab(selectedTab);
+            updateList();
+        }
+
+        function showAddPopup() {
+            container.hide();
+            $('#client_id').val("");
+            $('#client_code').val("");
+            const frm = document.getElementById("frmClientSelect");
+
+            $.ajax({
+                type: "POST",
+                url: "/gettaxcalcbac/clientselect/AddClient",
+                data: $(frm).serializeArray(),
+                success: function (responseHtml) {
+                    container.html(responseHtml);
+                    container.show();
+                    setUpPopupWindows();
+                    showPopupByIdMiddle('Add Client', 'popDivClient');
+                },
+                error: function (data) {
+                }
+            });
+        }
+
+        function editClient(encryptedId, shardName, encryptedCode) {
+            $('#frmClientSelect #client_id').val(encryptedId);
+            $('#frmClientSelect #client_shardName').val(shardName);
+            $('#frmClientSelect #client_code').val(encryptedCode);
+
+            const frm = document.getElementById("frmClientSelect");
+            container.hide();
+            $.ajax({
+                type: "POST",
+                url: "/gettaxcalcbac/clientselect/EditClient",
+                data: $(frm).serializeArray(),
+                success: function (responseHtml) {
+                    container.html(responseHtml);
+                    container.show();
+                    setUpPopupWindows();
+                    showPopupByIdMiddle('Edit Client', 'popDivClient');
+                },
+                error: function (data) {
+                }
+            });
+        }
+
+        function deleteClient(encryptedId, shardName, encryptedCode) {
+            if (confirm("Are you sure you want to delete this item?")) {
+                const frm = document.getElementById("frmClientSelect");
+                $('#frmClientSelect #client_id').val(encryptedId);
+                $('#frmClientSelect #client_shardName').val(shardName);
+                $('#frmClientSelect #client_code').val(encryptedCode);
+                frm.action = "/gettaxcalcbac/clientselect/DeleteClient";
+                frm.method = "POST";
+                frm.submit();
+                resetForm(frm);
+            }
+        }
+
+        function viewClient(id, shardName, encryptedCode) {
+            $('#frmClientSelect #client_id').val(id);
+            $('#frmClientSelect #client_shardName').val(shardName);
+            $('#frmClientSelect #client_code').val(encryptedCode);
+            const frm = document.getElementById("frmClientSelect");
+            frm.action = "/gettaxcalcbac/clientselect/ViewClient";
+            frm.submit();
+            resetForm(frm);
+        }
+
+        function viewControlClient(encryptedId, shardName, encryptedCode) {
+            $('#frmClientSelect #client_id').val(encryptedId);
+            $('#frmClientSelect #client_shardName').val(shardName);
+            $('#frmClientSelect #client_code').val(encryptedCode);
+            const frm = document.getElementById("frmClientSelect");
+            frm.action = "/gettaxcalcbac/clientselect/ViewControlClient";
+            frm.submit();
+            resetForm(frm);
+        }
+
+        function resetForm(frm) {
+            frm.action = "";
+            $('#frmClientSelect #client_id').val("");
+            $('#frmClientSelect #client_shardName').val("");
+            $('#frmClientSelect #client_code').val("");
+        }
+
+        function updateActiveState(id, shardName, encryptedCode, active) {
+            $('#frmClientSelect #client_id').val(id);
+            $('#frmClientSelect #client_shardName').val(shardName);
+            $('#frmClientSelect #client_code').val(encryptedCode);
+            $('#frmClientSelect #client_active').val(active);
+
+            const frm = document.getElementById("frmClientSelect");
+            $.ajax({
+                type: "POST",
+                url: "/gettaxcalcbac/clientselect/UpdateActiveState",
+                data: $(frm).serializeArray(),
+                dataType: "html",
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                success: function (result) {
+                    $("#divClientSelect").html(result);
+                },
+                error: function (data) {
+                }
+            });
+            resetForm(frm);
+        }
+
+        function downloadClients() {
+            const frm = document.getElementById("frmClientSelect");
+            frm.method = "GET";
+            frm.action = "/gettaxcalcbac/clientselect/DownloadClients";
+            frm.submit();
+        }
+    </script>
+
+
+    <script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+        function handleSelectAll(event) {
+            var checking = event.target.checked;
+            if (checking === false) {
+                $(".selectAllCheckBox").prop("checked", false);
+                $(".selectAllCheckBox").prop("title", "Select all");
+            }
+            else if ($('.selectCheckBox:checked').length == $('.selectCheckBox').length) {
+                $(".selectAllCheckBox").prop("checked", true);
+                $(".selectAllCheckBox").prop("title", "Unselect all");
+            }
+        }
+
+        function genericSelectAll() {
+            var checked = $(".selectAllCheckBox").prop("checked");
+            $(".selectCheckBox").prop("checked", checked);
+            if (checked === true) {
+                $(".selectAllCheckBox").prop("title", "Unselect all");
+            }
+            else {
+                $(".selectAllCheckBox").prop("title", "Select all");
+            }
+            return checked;
+        }
+    </script>
+
+    
+<script type="text/javascript" nonce="RDPSuytE8LO5v8u4l2EhOfnjC8ngFC82VAXBFVYIlZs=">
+    function showLoader() {
+        $("#pageLoader").show();
+    }
+    function hideLoader() {
+        $("#pageLoader").fadeOut();
+    }
+</script>
+<div id="pageLoader" class="hidden">
+    <div><img alt="Please Wait..." id="imgLoader" src="/gettaxcalcbac/images/loader.gif" /></div>
+</div>
+</body>
+</html>
