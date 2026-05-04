@@ -1,3 +1,1 @@
-curl -v https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/enter \
-  -H "User-Agent: Mozilla/5.0" \
-  -H "Accept: text/html"
+canvas winding:yes~canvas fp:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9AAAADICAYAAACwGnoBAAAQAElEQVR4AezdeWBcdb3//9eZSdI03WmhLdBSKDuUpS2gbIoLXtHrAoJX+Koosuj96XX7wvV+xVtx37d7lX1RwQVFcRdUFHChdGETylIolC5AaZu2SZNMJuf3ek8yaZImafYm0+f0884553M+62Om/eedM81omL9SpaMd8xxnOy5z/Mhxp+MBx1OOdY60JeI86uJetIm2n/S9tzmOdoxuu11fVzmOc7zb8RXH7x3/cNzveNTxjOMFx2ZHcY44j7q4F22ibfT5ndt82RFjHetju7mUpqMd8xxnOy5z/Mhxp+MBx1OOdQ53K0wT51EX96JNtP2k7
