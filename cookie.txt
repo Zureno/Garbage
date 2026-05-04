@@ -1,11 +1,23 @@
-TEST 1 - id=1:
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1&logicType=subPlan" | findstr "clientId ="
+TEST 1:
+curl -b "TC-BAC-DEV=YOUR_NEW_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1&logicType=subPlan"
+Result: _________
 
-TEST 2 - id=30:
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" | findstr "clientId ="
+TEST 2:
+curl -b "TC-BAC-DEV=YOUR_NEW_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=10&logicType=subPlan"
+Result: _________
 
-TEST 3 - id=50:
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=50&logicType=subPlan" | findstr "clientId ="
+TEST 3:
+curl -b "TC-BAC-DEV=YOUR_NEW_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan"
+Result: _________
 
-TEST 4 - id=100:
-curl -b "TC-BAC-DEV=YOUR_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=100&logicType=subPlan" | findstr "clientId ="
+TEST 4:
+curl -b "TC-BAC-DEV=YOUR_NEW_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=50&logicType=subPlan"
+Result: _________
+
+TEST 5:
+curl -b "TC-BAC-DEV=YOUR_NEW_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=100&logicType=subPlan"
+Result: _________
+
+TEST 6:
+curl -b "TC-BAC-DEV=YOUR_NEW_COOKIE_HERE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=500&logicType=subPlan"
+Result: _________
