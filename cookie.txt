@@ -1,1 +1,2 @@
-curl -v -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CommonClientTaxLogic?id=30"
+TC-BAC-DEV 03wmiv45aqnshv1q0jdh3z5g
+TC-BAC-DEV xu5nie5v4jh3zsebntiuz1bu
