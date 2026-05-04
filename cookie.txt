@@ -1,1 +1,11 @@
-curl -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=741&logicType=subPlan"
+curl -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=1&logicType=subPlan" | findstr "clientId"
+
+curl -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=10&logicType=subPlan" | findstr "clientId"
+
+curl -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" | findstr "clientId"
+
+curl -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=50&logicType=subPlan" | findstr "clientId"
+
+curl -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=100&logicType=subPlan" | findstr "clientId"
+
+curl -b "TC-BAC-DEV=YOUR_FRESH_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=741&logicType=subPlan" | findstr "clientId"
