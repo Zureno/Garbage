@@ -1,3 +1,1 @@
-curl -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" > response_id30.txt
-
-type response_id30.txt
+curl -v -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30"
