@@ -1,0 +1,37 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host qa.gmsgetb.kpmglinkgo.com:443 was resolved.
+* IPv6: (none)
+* IPv4: 13.107.213.40, 13.107.246.40
+*   Trying 13.107.213.40:443...
+* schannel: disabled automatic use of client certificate
+* ALPN: curl offers http/1.1
+* ALPN: server accepted http/1.1
+* Connected to qa.gmsgetb.kpmglinkgo.com (13.107.213.40) port 443
+* using HTTP/1.x
+> GET /gettaxcalcbac/login/enter HTTP/1.1
+> Host: qa.gmsgetb.kpmglinkgo.com
+> User-Agent: Mozilla/5.0
+> Accept: text/html
+> 
+* Request completely sent off
+< HTTP/1.1 302 Found
+< Date: Mon, 04 May 2026 10:52:57 GMT
+< Content-Length: 0
+< Connection: keep-alive
+< Cache-Control: no-cache, no-store
+< Expires: -1
+< Location: https://login.microsoftonline.com/8ab59120-9090-4240-97e7-2720df205913/oauth2/v2.0/authorize?client_id=ab6ca321-4bfb-4476-bf26-89da338188c4&redirect_uri=https%3A%2F%2Fqa.gmsgetb.kpmglinkgo.com%2Fgettaxcalcbac%2Fclientselect&response_type=code%20id_token&scope=openid%20profile%20&state=OpenIdConnect.AuthenticationProperties%3D5mwaGNLC4G2DGr8IkYhy-bFm0-oGkYyjOjchdzlE9xYdEkEhhOWBRlQaM38wcNvhWZOV7X2ftICVF253jj7wLNffEKV7W9vxPRajU_BrKS_PTWFehJxLMpnac4jCSM2uDB5F9OxYYmiSMVZttdPBOT97cueCFbz6zGc97SWU5ISE3-Rz_ZGZbh0ZXIjTjby3jUE0rC4QXmNahhkx8mvESGfVCUwfzWaDq2giadA6_l39jYaq-PMBD612G3PsF1iH2X00ulz1hxEJyStsILHIsXXB9O1-4b-n5dNmBVVQxfs&response_mode=form_post&nonce=639134887774308553.ZDYwNDY2MzQtNWQxMS00ZWJhLThjNmQtODMwMWIwZmI2YjlhNGYwNTUyYTEtNWJmOS00ZDMwLWFlMjEtNDYxN2ViOWZlOTU3&x-client-SKU=ID_NET472&x-client-ver=8.14.0.0
+< Pragma: no-cache
+< Set-Cookie: TC-BAC-DEV=aigypv1qs1a4woii3obdgvz2; path=/gettaxcalcbac; secure; HttpOnly; SameSite=Lax
+< Set-Cookie: OpenIdConnect.nonce.tShEryKPLsGPQZfEN0wl39lUIJSEwWqApN4DHOh%2FMXo%3D=SC1HZXBtUlNDZE5PcWt4MVZNNTVNV0NsRlU3NUN3LXB6ODBzODhiQzdyeEVzV25BUjkyOU10RGoyTmVUTHdKLTlaR0NSSW11SmRJdktEZFhSQ1I0bEFNWjYyRTdvXy03N25hblZhYy1LbnpaMl9fQXpzTF9vQnlYTHBId2M1RWR6ZjgzOXYxNHRxdVZaZUEtQXVRRE10QzdRR2ktZEJfYkd3NHdpSDNnYXl0cmFoUkhjOWZpSTZQQ1ZKR18wTUt3cFp3RU1iSmpyWm1vY0ZfbTVBUlJWTm5jZHlxeTdEVC15NkZvQ0xjSTlKYw%3D%3D; expires=Mon, 04-May-2026 11:07:57 GMT; path=/; secure; HttpOnly; SameSite=None
+< Strict-Transport-Security: max-age=31536000; includeSubDomains
+< Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-fxphCQbMsDzAJnpbP2fUcYHFuOyG61XruP8unWQcl5g=' 'strict-dynamic'; style-src 'self' 'nonce-fxphCQbMsDzAJnpbP2fUcYHFuOyG61XruP8unWQcl5g='; img-src 'self'; report-uri /gettaxcalcbac/WebService/CspReport;
+< X-XSS-Protection: 1; mode=block
+< X-Frame-Options: DENY
+< X-Content-Type-Options: nosniff
+< x-azure-ref: 20260504T105257Z-r1999c7fc5d8dhfthC1TEB3q2g0000000ft00000000008tu
+< X-Cache: CONFIG_NOCACHE
+< 
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Connection #0 to host qa.gmsgetb.kpmglinkgo.com left intact
