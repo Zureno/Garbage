@@ -1,2 +1,37 @@
 Ankans --->    TC-BAC-DEV a2tyfcve2uz5p24fqivmekwa
 Sudeep --->    TC-BAC-DEV u04hjv1sl3zvfnh2aq0fl2ll
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=98"
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+
+
+curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=100"
+
+
+curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=98"
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+
+
+curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=98"
+
+curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+
+curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+
