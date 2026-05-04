@@ -1,41 +1,638 @@
-POST /gettaxcalcbac/BackgroundTasks/CheckBackgroundTasks HTTP/2
+Story 1: akamaivalidator
+Title: Implement UCAS Debugger Logging in akamaivalidator Lambda
+Description:
+Enhance the akamaivalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
 
-Host: qa.gmsgetb.kpmglinkgo.com
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of Akamai configurations retrieved, Number of validations performed, Number of pass/fail results
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
 
-Cookie: TC-BAC-DEV=1cwijax3rvts3u441li5kjaz; TC-BAC-DEV-XSRF=4648d0b2ce474e308ac8f8deef51d0f9; OpenIdConnect.nonce.oonvGleTbfCPkWnSZYqSIa7MW%2F3rSKmLBo7PHoT38mQ%3D=bHFhMWJQa2I5MXJRZDBNNlBQQURna3haV3RjcTZYYlNENWRiZnpmZDFaTDVZVXpqeW1Jd2tMODBTWmI0c2NZYmdSSVlLQy1VSUhYekpPcmJ4X1VzU3VUdGozS1o1Y1ZjV2U4TjV2NHN5Y1p1V3RVUEtqYzE2SDZrVXVKTU8zekFsYWhfV0FheGZlNHIzX2xDUVdaTDRlQmlnWDhrUnkwTXNnQ3BFRXY0bmJYb3c3cGdYekplc1hwbEFxZ1RJcnFCWEs3Z0hnRE0tNnhXWTRUS1NpUlZYVS11NU9JRjkyZWxHMHVJV0FvQmpnbw%3D%3D; .AspNet.Cookies=DNWiuqXRaKCMfwi_MmRoCiS5O9Fhr4QYqQwwNkvjmXeify6r6mQw2syiZ6SxlsP9aEKto5M2W3MOJC8B1D59rlgp0vXYfK8QU-c1-ZlmHl_XyDVWuH4ebSGCuxs8bh-_Qm2o7G8p2uxbdTM2YLEVLscAo2cH82H9a9Dji5Muc8trR7BBqO6ncOWn9C434S7wSkMpStX8bP_v44hpqiWLMR6QwTrbj5bF7RLqC8UZmt8HYZdlTrJFS_fVCvKEczi_KTznDt9HVXuHp4MWsXkioPS8oH1PCesJWMir4FWPpDuQS6QhcH1jQpScZT86il92IRwJ1ekFFrNsVc30IYvOZnHUesHlU8mQw4g9EGrEKvRSrJSh9WcsAJ-s5W586fCulermBynvOoPITRkZVbz3jiRDydVmvi-_9KzkPOL-P_5V3FXoD6_aRSj8RbyHU0EpG5Hc4TYY9bC0Exza2nJcEzIaRbA15jtmwHbmCHeDS_QqcZYNjktk2T-n2jL_9Z2a4gyTdLrCYL6mFivRb89Ogvn1f0NjAOQtiKqRcrxDk_mBhNJmJtzWgJEuJ6-K9GwlAbOeHyiZy_vRFwMdHLbJxtcUuCOx9R4Q7mPB0kVwgEMMcR6Rk3NXCojjwOb-gv88NBzJIQddmLMZ6_vpuyaBQ4mIgHa2ru00PSc7o5i3KQ0FSkYNAbrpmJIO-woQerI_glGTr81cxbksqAk-qUYG3G3c0_MhTuAGSolRz_SKJf0H-9GocjPFvo3NaLpodqc__yHuMkVxhWmOtXbuHOoTvx-Tu6Svunl0ALCyus1GYdwPfLCLlfhw4kopwnSwj9raS-O6nG3T7CP9_sVUDs9z4Uwf6HM6etzCk06GSEHdPxftrEsBDtUI54mb1lg5UzXDOgiQ-VX0Sc0quiqvymcm-f9bH3p0Jk9gMQI8CcAKrvq1q42vogA_0ZMowKks2ChzPUui1LXcRksJSFwSo-Fl--TswgNVT1r7BRyGyID8FPwpiLjdTfY-0civkHSTsVMlj0OxelXOWLx_83K_vhQL5npjqTZGknOfFvX2jz0ii8UUDGkT3SZ0v879FGRfR4eSpH6jeLP9JSjL6mfmg3XXZa0SxoTlK3LOj2GJx1pRTiwiW7K5QLiVetskRlzTv53ppYNmplVV_yla6i3XkFti4_iAzY1aIH864QaAhZelFAIRdCYGBkDS2gWy6lKVbeU0E8SXmkE5GasduhpBdd4ykwnuIjMKUpnErp7CvhzZ36b-Tlu5cSeONix-gn5dTZ1Q0XueWd7XDxt5nw-RTBB0g-KWUYejI3OtCykB8w3TzwgN4ZkW0_FDf0B-oCvcYjLgeQXKNZCQxBwYh9Lyymhf79HLDHa_wPgzagqRxXDzo4b6zY5SlyhRP2IpbJ-oISonUPIzMDpVmVo7XqE3NnZN9_v_O2l8fDaNVRGdcv1Ft-ESroPnLOFCHqq_UD75WZxzCV4wRykB1WbYrd4aqpbsQjPlakF4UML83e5EnNbU3HY; __RequestVerificationToken_L2dldHRheGNhbGNiYWM1=FWkEdeYgyevNajUjIdex-VkKly3CetOb_uN5GwmFTzALWHAjB_irc_izJYyE2RFkMNxL_QoPmtEwycqDToAQuna-YRGZcnvFJdld5wN5_tA1
+Technical Notes:
 
-Content-Length: 11
+Use aws-lambda-powertools[all] package
+Instrument: validate(), query_data(), build_result()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
 
-Sec-Ch-Ua-Platform: "Windows"
+Definition of Done:
 
-Accept-Language: en-US,en;q=0.9
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
 
-Sec-Ch-Ua: "Not-A.Brand";v="24", "Chromium";v="146"
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
 
-Sec-Ch-Ua-Mobile: ?0
+Story 2: codeqlalertsvalidator
+Title: Implement UCAS Debugger Logging in codeqlalertsvalidator Lambda
+Description:
+Enhance the codeqlalertsvalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
 
-X-Requested-With: XMLHttpRequest
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of CodeQL alerts retrieved, Number of alerts processed, Number of critical/high/medium/low alerts
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
 
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36
+Technical Notes:
 
-Accept: */*
+Use aws-lambda-powertools[all] package
+Instrument: validate(), fetch_alerts(), process_alerts()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
 
-Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Definition of Done:
 
-Origin: https://qa.gmsgetb.kpmglinkgo.com
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
 
-Sec-Fetch-Site: same-origin
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
 
-Sec-Fetch-Mode: cors
+Story 3: control
+Title: Implement UCAS Debugger Logging in control Lambda
+Description:
+Enhance the control Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
 
-Sec-Fetch-Dest: empty
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of controls processed, Number of requirements evaluated, Number of control mappings retrieved
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
 
-Referer: https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home
+Technical Notes:
 
-Accept-Encoding: gzip, deflate, br
+Use aws-lambda-powertools[all] package
+Instrument: process_control(), map_requirements(), validate_mapping()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
 
-Priority: u=1, i
- 
-clientId=30
-Microsoft Azure App Service - Welcome
- 
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, core-service
+
+Story 4: cwemapping
+Title: Implement UCAS Debugger Logging in cwemapping Lambda
+Description:
+Enhance the cwemapping Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of CWE mappings processed, Number of successful mappings, Number of unmapped CWEs
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: map_cwe(), retrieve_mappings(), validate_mapping()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 2
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 5: dispatch
+Title: Implement UCAS Debugger Logging in dispatch Lambda
+Description:
+Enhance the dispatch Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of events received, Number of events routed, Routing destinations breakdown
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: dispatch_event(), route_to_validator(), determine_routing()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, core-service
+
+Story 6: ghasvalidator
+Title: Implement UCAS Debugger Logging in ghasvalidator Lambda
+Description:
+Enhance the ghasvalidator Lambda (GitHub Advanced Security) with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of GHAS alerts retrieved, Number of repositories scanned, Number of vulnerabilities by severity
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), fetch_ghas_alerts(), process_vulnerabilities()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 7: gitleaksvalidator
+Title: Implement UCAS Debugger Logging in gitleaksvalidator Lambda
+Description:
+Enhance the gitleaksvalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of Gitleaks findings retrieved, Number of secrets detected, Number of false positives filtered
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), fetch_findings(), filter_false_positives()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, security
+
+Story 8: onboardedvalidator
+Title: Implement UCAS Debugger Logging in onboardedvalidator Lambda
+Description:
+Enhance the onboardedvalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of onboarded applications checked, Number of validation checks performed, Number of pass/fail results
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), check_onboarding_status(), verify_requirements()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 2
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 9: override
+Title: Implement UCAS Debugger Logging in override Lambda
+Description:
+Enhance the override Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of override requests processed, Number of approvals/rejections, Override types breakdown
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: process_override(), validate_override(), apply_override()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, governance
+
+Story 10: pipelinevalidator
+Title: Implement UCAS Debugger Logging in pipelinevalidator Lambda
+Description:
+Enhance the pipelinevalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of pipelines validated, Number of pipeline stages evaluated, Number of pass/fail results by stage
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), check_pipeline_config(), evaluate_stages()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 11: prescription
+Title: Implement UCAS Debugger Logging in prescription Lambda
+Description:
+Enhance the prescription Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of prescriptions generated, Number of remediation actions recommended, Prescription types breakdown
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: generate_prescription(), analyze_findings(), recommend_actions()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 12: resolver
+Title: Implement UCAS Debugger Logging in resolver Lambda
+Description:
+Enhance the resolver Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of resolution attempts, Number of successful resolutions, Number of conflicts detected
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: resolve(), detect_conflicts(), apply_resolution()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, core-service
+
+Story 13: scoring
+Title: Implement UCAS Debugger Logging in scoring Lambda
+Description:
+Enhance the scoring Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of scores calculated, Score distribution (high/medium/low), Number of scoring factors evaluated
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: calculate_score(), evaluate_factors(), aggregate_scores()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 14: servicenow
+Title: Implement UCAS Debugger Logging in servicenow Lambda
+Description:
+Enhance the servicenow Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of ServiceNow tickets created, Number of API calls made, Number of successful/failed operations
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: create_ticket(), update_ticket(), query_servicenow()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement, integration
+
+Story 15: ucasmanager
+Title: Implement UCAS Debugger Logging in ucasmanager Lambda
+Description:
+Enhance the ucasmanager Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of management operations performed, Number of resources managed, Operation types breakdown
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: manage_resources(), perform_operation(), validate_state()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, core-service
+
+Story 16: udcrmrx
+Title: Implement UCAS Debugger Logging in udcrmrx Lambda
+Description:
+Enhance the udcrmrx Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of UDCRM operations processed, Number of prescriptions generated, Operation success rate
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: process_udcrm(), generate_rx(), validate_operation()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement
+
+Story 17: validation
+Title: Implement UCAS Debugger Logging in validation Lambda
+Description:
+Enhance the validation Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of validations performed, Number of pass/fail results, Validation types breakdown
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), execute_validation(), aggregate_results()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, core-service
+
+Story 18: validator_template
+Title: Implement UCAS Debugger Logging in validator_template
+Description:
+Enhance the validator_template with UCAS Debugger functionality using AWS Lambda Powertools to create a standardized logging template for all future validators. This will improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Template-specific metrics (configurable), Number of operations performed, Success/failure counts
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+Template includes inline comments for customization
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), process_data(), build_result()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+Document customization points for specific validator needs
+
+Definition of Done:
+
+Template code updated with logging
+CloudWatch logs show structured JSON format
+Documentation updated with usage examples
+Code review approved
+Template tested with sample validator
+
+Story Points: 5
+Priority: High
+Labels: ucas-debugger, logging, lambda, enhancement, template, core-service
+
+Story 19: venafivalidator
+Title: Implement UCAS Debugger Logging in venafivalidator Lambda
+Description:
+Enhance the venafivalidator Lambda with UCAS Debugger functionality using AWS Lambda Powertools to improve debugging efficiency and reduce error resolution times.
+Acceptance Criteria:
+
+All main methods log method_start with timestamp
+All main methods log method_stop with duration
+Key metrics logged: Number of Venafi certificates checked, Number of certificate validations performed, Number of expired/expiring certificates detected
+Structured JSON logging format
+Lambda context automatically injected
+No performance degradation (less than 50ms overhead)
+
+Technical Notes:
+
+Use aws-lambda-powertools[all] package
+Instrument: validate(), fetch_certificates(), check_expiry()
+Log level: INFO for start/stop, DEBUG for detailed metrics
+Include correlation_id for request tracing
+
+Definition of Done:
+
+Code deployed to dev environment
+CloudWatch logs show structured JSON format
+All acceptance criteria validated through manual testing
+Code review approved
+Documentation updated
+
+Story Points: 3
+Priority: Medium
+Labels: ucas-debugger, logging, lambda, enhancement, security
+
+Summary
+PriorityCountStory Points TotalHigh724Medium1236Total1960
+Recommended Implementation Order
+Phase 1 - Core Services (Sprint 1)
+
+validator_template (5 pts)
+dispatch (3 pts)
+control (3 pts)
+validation (3 pts)
+resolver (3 pts)
+
+Phase 2 - Security Validators (Sprint 2)
+6. gitleaksvalidator (3 pts)
+7. venafivalidator (3 pts)
+8. ghasvalidator (3 pts)
+9. codeqlalertsvalidator (3 pts)
+Phase 3 - Other Validators (Sprint 3)
+10. akamaivalidator (3 pts)
+11. pipelinevalidator (3 pts)
+12. onboardedvalidator (2 pts)
+13. cwemapping (2 pts)
+Phase 4 - Supporting Services (Sprint 4)
+14. ucasmanager (3 pts)
+15. override (3 pts)
+16. prescription (3 pts)
+17. scoring (3 pts)
+18. servicenow (3 pts)
+19. udcrmrx (3 pts)
