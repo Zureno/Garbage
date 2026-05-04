@@ -1,1 +1,8 @@
-curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=xy913G7MNGNoVoKyljVDVDdMH06zqKvigXkj3W3Y9kW7A9RY2ZVaUil9em9Bsgc-Wqst6cuOJqflrKcoG0Ome4Han01Di876PhdXRWMrkdEKnBCTR11WH99xrOLVzfbydjjwPrbnqK5pBqa6Pd4jkA2&Client.id=TestID123456789&Client.code=TestCode123456789" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
+curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=xy913G7MNGNoVoKyljVDVDdMH06zqKvigXkj3W3Y9kW7A9RY2ZVaUil9em9Bsgc-Wqst6cuOJqflrKcoG0Ome4Han01Di876PhdXRWMrkdEKnBCTR11WH99xrOLVzfbydjjwPrbnqK5pBqa6Pd4jkA2&Client.id=sMj31jU79N4EqnsSLstsi3TZywsHxA4607NUEAzcV&Client.code=y9f+h0uYRfs/K/Vyxy9aBy7MwHRtU/tJx+bkkoET7RzlV69Nu" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
+
+
+
+curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=xy913G7MNGNoVoKyljVDVDdMH06zqKvigXkj3W3Y9kW7A9RY2ZVaUil9em9Bsgc-Wqst6cuOJqflrKcoG0Ome4Han01Di876PhdXRWMrkdEKnBCTR11WH99xrOLVzfbydjjwPrbnqK5pBqa6Pd4jkA2&Client.id=h1JabNuQChMprailthC4EINkzIaZTFkqgGDdw6lBL&Client.code=W/QeBpEaLD2ZB2EDeWTGkanRZZbVI1JR0FxH5pwKynrK1Z5fA" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
+
+
+curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=xy913G7MNGNoVoKyljVDVDdMH06zqKvigXkj3W3Y9kW7A9RY2ZVaUil9em9Bsgc-Wqst6cuOJqflrKcoG0Ome4Han01Di876PhdXRWMrkdEKnBCTR11WH99xrOLVzfbydjjwPrbnqK5pBqa6Pd4jkA2&Client.id=sMj31jU79N4EqnsSLstsi3TZywsHxA4607NUEAzcW&Client.code=W/QeBpEaLD2ZB2EDeWTGkanRZZbVI1JR0FxH5pwKynrK1Z5fA" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
