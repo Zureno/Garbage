@@ -1,1 +1,2 @@
-curl -v -b "TC-BAC-DEV=03wmiv45aqnshv1q0jdh3z5g" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+Ankans --->    TC-BAC-DEV a2tyfcve2uz5p24fqivmekwa
+Sudeep --->    TC-BAC-DEV u04hjv1sl3zvfnh2aq0fl2ll
