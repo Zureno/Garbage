@@ -3,3 +3,5 @@ curl -i -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/get
 
 # Save to file AND show first 50 lines
 curl -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" > test_response.txt && head -50 test_response.txt
+
+curl -v -L -b "TC-BAC-DEV=YOUR_FIRST_COOKIE" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic?id=30&logicType=subPlan" 2>&1 | head -100
