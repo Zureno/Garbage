@@ -1,7 +1,1 @@
-curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=wudO8VPSSfe5MiToIBS8vbk3KQ8k8t79-BB1G_KD1YYElMqW9IGvRXuYKAlPUi3esO1zbBRMSMV7RzHI8akc9YtXQQVhli2ipUsfjg9wZ6WNQaG-4lzb4Z0o43psNKtS7jOnLp5HKjCr27de3fGoIA2&client.id=sMj31jU79N4EqnsSLstsi3TZywsHxA4607NUEAzcV" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
-
-
-curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=wudO8VPSSfe5MiToIBS8vbk3KQ8k8t79-BB1G_KD1YYElMqW9IGvRXuYKAlPUi3esO1zbBRMSMV7RzHI8akc9YtXQQVhli2ipUsfjg9wZ6WNQaG-4lzb4Z0o43psNKtS7jOnLp5HKjCr27de3fGoIA2&client.id=h1JabNuQChMprailthC4EINkzIaZTFkqgGDdw6lBL" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
-
-
-curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "__RequestVerificationToken=INVALID12345&client.id=h1JabNuQChMprailthC4EINkzIaZTFkqgGDdw6lBL" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
+curl -X POST -b "TC-BAC-DEV=q11ok23cvmbx2it25qbjhejc" -d "client.id=INVALID_DATA" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient"
