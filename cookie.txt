@@ -1,37 +1,200 @@
-Ankans --->    TC-BAC-DEV wr2zb2hbnyfagyiza3n2gtqt
-Sudeep --->    TC-BAC-DEV u04hjv1sl3zvfnh2aq0fl2ll
+Finding 1: Injection Vulnerability – Blind LDAP Injection
+Severity: High
+Dependency: Application
+Status: Open
+Description
 
+The application is vulnerable to Blind LDAP Injection, arising from improper handling of user-supplied input that is incorporated into backend LDAP queries without sufficient validation, sanitization, or parameterization.
 
-curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=98"
+LDAP (Lightweight Directory Access Protocol) is commonly used to interface with centralized identity stores such as Active Directory. In the current implementation, user-controlled parameters are dynamically embedded into LDAP query filters, allowing manipulation of query logic.
 
+The vulnerability is classified as blind, meaning that:
 
-curl -v -b "TC-BAC-DEV=wr2zb2hbnyfagyiza3n2gtqt" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+The application does not return direct LDAP query results
+However, variations in application responses (e.g., success/failure conditions, response timing, or behavioral changes) allow attackers to infer backend data and query execution outcomes
 
+Through crafted payloads leveraging LDAP operators (e.g., *, |, &, (, )), an attacker can:
 
-curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/LogicSummary?id=30"
+Modify authentication conditions
+Expand query scope beyond intended constraints
+Bypass logical checks enforced by the application
 
+Given that LDAP is typically integrated with enterprise identity systems, exploitation may extend beyond the application boundary and impact organizational authentication infrastructure.
 
-curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+Impact
 
+Successful exploitation may result in:
 
-curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=100"
+Authentication bypass and unauthorized access
+Enumeration of directory structures and user accounts
+Exposure of sensitive identity attributes
+Privilege escalation within the application or connected systems
 
+This significantly increases the risk of lateral movement within enterprise environments.
 
-curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactionHistory?calcTransactionId=1"
+Root Cause
+Direct concatenation of user input into LDAP queries
+Absence of input validation and encoding mechanisms
+Lack of secure query construction (parameterization)
+Remediation
+Implement strict allowlist-based input validation
+Use parameterized LDAP queries or secure APIs
+Escape all LDAP special characters
+Apply least privilege access to directory queries
+Monitor and log abnormal query behavior
+Closing/Downgrading Justification
+This finding cannot be downgraded due to its direct impact on authentication mechanisms and directory access controls. Exploitation could result in unauthorized access to sensitive identity systems and potential compromise of enterprise authentication infrastructure.
+🔷 Finding 2: Client-Side Security Control Failure – CSP Misconfiguration & Missing Security Headers
+Severity: High
+Dependency: Application / Infrastructure
+Status: Open
+Description
 
+The application demonstrates a systemic failure in enforcing browser-based security controls, primarily due to a combination of:
 
-curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=98"
+1. Content Security Policy (CSP) Weaknesses
+Missing CSP header on critical endpoints
+Inline script execution permitted (unsafe-inline)
+Missing or incomplete directives (default-src, script-src)
+Presence of invalid or ignored directives
+Trusted Types not enforced
+2. Missing Cross-Origin Security Headers
+Cross-Origin-Opener-Policy (COOP)
+Cross-Origin-Embedder-Policy (COEP)
+Cross-Origin-Resource-Policy (CORP)
+Referrer-Policy
 
+These issues collectively indicate that client-side trust boundaries are not properly enforced, resulting in a weakened browser security model.
 
-curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+CSP is designed to act as a primary defense mechanism against client-side attacks, particularly Cross-Site Scripting (XSS). However, the current implementation is inconsistent and ineffective across multiple application components.
 
+Additionally, the absence of cross-origin isolation headers weakens protections against:
 
-curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient?clientId=30"
+Cross-origin data leakage
+Side-channel attacks (e.g., XS-Leaks)
+Unauthorized resource sharing
 
+This represents a systemic control gap rather than isolated misconfigurations.
 
-curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=98"
+Impact
 
-curl -v -b "TC-BAC-DEV=a2tyfcve2uz5p24fqivmekwa" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+An attacker may be able to:
 
-curl -v -b "TC-BAC-DEV=u04hjv1sl3zvfnh2aq0fl2ll" "https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions?id=30"
+Execute malicious JavaScript within user sessions (XSS)
+Hijack user sessions or steal authentication tokens
+Perform DOM-based attacks and manipulate application behavior
+Exploit cross-origin weaknesses to exfiltrate sensitive data
 
+Because these controls are globally applicable, the impact spans the entire application.
+
+Root Cause
+Lack of centralized security header enforcement
+Incomplete CSP design and implementation
+Absence of standardized secure configuration baseline
+Remediation
+
+Implement a strict CSP policy:
+
+default-src 'self';
+script-src 'self';
+object-src 'none';
+Remove unsafe-inline and unsafe-eval
+Enforce Trusted Types (require-trusted-types-for 'script')
+Configure headers:
+COOP: same-origin
+COEP: require-corp
+CORP: same-origin
+Referrer-Policy: strict-origin-when-cross-origin
+Apply headers at gateway/load balancer level for consistency
+Closing/Downgrading Justification
+This finding is categorized as High due to the systemic failure of browser-enforced security controls, which significantly increases the risk of client-side attacks such as Cross-Site Scripting. Downgrading is not recommended given the breadth of exposure across the application.
+🔷 Finding 3: Session & Data Protection Weakness – Cookie Security and Sensitive Data Handling
+Severity: Medium
+Dependency: Application
+Status: Open
+Description
+
+The application demonstrates inconsistent implementation of session and data protection controls, specifically related to cookie security and sensitive data handling mechanisms.
+
+Combined Issues Identified:
+Cookies configured with weak or missing SameSite attributes
+Lack of restrictive cookie scope (cross-origin exposure risk)
+Potential absence of Secure and HttpOnly flags
+Sensitive parameters transmitted via URL query strings
+Cacheable responses containing sensitive data over HTTPS
+
+These issues indicate that session management and data protection controls are not consistently enforced across the application.
+
+Improper use of query parameters for sensitive data further increases exposure through:
+
+Browser history
+Server logs
+Referrer headers
+
+Additionally, allowing sensitive responses to be cached introduces the risk of local data persistence beyond intended session boundaries.
+
+Impact
+Increased risk of Cross-Site Request Forgery (CSRF)
+Potential session hijacking or leakage
+Exposure of sensitive data through logs or cached content
+Unauthorized reuse of session information
+Root Cause
+Inconsistent cookie configuration practices
+Lack of secure session management standards
+Improper separation of sensitive and non-sensitive data transmission
+Missing cache-control directives
+Remediation
+
+Enforce cookie security:
+
+SameSite=Strict or Lax
+Secure
+HttpOnly
+Avoid transmitting sensitive data via URL parameters
+
+Implement:
+
+Cache-Control: no-store
+Pragma: no-cache
+Standardize session management policies across the application
+Closing/Downgrading Justification
+This finding is categorized as Medium as it increases the likelihood of session-related attacks and data exposure, but does not independently result in direct exploitation without additional attack vectors.
+🔷 Finding 4: Information Disclosure – Exposure of Internal Artifacts and Application Structure
+Severity: Low
+Dependency: Application / Infrastructure
+Status: Open
+Description
+
+The application exposes internal system artifacts and structural information, which may aid attackers in reconnaissance and attack planning.
+
+Combined Observations:
+Accessible hidden directories:
+.git, .svn, .bashrc, .profile, .mysql_history
+Exposure of JavaScript files containing identifiable patterns (e.g., email addresses)
+Indicators of potential source code disclosure
+
+These findings suggest that:
+
+Development or configuration artifacts may be present in the production environment
+Proper access restrictions and file management practices are not enforced
+
+While these issues do not directly enable exploitation, they provide valuable intelligence that can:
+
+Reduce attack complexity
+Enable targeted exploitation
+Reveal underlying technologies and configurations
+Impact
+Enhanced attacker reconnaissance capabilities
+Exposure of internal application structure
+Potential leakage of sensitive configuration data
+Root Cause
+Inadequate server configuration
+Improper deployment practices (dev artifacts in production)
+Lack of file access restrictions
+Remediation
+Remove sensitive and unnecessary files from production
+Restrict access to system directories
+Return generic responses (e.g., HTTP 404)
+Implement secure deployment and configuration management processes
+Closing/Downgrading Justification
+This finding is categorized as Low as it primarily facilitates reconnaissance activities and does not directly result i
