@@ -1,200 +1,102 @@
-Finding 1: Injection Vulnerability – Blind LDAP Injection
-Severity: High
+Finding 5: Cacheable SSL Pages Found
+Risk Rating: Low
 Dependency: Application
 Status: Open
 Description
+The application fails to enforce proper cache control directives on SSL/HTTPS pages containing sensitive information. Pages transmitted over secure HTTPS connections are being cached by the browser, which allows sensitive data to remain accessible in the browser cache.
+This vulnerability arises from the absence of or improper implementation of cache control headers (Cache-Control, Pragma, Expires) that explicitly prevent caching of sensitive content. When users access authentication pages, user profile pages, or pages containing personal/financial data over HTTPS, the browser stores these pages in its local cache.
+An attacker with physical access to the user's computer, or a malicious user on a shared computer, can access the browser's cache to retrieve previously visited sensitive pages without requiring valid authentication credentials. The vulnerability is particularly concerning in environments with:
 
-The application is vulnerable to Blind LDAP Injection, arising from improper handling of user-supplied input that is incorporated into backend LDAP queries without sufficient validation, sanitization, or parameterization.
+Shared workstations
+Public computers (internet cafes, libraries)
+Corporate environments where multiple users share the same device
 
-LDAP (Lightweight Directory Access Protocol) is commonly used to interface with centralized identity stores such as Active Directory. In the current implementation, user-controlled parameters are dynamically embedded into LDAP query filters, allowing manipulation of query logic.
+Additionally, cached HTTPS content may be accessible through browser history, cached images, or forensic analysis of the storage medium.
+Affected Systems & Locations
+This vulnerability affects multiple critical pages across the application:
 
-The vulnerability is classified as blind, meaning that:
+https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/index (Authentication page - highly sensitive)
+https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/enter (Login processing page)
+https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home/QuickSearch (User dashboard with personal data)
+https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic (Client configuration data)
+https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions (Transaction records and calculations)
+https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient (Client information)
 
-The application does not return direct LDAP query results
-However, variations in application responses (e.g., success/failure conditions, response timing, or behavioral changes) allow attackers to infer backend data and query execution outcomes
+All authenticated user pages and sensitive data endpoints are affected. Testing revealed that HTTP response headers do not include proper cache control directives. Pages are cached with default browser settings, allowing indefinite retention in the browser cache unless manually cleared by the user.
+Reproduction Steps
+Step 1: Access the application login page
 
-Through crafted payloads leveraging LDAP operators (e.g., *, |, &, (, )), an attacker can:
+Open browser (Chrome, Firefox, Edge, Safari)
+Navigate to https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/index
+Open Developer Tools (F12 or Right-click → Inspect)
+Navigate to Network tab
 
-Modify authentication conditions
-Expand query scope beyond intended constraints
-Bypass logical checks enforced by the application
+Step 2: Check response headers for cache control
 
-Given that LDAP is typically integrated with enterprise identity systems, exploitation may extend beyond the application boundary and impact organizational authentication infrastructure.
+Observe the HTTP response headers for the login page
+Look for the following headers: Cache-Control, Pragma, Expires
+Expected (SECURE): Cache-Control: no-store, no-cache, must-revalidate, private
+Expected (SECURE): Pragma: no-cache
+Observed (VULNERABLE): Headers are missing or set to allow caching
+Observed (VULNERABLE): Cache-Control: public or Cache-Control: max-age=3600
 
-Impact
+Step 3: Verify page is cached
 
-Successful exploitation may result in:
+Complete login process with valid credentials
+Log out or clear session
+Close the browser completely
+Reopen the browser
+Navigate to https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/index
 
-Authentication bypass and unauthorized access
-Enumeration of directory structures and user accounts
-Exposure of sensitive identity attributes
-Privilege escalation within the application or connected systems
+Step 4: Access cached page without authentication
 
-This significantly increases the risk of lateral movement within enterprise environments.
+Open browser cache/history
+Using keyboard shortcut Ctrl+H (History), search for the domain
+Alternatively, use browser developer tools to inspect cached resources
+Observe: Previously visited authenticated pages are accessible from cache
+Observe: Page content displays without requiring re-authentication
+FINDING: Sensitive pages are retained in browser cache
 
-Root Cause
-Direct concatenation of user input into LDAP queries
-Absence of input validation and encoding mechanisms
-Lack of secure query construction (parameterization)
+Step 5: Verify sensitive data in cache
+
+Navigate to authenticated pages containing user data (e.g., /Home/QuickSearch)
+Check browser cache location:
+
+Windows: C:\Users[username]\AppData\Local[BrowserName]\Cache
+macOS: ~/Library/Caches/[BrowserName]
+Linux: ~/.cache/[BrowserName]
+
+
+Observe: HTML files contain sensitive information including transaction details, client data, tax calculations
+FINDING: Sensitive user data persists in cache files
+
 Remediation
-Implement strict allowlist-based input validation
-Use parameterized LDAP queries or secure APIs
-Escape all LDAP special characters
-Apply least privilege access to directory queries
-Monitor and log abnormal query behavior
-Closing/Downgrading Justification
-This finding cannot be downgraded due to its direct impact on authentication mechanisms and directory access controls. Exploitation could result in unauthorized access to sensitive identity systems and potential compromise of enterprise authentication infrastructure.
-🔷 Finding 2: Client-Side Security Control Failure – CSP Misconfiguration & Missing Security Headers
-Severity: High
-Dependency: Application / Infrastructure
-Status: Open
-Description
-
-The application demonstrates a systemic failure in enforcing browser-based security controls, primarily due to a combination of:
-
-1. Content Security Policy (CSP) Weaknesses
-Missing CSP header on critical endpoints
-Inline script execution permitted (unsafe-inline)
-Missing or incomplete directives (default-src, script-src)
-Presence of invalid or ignored directives
-Trusted Types not enforced
-2. Missing Cross-Origin Security Headers
-Cross-Origin-Opener-Policy (COOP)
-Cross-Origin-Embedder-Policy (COEP)
-Cross-Origin-Resource-Policy (CORP)
-Referrer-Policy
-
-These issues collectively indicate that client-side trust boundaries are not properly enforced, resulting in a weakened browser security model.
-
-CSP is designed to act as a primary defense mechanism against client-side attacks, particularly Cross-Site Scripting (XSS). However, the current implementation is inconsistent and ineffective across multiple application components.
-
-Additionally, the absence of cross-origin isolation headers weakens protections against:
-
-Cross-origin data leakage
-Side-channel attacks (e.g., XS-Leaks)
-Unauthorized resource sharing
-
-This represents a systemic control gap rather than isolated misconfigurations.
-
-Impact
-
-An attacker may be able to:
-
-Execute malicious JavaScript within user sessions (XSS)
-Hijack user sessions or steal authentication tokens
-Perform DOM-based attacks and manipulate application behavior
-Exploit cross-origin weaknesses to exfiltrate sensitive data
-
-Because these controls are globally applicable, the impact spans the entire application.
-
-Root Cause
-Lack of centralized security header enforcement
-Incomplete CSP design and implementation
-Absence of standardized secure configuration baseline
-Remediation
-
-Implement a strict CSP policy:
-
-default-src 'self';
-script-src 'self';
-object-src 'none';
-Remove unsafe-inline and unsafe-eval
-Enforce Trusted Types (require-trusted-types-for 'script')
-Configure headers:
-COOP: same-origin
-COEP: require-corp
-CORP: same-origin
-Referrer-Policy: strict-origin-when-cross-origin
-Apply headers at gateway/load balancer level for consistency
-Closing/Downgrading Justification
-This finding is categorized as High due to the systemic failure of browser-enforced security controls, which significantly increases the risk of client-side attacks such as Cross-Site Scripting. Downgrading is not recommended given the breadth of exposure across the application.
-🔷 Finding 3: Session & Data Protection Weakness – Cookie Security and Sensitive Data Handling
-Severity: Medium
-Dependency: Application
-Status: Open
-Description
-
-The application demonstrates inconsistent implementation of session and data protection controls, specifically related to cookie security and sensitive data handling mechanisms.
-
-Combined Issues Identified:
-Cookies configured with weak or missing SameSite attributes
-Lack of restrictive cookie scope (cross-origin exposure risk)
-Potential absence of Secure and HttpOnly flags
-Sensitive parameters transmitted via URL query strings
-Cacheable responses containing sensitive data over HTTPS
-
-These issues indicate that session management and data protection controls are not consistently enforced across the application.
-
-Improper use of query parameters for sensitive data further increases exposure through:
-
-Browser history
-Server logs
-Referrer headers
-
-Additionally, allowing sensitive responses to be cached introduces the risk of local data persistence beyond intended session boundaries.
-
-Impact
-Increased risk of Cross-Site Request Forgery (CSRF)
-Potential session hijacking or leakage
-Exposure of sensitive data through logs or cached content
-Unauthorized reuse of session information
-Root Cause
-Inconsistent cookie configuration practices
-Lack of secure session management standards
-Improper separation of sensitive and non-sensitive data transmission
-Missing cache-control directives
-Remediation
-
-Enforce cookie security:
-
-SameSite=Strict or Lax
-Secure
-HttpOnly
-Avoid transmitting sensitive data via URL parameters
-
-Implement:
-
-Cache-Control: no-store
+Implement Cache-Control Headers on All Sensitive Pages:
+Add the following HTTP response headers to all pages containing sensitive information:
+Cache-Control: no-store, no-cache, must-revalidate, private, max-age=0
 Pragma: no-cache
-Standardize session management policies across the application
+Expires: 0
+Set-Cookie headers should include:
+
+HttpOnly
+Secure
+SameSite=Strict
+
+Implementation Guidelines:
+
+Configure cache-control at application level (web server or application framework)
+Apply to all endpoints that handle:
+
+User authentication
+Login/logout operations
+User profile and account information
+Transaction records
+Client data
+Administrative functions
+Session information
+
+
+Implement for both Pre-Auth (login pages) and Post-Auth (all authenticated pages)
+
 Closing/Downgrading Justification
-This finding is categorized as Medium as it increases the likelihood of session-related attacks and data exposure, but does not independently result in direct exploitation without additional attack vectors.
-🔷 Finding 4: Information Disclosure – Exposure of Internal Artifacts and Application Structure
-Severity: Low
-Dependency: Application / Infrastructure
-Status: Open
-Description
-
-The application exposes internal system artifacts and structural information, which may aid attackers in reconnaissance and attack planning.
-
-Combined Observations:
-Accessible hidden directories:
-.git, .svn, .bashrc, .profile, .mysql_history
-Exposure of JavaScript files containing identifiable patterns (e.g., email addresses)
-Indicators of potential source code disclosure
-
-These findings suggest that:
-
-Development or configuration artifacts may be present in the production environment
-Proper access restrictions and file management practices are not enforced
-
-While these issues do not directly enable exploitation, they provide valuable intelligence that can:
-
-Reduce attack complexity
-Enable targeted exploitation
-Reveal underlying technologies and configurations
-Impact
-Enhanced attacker reconnaissance capabilities
-Exposure of internal application structure
-Potential leakage of sensitive configuration data
-Root Cause
-Inadequate server configuration
-Improper deployment practices (dev artifacts in production)
-Lack of file access restrictions
-Remediation
-Remove sensitive and unnecessary files from production
-Restrict access to system directories
-Return generic responses (e.g., HTTP 404)
-Implement secure deployment and configuration management processes
-Closing/Downgrading Justification
-This finding is categorized as Low as it primarily facilitates reconnaissance activities and does not directly result i
+(No justification provided)
