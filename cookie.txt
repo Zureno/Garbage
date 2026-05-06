@@ -1,102 +1,317 @@
-Finding 5: Cacheable SSL Pages Found
-Risk Rating: Low
-Dependency: Application
-Status: Open
-Description
-The application fails to enforce proper cache control directives on SSL/HTTPS pages containing sensitive information. Pages transmitted over secure HTTPS connections are being cached by the browser, which allows sensitive data to remain accessible in the browser cache.
-This vulnerability arises from the absence of or improper implementation of cache control headers (Cache-Control, Pragma, Expires) that explicitly prevent caching of sensitive content. When users access authentication pages, user profile pages, or pages containing personal/financial data over HTTPS, the browser stores these pages in its local cache.
-An attacker with physical access to the user's computer, or a malicious user on a shared computer, can access the browser's cache to retrieve previously visited sensitive pages without requiring valid authentication credentials. The vulnerability is particularly concerning in environments with:
+$(document).ready(function () {
 
-Shared workstations
-Public computers (internet cafes, libraries)
-Corporate environments where multiple users share the same device
+    isOnfocus = window.document.hasFocus();
 
-Additionally, cached HTTPS content may be accessible through browser history, cached images, or forensic analysis of the storage medium.
-Affected Systems & Locations
-This vulnerability affects multiple critical pages across the application:
+    $(".get-id-txt").focus(function () {
+        $(".get-id-drop-down").addClass("menu-hover");
+        $(".get-id-drop-down .nav-dropdown-content").addClass("display-block");
+    });
+    $("#getClientIdSelect").focus(function () {
+        $(".get-id-drop-down").addClass("menu-hover");
+        $(".get-id-drop-down .nav-dropdown-content").addClass("display-block");
+    });
+    $(document).on("click", function (event) {
+        // Check if the clicked element is inside the dropdown
+        if ($(event.target).closest(".nav-dropdown.get-id-drop-down").length) {
+            $(".get-id-drop-down").addClass("menu-hover");
+            $(".get-id-drop-down .nav-dropdown-content").addClass("display-block");
+        } else {
+            $(".get-id-drop-down").removeClass("menu-hover");
+            $(".get-id-drop-down .nav-dropdown-content").removeClass("display-block");
+        }
+    });
+    $("#getIdTextbox").keyup(enterKeyPressed);
+    $(".client-dropdown > li").click(clientPressed);
+    $("#clientSelectSearch").keyup(enterPressedOnClientSearch);
+    keyPressOnClientSelectEvent();
 
-https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/index (Authentication page - highly sensitive)
-https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/enter (Login processing page)
-https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/Home/QuickSearch (User dashboard with personal data)
-https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientTaxLogic (Client configuration data)
-https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/CalcTransactions (Transaction records and calculations)
-https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/ClientSelect/ViewClient (Client information)
+    new Fingerprint2().get(function (result, components) {
+        var canvasFingerprinting = "";
+        if (typeof window.console !== "undefined") {
+            for (var index in components) {
+                var obj = components[index];
+                if (obj.key === "canvas") {
+                    canvasFingerprinting = obj.value.toString().substr(0, 1000);
+                    break;
+                }
+            }
+            //setFingerprinting(canvasFingerprinting);
+            $.ajax({
+                type: "POST",
+                url: rootUrl + "WebService/SetFingerprinting",
+                data: { fingerprinting: canvasFingerprinting },
+                success: function (responseHtml) {
+                },
+                error: function (data) {
+                }
+            });
+        }
+    });
+});
 
-All authenticated user pages and sensitive data endpoints are affected. Testing revealed that HTTP response headers do not include proper cache control directives. Pages are cached with default browser settings, allowing indefinite retention in the browser cache unless manually cleared by the user.
-Reproduction Steps
-Step 1: Access the application login page
+$(document).on('focus', ':input', function () {
+    $(this).attr('autocomplete', 'off');
+});
 
-Open browser (Chrome, Firefox, Edge, Safari)
-Navigate to https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/index
-Open Developer Tools (F12 or Right-click → Inspect)
-Navigate to Network tab
+window.onfocus = function () {
+    isOnfocus = true;
+};
 
-Step 2: Check response headers for cache control
+window.onblur = function () {
+    isOnfocus = false;
+};
 
-Observe the HTTP response headers for the login page
-Look for the following headers: Cache-Control, Pragma, Expires
-Expected (SECURE): Cache-Control: no-store, no-cache, must-revalidate, private
-Expected (SECURE): Pragma: no-cache
-Observed (VULNERABLE): Headers are missing or set to allow caching
-Observed (VULNERABLE): Cache-Control: public or Cache-Control: max-age=3600
+function setTabDisplay(divTab, divTabMiddle, selected) {
+    var outerDiv = $('#' + divTab);
+    var innerDiv = $('#' + divTabMiddle);
+    if (outerDiv && innerDiv) {
+        if (selected === true) {
+            $(outerDiv).css("display", "block");
+            $(innerDiv).attr("class", "tabTitle selectedTab");
+        }
+        else {
+            $(outerDiv).css("display", "none");
+            $(innerDiv).attr("class", "tabTitle unSelectedTab");
+        }
+    }
+}
 
-Step 3: Verify page is cached
+//cannot find references to this function
+function setTabStyle(tabName, selected) {
+    //div selector must change to work with mvc
+    var div = document.getElementById('ctl00_CPH_div' + tabName);
+    if (div !== null) {
+        if (selected === true) {
+            div.style.display = 'block';
+        }
+        else {
+            div.style.display = 'none';
+        }
+    }
+    var tab = document.getElementById('divTabMiddle' + tabName);
+    if (tab !== null) {
+        if (selected === true) {
+            tab.className = 'tabTitle selectedTab';
+        }
+        else {
+            tab.className = 'tabTitle unSelectedTab';
+        }
+    }
+}
 
-Complete login process with valid credentials
-Log out or clear session
-Close the browser completely
-Reopen the browser
-Navigate to https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/login/index
+function downloadDocument(fileId) {
+    frm = document.forms[0];
+    txtDoc = document.getElementById('<% =txtDocumentFileId.ClientID %>');
+    txtDoc.value = fileId;
+    frm.target = "_blank";
+    frm.submit();
+    txtDoc.value = "";
+    frm.target = "";
+}
 
-Step 4: Access cached page without authentication
+function DisableEnterKey(event) {
+    key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+    if (key === 13 && (!event.target || event.target.tagName !== "TEXTAREA") && allowEnter === false) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 
-Open browser cache/history
-Using keyboard shortcut Ctrl+H (History), search for the domain
-Alternatively, use browser developer tools to inspect cached resources
-Observe: Previously visited authenticated pages are accessible from cache
-Observe: Page content displays without requiring re-authentication
-FINDING: Sensitive pages are retained in browser cache
+function openPage(pageToOpen, clickedLink, addArg) {
+    document.frmNAV.txtTreeViewSelection.value = clickedLink;
+    document.frmNAV.action = pageToOpen;
+    document.frmNAV.txtAdditionalArg.value = addArg;
+    document.frmNAV.submit();
+}
 
-Step 5: Verify sensitive data in cache
+function showChildMenu(id, event) {
+    event.stopPropagation();
+    var childMenu = document.getElementById(id);
+    if (childMenu.style.display === "none") {
+        childMenu.style.display = "block";
+        $(event.target).attr("class", "menuDownArrow");
+        addExpandedMenu(id);
+    }
+    else {
+        childMenu.style.display = "none";
+        $(event.target).attr("class", "menuRightArrow");
+        removeExpandedMenu(id);
+    }
+}
 
-Navigate to authenticated pages containing user data (e.g., /Home/QuickSearch)
-Check browser cache location:
+var expandedMenus = Array();
 
-Windows: C:\Users[username]\AppData\Local[BrowserName]\Cache
-macOS: ~/Library/Caches/[BrowserName]
-Linux: ~/.cache/[BrowserName]
+function fillExpandedMenusArray() {
+    var menus = document.forms[0].ctl00_txtExpandedMenus.value.split("|");
+    expandedMenus = menus;
+    document.frmNAV.txtExpandedMenus.value = document.forms[0].ctl00_txtExpandedMenus.value;
+}
 
+function addExpandedMenu(menu) {
+    var expandedCount = expandedMenus.length;
+    expandedMenus[expandedCount] = menu;
+    saveExpandedMenus();
+}
 
-Observe: HTML files contain sensitive information including transaction details, client data, tax calculations
-FINDING: Sensitive user data persists in cache files
+function removeExpandedMenu(menu) {
+    var expandedCount = expandedMenus.length;
+    for (var i = 0; i < expandedCount; i++) {
+        if (menu === expandedMenus[i].toString()) {
+            expandedMenus.splice(i, 1);
+            break;
+        }
+    }
+    saveExpandedMenus();
+}
 
-Remediation
-Implement Cache-Control Headers on All Sensitive Pages:
-Add the following HTTP response headers to all pages containing sensitive information:
-Cache-Control: no-store, no-cache, must-revalidate, private, max-age=0
-Pragma: no-cache
-Expires: 0
-Set-Cookie headers should include:
+function saveExpandedMenus() {
+    var expandedCount = expandedMenus.length;
+    var menus = "";
+    for (var i = 0; i < expandedCount; i++) {
+        menus += expandedMenus[i].toString() + "|";
+    }
+    document.frmNAV.txtExpandedMenus.value = menus;
+}
 
-HttpOnly
-Secure
-SameSite=Strict
+function enterKey() {
+    if (allowEnter === false) {
+        allowEnter = true;
+    }
+    else {
+        allowEnter = false;
+    }
+}
 
-Implementation Guidelines:
+//Fix Firefox extra line in textareas
+$("textarea").each(function () {
+    var lineHeight = parseFloat($(this).css("line-height"));
+    var lines = $(this).attr("rows") * 1 || $(this).prop("rows") * 1;
+    $(this).css("height", lines * lineHeight);
+});
 
-Configure cache-control at application level (web server or application framework)
-Apply to all endpoints that handle:
+function enterKeyPressed(e) {
+    if (e.keyCode === 13) {
+        if (e.target.id === "getIdTextbox" && e.target.value.length !== 0) {
+            searchGETID(e.target.value, getClientIdDropdownValue());
+        }
+    }
+}
 
-User authentication
-Login/logout operations
-User profile and account information
-Transaction records
-Client data
-Administrative functions
-Session information
+function getIdTextboxValue() {
+    return document.getElementById("getIdTextbox").value;
+}
 
+function getClientIdDropdownValue() {
+    return document.getElementById("getClientIdSelect").value;
+}
 
-Implement for both Pre-Auth (login pages) and Post-Auth (all authenticated pages)
+function searchGETID(searchText, clientId) {
+    console.log("searchGETID:" + searchText);
+    document.quickSearchForm.action = rootUrl + "Home/QuickSearch";
+    document.quickSearchForm.method = "post";
+    document.quickSearchForm.quickSearchType.value = "GETID";
+    document.quickSearchForm.quickSearchValue.value = searchText;
+    document.quickSearchForm.quickSearchClientId.value = clientId;
+    document.quickSearchForm.submit();
+}
 
-Closing/Downgrading Justification
-(No justification provided)
+function focusOnGETTransactionSearch() {
+    document.getElementById("getIdTextbox").focus();
+}
+
+function enableClientSearchBox() {
+    $("#clientSelectSearch").width($("#lblCurrentClient").width());
+    $("#lblCurrentClient").hide();
+    $("#clientSelectSearch").show();
+    $("#clientSelectSearch").focus();
+}
+
+function showlblCurrentClient() {
+    //if there is no hover, this means that the mouse is not over the client dropdown anymore
+    if (!($(".client-dropdown > li:hover").length != 0)) {
+        $("#clientSelectSearch").hide();
+        $("#clientSelectSearch").val("");
+        $("#lblCurrentClient").show();
+        $(".client-dropdown > li").show();
+    }
+}
+
+function filterClientSelect(element) {
+    var value = $(element).val().toUpperCase();
+
+    $(".client-dropdown > li").each(function () {
+        if ($(this).find("a").text().toUpperCase().search(value) > -1) {
+            $(this).show();
+        }
+        else {
+            $(this).hide();
+        }
+    });
+}
+
+function switchClient(clientId, clientCode) {
+    var elmnt = document.getElementsByClassName('js-switch-client-id');
+    var elmntCode = document.getElementsByClassName('js-switch-client-code');
+    if (elmnt != null) {
+        elmnt[0].value = clientId;
+        elmntCode[0].value = clientCode;
+        elmnt[0].form.submit();
+    }
+}
+
+function clientPressed(event) {
+
+    var clientId = $(event.target).attr("data-client-id");
+    var clientCode = $(event.target).attr("data-client-code");
+    if (event.target.nodeName == "A")//added this because sometime if the anchor tag is pressed it won't be able to get the data-client-id which is on the li tag
+    {
+        clientId = $(event.target).parent().attr("data-client-id");
+        clientCode = $(event.target).parent().attr("data-client-code");
+    }
+    if (clientId) {
+        switchClient(clientId, clientCode);
+    }
+}
+
+function enterPressedOnClientSearch(event) {
+    var elementId = event.target.id;
+    if (event.keyCode == 13) {
+        if (elementId == "clientSelectSearch") {
+            var clientId = $(".client-dropdown > li:visible").first().attr("data-client-id");
+            var clientCode = $(".client-dropdown > li:visible").first().attr("data-client-code");
+            if (clientId) {
+                switchClient(clientId, clientCode);
+            }
+        }
+    }
+}
+
+function keyPressOnClientSelectEvent() {
+    var lblCurrentClient = document.getElementById('lblCurrentClient');
+    var ulClientSelect = document.getElementsByClassName('client-dropdown')[0];
+
+    function keyaction(e) {
+        enableClientSearchBox();
+    }
+    if (lblCurrentClient) {
+        lblCurrentClient.addEventListener("mouseover", function () {
+            document.addEventListener("keypress", keyaction);
+        });
+
+        lblCurrentClient.addEventListener("mouseout", function () {
+            document.removeEventListener("keypress", keyaction, false);
+        });
+    }
+
+    if (ulClientSelect) {
+        ulClientSelect.addEventListener("mouseover", function () {
+            document.addEventListener("keypress", keyaction);
+        });
+
+        ulClientSelect.addEventListener("mouseout", function () {
+            document.removeEventListener("keypress", keyaction, false);
+        });
+    }
+}
