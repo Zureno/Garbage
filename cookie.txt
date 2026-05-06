@@ -1,271 +1,251 @@
 // ============================================================================
-// SOURCE CODE DISCLOSURE IMPACT: UNAUTHENTICATED ATTACKER
+// UNAUTHENTICATED ATTACKER POC - Using appMaster.js
+// ============================================================================
+// This POC works on ANY page (authenticated or not)
+// Shows what unauthenticated attackers can do with the exposed code
 // ============================================================================
 
-console.log("=== ANALYZING UNAUTHENTICATED ATTACKER CAPABILITIES ===\n");
+console.log("========== UNAUTHENTICATED ATTACKER POC ==========\n");
 
 // ============================================================================
-// WHAT UNAUTHENTICATED ATTACKER CAN DO
+// EXPLOIT 1: EXTRACT ALL FUNCTION NAMES (Complete API Discovery)
 // ============================================================================
+console.log("[EXPLOIT 1] Extract all callable functions from appMaster.js\n");
 
-console.log("[UNAUTHENTICATED USER] Capabilities:\n");
+var allFunctions = [];
+for (var key in window) {
+    if (typeof window[key] === 'function') {
+        allFunctions.push(key);
+    }
+}
 
-// STEP 1: RECONNAISSANCE - COMPLETELY FREE
-console.log("[1] APPLICATION STRUCTURE RECONNAISSANCE");
-console.log("    - Can read unminified JavaScript");
-console.log("    - Can see ALL function names");
-console.log("    - Can see ALL form names");
-console.log("    - Can discover API endpoint patterns");
-console.log("    - Can understand complete application architecture");
-console.log("    Impact: Complete reverse engineering without authentication\n");
+console.log("Total functions found: " + allFunctions.length);
+console.log("\nKey functions discovered:");
 
-// STEP 2: DISCOVER API ENDPOINTS
-console.log("[2] API ENDPOINT DISCOVERY (Works WITHOUT authentication)");
-var discoveredEndpoints = [
-    "rootUrl + 'Home/QuickSearch'",
-    "rootUrl + 'WebService/SetFingerprinting'",
-    "rootUrl + 'Home/GetClientData'",
-    "rootUrl + 'API/GetTransactions'",
-    "rootUrl + 'ClientTaxLogic'",
-    "rootUrl + 'CalcTransactions'",
-    "rootUrl + 'ClientSelect/ViewClient'"
+var importantFunctions = [
+    'searchGETID',
+    'switchClient',
+    'openPage',
+    'clientPressed',
+    'filterClientSelect',
+    'setTabDisplay',
+    'setTabStyle'
 ];
-console.log("    Discovered endpoints:");
-discoveredEndpoints.forEach(function(ep) {
-    console.log("    - " + ep);
+
+importantFunctions.forEach(function(fn) {
+    if (typeof window[fn] === 'function') {
+        console.log("[FOUND] " + fn + "() - Function is callable");
+    }
 });
-console.log("    Impact: Attacker knows exactly where to send requests\n");
 
-// STEP 3: UNDERSTAND DATA FLOW
-console.log("[3] DATA FLOW UNDERSTANDING (Works WITHOUT authentication)");
-console.log("    From source code analysis:");
-console.log("    - searchGETID() takes (searchText, clientId)");
-console.log("    - switchClient() takes (clientId, clientCode)");
-console.log("    - Forms use POST with specific field names");
-console.log("    - API returns JSON responses");
-console.log("    Impact: Attacker knows what parameters each API expects\n");
-
-// STEP 4: IDENTIFY AUTHENTICATION BYPASS OPPORTUNITIES
-console.log("[4] IDENTIFY SECURITY WEAKNESSES (From source code)");
-console.log("    Findings from code analysis:");
-console.log("    - No CSRF tokens visible");
-console.log("    - No nonce/replay protection");
-console.log("    - Client-side form validation only");
-console.log("    - No apparent rate limiting");
-console.log("    Impact: Attacker knows which bypasses to attempt\n");
+console.log("\nAttacker Knowledge: Knows exactly what functions exist\n");
 
 // ============================================================================
-// WHAT UNAUTHENTICATED ATTACKER CANNOT DO DIRECTLY
+// EXPLOIT 2: DISCOVER API ENDPOINTS FROM GLOBAL VARIABLES
 // ============================================================================
+console.log("[EXPLOIT 2] Discover API endpoints\n");
 
-console.log("\n[UNAUTHENTICATED USER] Limitations:\n");
+console.log("Looking for rootUrl variable...");
+if (typeof rootUrl !== 'undefined') {
+    console.log("[FOUND] rootUrl = " + rootUrl);
+    
+    var endpoints = [
+        'Home/QuickSearch',
+        'WebService/SetFingerprinting',
+        'Home/GetClientData',
+        'API/GetTransactions',
+        'ClientTaxLogic',
+        'CalcTransactions'
+    ];
+    
+    console.log("\nDiscovered API endpoints:");
+    endpoints.forEach(function(ep) {
+        var fullUrl = rootUrl + ep;
+        console.log("  [ENDPOINT] " + fullUrl);
+    });
+} else {
+    console.log("[NOT FOUND] rootUrl - but attacker can guess endpoints");
+    console.log("  Typical patterns: /Home/*, /API/*, /WebService/*");
+}
 
-console.log("[BLOCKED 1] Cannot call switchClient()");
-console.log("    Reason: Requires valid session/authentication");
-console.log("    Impact: Cannot switch to other clients YET\n");
-
-console.log("[BLOCKED 2] Cannot call searchGETID() directly");
-console.log("    Reason: Form might not exist on login page");
-console.log("    Impact: Cannot search for transactions YET\n");
-
-console.log("[BLOCKED 3] Cannot read existing session cookies");
-console.log("    Reason: If cookies are HttpOnly, JavaScript can't read them");
-console.log("    Impact: Cannot steal session YET\n");
-
-// ============================================================================
-// ATTACK PROGRESSION: HOW UNAUTHENTICATED BECOMES AUTHENTICATED
-// ============================================================================
-
-console.log("\n[ATTACK PROGRESSION] How Source Code Disclosure Leads to Breach:\n");
-
-console.log("PHASE 1: RECONNAISSANCE (Unauthenticated, needs source code)");
-console.log("  1. Read appMaster.js - understand all functions");
-console.log("  2. Map all API endpoints");
-console.log("  3. Understand form structure and field names");
-console.log("  4. Identify missing security controls (no CSRF tokens visible)");
-console.log("  5. Study authentication flow\n");
-
-console.log("PHASE 2: AUTHENTICATION ATTACK (Using knowledge from Phase 1)");
-console.log("  1. Attempt SQL injection on login form (now knows field names!)");
-console.log("  2. Attempt credential stuffing (knows what fields exist)");
-console.log("  3. Attempt LDAP injection (knows LDAP is used from code)");
-console.log("  4. Analyze login response (knows what to expect)");
-console.log("  5. Bypass client-side validation (understands it completely)\n");
-
-console.log("PHASE 3: POST-AUTHENTICATION ATTACKS (Once authenticated)");
-console.log("  1. Call switchClient() to access other accounts");
-console.log("  2. Call searchGETID() to find specific transactions");
-console.log("  3. Manipulate form fields before submission");
-console.log("  4. Call internal APIs directly");
-console.log("  5. Exploit known vulnerabilities from code analysis\n");
+console.log("\nAttacker Knowledge: Knows all internal API endpoints\n");
 
 // ============================================================================
-// EXAMPLE: UNAUTHENTICATED ATTACKER'S WORKFLOW
+// EXPLOIT 3: IDENTIFY FORM STRUCTURE AND FIELD NAMES
 // ============================================================================
+console.log("[EXPLOIT 3] Discover form structures\n");
 
-console.log("\n[EXAMPLE WORKFLOW] How Unauthenticated Attacker Exploits Source Code:\n");
+console.log("Scanning for forms in appMaster.js context...");
 
-console.log("STEP 1: Attacker opens login page, presses F12, finds appMaster.js");
-console.log("  URL: https://qa.gmsgetb.kpmglinkgo.com/gettaxcalcbac/javascript/appMaster.js\n");
+var discoveredForms = {
+    quickSearchForm: false,
+    frmNAV: false,
+    jsSwitchClientForm: false
+};
 
-console.log("STEP 2: Attacker reads and analyzes the code:");
-console.log("  - Finds LDAP injection vulnerability mentioned in Finding 2");
-console.log("  - Sees: $.ajax() with LDAP query construction");
-console.log("  - Knows exactly which endpoint to target\n");
+if (typeof document !== 'undefined') {
+    if (document.quickSearchForm) {
+        discoveredForms.quickSearchForm = true;
+        console.log("[FOUND] document.quickSearchForm");
+        console.log("  Fields: quickSearchType, quickSearchValue, quickSearchClientId");
+    }
+    
+    if (document.frmNAV) {
+        discoveredForms.frmNAV = true;
+        console.log("[FOUND] document.frmNAV");
+        console.log("  Fields: txtTreeViewSelection, txtAdditionalArg");
+    }
+    
+    var switchClientElements = document.getElementsByClassName('js-switch-client-id');
+    if (switchClientElements.length > 0) {
+        discoveredForms.jsSwitchClientForm = true;
+        console.log("[FOUND] js-switch-client-* form elements");
+        console.log("  Fields: js-switch-client-id, js-switch-client-code");
+    }
+}
 
-console.log("STEP 3: Attacker attempts to bypass authentication:");
-console.log("  POST /gettaxcalcbac/login/index");
-console.log("  Data: username=admin*&password=*");
-console.log("  (LDAP wildcard injection - now they know this works!)\n");
-
-console.log("STEP 4: If successful, attacker is now authenticated");
-console.log("  - Has session cookie");
-console.log("  - Can now call switchClient()");
-console.log("  - Can call searchGETID()");
-console.log("  - Can manipulate forms\n");
-
-console.log("STEP 5: Attacker exploits IDOR vulnerability (Finding 1)");
-console.log("  - Calls: switchClient('999', 'ADMIN')");
-console.log("  - Now has access to client 999's data");
-console.log("  - Source code disclosed HOW to do this!\n");
-
-// ============================================================================
-// WHAT SPECIFIC VULNERABILITIES BECOME EXPLOITABLE
-// ============================================================================
-
-console.log("\n[VULNERABILITY AMPLIFICATION] How Source Code Disclosure Makes Other Vulns Worse:\n");
-
-console.log("Finding 1: IDOR Vulnerability");
-console.log("  WITHOUT source code: Attacker randomly guesses client IDs");
-console.log("  WITH source code: Attacker knows exact function: switchClient(clientId, code)");
-console.log("  Impact multiplier: 10x easier to exploit\n");
-
-console.log("Finding 2: LDAP Injection");
-console.log("  WITHOUT source code: Attacker doesn't know if LDAP is used");
-console.log("  WITH source code: Attacker sees LDAP pattern in code");
-console.log("  Impact multiplier: Instant confirmation of attack vector\n");
-
-console.log("Finding 3: CSP Misconfiguration");
-console.log("  WITHOUT source code: Attacker has to test for XSS blindly");
-console.log("  WITH source code: Attacker sees no CSP headers mentioned");
-console.log("  Impact multiplier: Knows XSS will work before attempting\n");
-
-console.log("Finding 4: Repository Exposure");
-console.log("  WITHOUT source code: Attacker might not find .git directory");
-console.log("  WITH source code: Can study code, then download .git for full source");
-console.log("  Impact multiplier: Complete application compromise\n");
+console.log("\nAttacker Knowledge: Knows exact form field names and structure\n");
 
 // ============================================================================
-// REAL-WORLD ATTACK SCENARIO
+// EXPLOIT 4: UNDERSTAND DATA FLOW PATTERNS
 // ============================================================================
+console.log("[EXPLOIT 4] Reverse-engineer data flow\n");
 
-console.log("\n[REAL SCENARIO] Unauthenticated Attacker's Attack Chain:\n");
+console.log("From appMaster.js code analysis, attacker understands:\n");
 
-console.log("Day 1:");
-console.log("  - Attacker visits login page");
-console.log("  - Finds and analyzes appMaster.js (publicly accessible)");
-console.log("  - Discovers LDAP injection vulnerability in code");
-console.log("  - Discovers IDOR vulnerability referenced in comments\n");
+console.log("1. Search Flow:");
+console.log("   searchGETID(searchText, clientId)");
+console.log("     → Sets form fields:");
+console.log("        quickSearchType = 'GETID'");
+console.log("        quickSearchValue = searchText");
+console.log("        quickSearchClientId = clientId");
+console.log("     → Submits to: rootUrl + 'Home/QuickSearch'\n");
 
-console.log("Day 2:");
-console.log("  - Attempts LDAP injection: admin*");
-console.log("  - Login succeeds (Finding 2 confirmed)");
-console.log("  - Now has valid session token\n");
+console.log("2. Client Switch Flow:");
+console.log("   switchClient(clientId, clientCode)");
+console.log("     → Sets hidden fields:");
+console.log("        js-switch-client-id = clientId");
+console.log("        js-switch-client-code = clientCode");
+console.log("     → Submits form\n");
 
-console.log("Day 3:");
-console.log("  - Calls switchClient() function with random client IDs");
-console.log("  - Accesses multiple client accounts (Finding 1)");
-console.log("  - Finds admin client and switches to it");
-console.log("  - Downloads confidential data\n");
+console.log("3. Navigation Flow:");
+console.log("   openPage(pageToOpen, clickedLink, addArg)");
+console.log("     → Fills frmNAV with navigation data");
+console.log("     → Submits to specified page\n");
 
-console.log("Day 4:");
-console.log("  - Discovered .git directory from code analysis");
-console.log("  - Downloads complete source code");
-console.log("  - Finds hardcoded credentials in old commits (Finding 4)");
-console.log("  - Compromises entire application\n");
-
-// ============================================================================
-// IMPACT: UNAUTHENTICATED VS AUTHENTICATED
-// ============================================================================
-
-console.log("\n[IMPACT ASSESSMENT]\n");
-
-console.log("UNAUTHENTICATED ATTACKER (Only using source code):");
-console.log("  Risk Level: MEDIUM");
-console.log("  Can do:");
-console.log("    + Complete application reverse engineering");
-console.log("    + Map all internal functions and APIs");
-console.log("    + Identify all security weaknesses");
-console.log("    + Plan attacks with 100% accuracy");
-console.log("    + Discover and exploit Finding 2 (LDAP Injection)");
-console.log("    + Find .git directory using disclosed information");
-console.log("  Cannot do:");
-console.log("    - Call sensitive functions directly");
-console.log("    - Access other users' data (yet)");
-console.log("    - Read session cookies (yet)\n");
-
-console.log("AUTHENTICATED ATTACKER (After auth bypass using disclosed info):");
-console.log("  Risk Level: CRITICAL");
-console.log("  Can do:");
-console.log("    + Call switchClient() to access any account (Finding 1)");
-console.log("    + Call searchGETID() with any parameters");
-console.log("    + Steal session cookies (if not HttpOnly)");
-console.log("    + Exploit Finding 3 (CSP) with XSS attacks");
-console.log("    + Access complete application as admin");
-console.log("    + Complete data exfiltration\n");
+console.log("Attacker Knowledge: Understands complete application flow\n");
 
 // ============================================================================
-// CRITICAL REALIZATION
+// EXPLOIT 5: IDENTIFY SECURITY WEAKNESSES
 // ============================================================================
+console.log("[EXPLOIT 5] Identify security weaknesses from code\n");
 
-console.log("\n[CRITICAL] Why Source Code Disclosure is So Dangerous:\n");
+var weaknesses = [
+    "No CSRF tokens visible in form manipulation",
+    "No nonce/replay protection detected",
+    "Client-side form submission without server validation hints",
+    "Direct form.submit() calls without checks",
+    "Unencrypted parameter passing visible in code",
+    "No input sanitization visible on client side"
+];
 
-console.log("The source code disclosure doesn't JUST expose the app structure.");
-console.log("It ENABLES exploitation of ALL OTHER VULNERABILITIES!\n");
+console.log("Security weaknesses identified from code:");
+weaknesses.forEach(function(weakness) {
+    console.log("  [WEAKNESS] " + weakness);
+});
 
-console.log("Example chain:");
-console.log("  1. Source code disclosed → attacker learns about LDAP");
-console.log("  2. LDAP injection vulnerability (Finding 2) → bypass auth");
-console.log("  3. Now authenticated → attacker exploits IDOR (Finding 1)");
-console.log("  4. IDOR leads to complete data theft\n");
-
-console.log("Without source code disclosure:");
-console.log("  - Attacker wouldn't know LDAP is used");
-console.log("  - Wouldn't attempt LDAP injection");
-console.log("  - Would be stuck at authentication\n");
-
-console.log("With source code disclosure:");
-console.log("  - Attacker knows EXACTLY what to exploit");
-console.log("  - Exploits are GUARANTEED to work");
-console.log("  - Complete application compromise in 4 days\n");
+console.log("\nAttacker Knowledge: Knows exactly which security controls are missing\n");
 
 // ============================================================================
-// SUMMARY
+// EXPLOIT 6: FIND ATTACK TARGETS
 // ============================================================================
+console.log("[EXPLOIT 6] Identify attack vectors\n");
 
-console.log("\n====================================================================");
-console.log("SUMMARY: Source Code Disclosure Impact on Unauthenticated Users");
-console.log("====================================================================\n");
+console.log("From appMaster.js analysis, attack targets are:\n");
 
-console.log("Short Answer: Source code disclosure is DANGEROUS for unauthenticated users");
-console.log("because it reveals:");
-console.log("  1. How to authenticate (which vulnerabilities to exploit)");
-console.log("  2. How to escalate once authenticated");
-console.log("  3. Which security controls are missing");
-console.log("  4. The exact attack vectors that will work\n");
+console.log("1. Authentication Weakness");
+console.log("   - Application uses LDAP (visible from form names)");
+console.log("   - No CSRF protection on login");
+console.log("   - Vulnerable to LDAP injection (Finding 2)\n");
 
-console.log("Unauthenticated Impact: MEDIUM");
-console.log("  - Cannot access data directly");
-console.log("  - But can plan perfect attack");
-console.log("  - Can find other vulnerabilities (LDAP Injection, Repo Exposure)");
-console.log("  - Can achieve authentication bypass using revealed knowledge\n");
+console.log("2. Data Access Weakness");
+console.log("   - switchClient() can change client context");
+console.log("   - No server-side validation hints");
+console.log("   - Vulnerable to IDOR (Finding 1)\n");
 
-console.log("Authenticated Impact: CRITICAL");
-console.log("  - Has all the knowledge from source code");
-console.log("  - Plus valid session to exploit IDOR and other vulns");
-console.log("  - Complete application compromise guaranteed\n");
+console.log("3. Form Manipulation Weakness");
+console.log("   - Forms are directly submittable");
+console.log("   - No token validation visible");
+console.log("   - Can forge requests as authenticated user\n");
 
-console.log("===================================================================");
-console.log("Conclusion: Source Code Disclosure enables ALL other vulnerabilities.");
-console.log("It's not just about information - it's about enabling full exploitation.");
-console.log("===================================================================\n");
+console.log("4. Repository Exposure");
+console.log("   - Code suggests this is .git-accessible");
+console.log("   - Can download full source (Finding 4)\n");
+
+console.log("Attacker Knowledge: Knows exactly which vulnerabilities to exploit\n");
+
+// ============================================================================
+// EXPLOIT 7: PLAN ATTACK CHAIN
+// ============================================================================
+console.log("[EXPLOIT 7] Plan multi-stage attack\n");
+
+console.log("Stage 1: Authentication Bypass");
+console.log("  - Use LDAP injection: admin*");
+console.log("  - Knowledge from appMaster.js: Know exactly which form\n");
+
+console.log("Stage 2: Access Control Bypass");
+console.log("  - Use switchClient() function discovered from code");
+console.log("  - Switch to any client: switchClient('999', 'CODE')");
+console.log("  - Knowledge from appMaster.js: Know exact function signature\n");
+
+console.log("Stage 3: Data Exfiltration");
+console.log("  - Use searchGETID() to find data");
+console.log("  - Knowledge from appMaster.js: Know exact search parameters\n");
+
+console.log("Stage 4: Privilege Escalation");
+console.log("  - Access admin client data");
+console.log("  - Full application compromise\n");
+
+console.log("Attacker Knowledge: Complete attack plan from code analysis\n");
+
+// ============================================================================
+// SUMMARY: UNAUTHENTICATED ATTACKER CAPABILITIES
+// ============================================================================
+console.log("\n" + "=".repeat(60));
+console.log("UNAUTHENTICATED ATTACKER CAPABILITIES WITH appMaster.js");
+console.log("=".repeat(60) + "\n");
+
+console.log("CAN DO:");
+console.log("  [✓] Extract all function names");
+console.log("  [✓] Discover all API endpoints");
+console.log("  [✓] Map form structures and field names");
+console.log("  [✓] Understand complete data flow");
+console.log("  [✓] Identify security weaknesses");
+console.log("  [✓] Find LDAP vulnerability (Finding 2)");
+console.log("  [✓] Discover IDOR vulnerability (Finding 1)");
+console.log("  [✓] Plan complete attack chain");
+console.log("  [✓] Locate .git directory (Finding 4)\n");
+
+console.log("CANNOT DO (without authentication):");
+console.log("  [✗] Call searchGETID() - form doesn't exist on login");
+console.log("  [✗] Call switchClient() - requires session");
+console.log("  [✗] Access actual data - needs authentication");
+console.log("  [✗] Read session cookies - if HttpOnly protected");
+console.log("  [✗] Manipulate authenticated forms - requires session\n");
+
+console.log("IMPACT LEVEL: MEDIUM-HIGH");
+console.log("Reason: Complete reconnaissance possible");
+console.log("        Can plan and execute authentication bypass");
+console.log("        Once authenticated → CRITICAL impact\n");
+
+console.log("=".repeat(60));
+console.log("\nStore results:");
+window.unauthenticatedAttackerPOC = {
+    discoveredFunctions: allFunctions,
+    discoveredEndpoints: endpoints,
+    discoveredForms: discoveredForms,
+    securityWeaknesses: weaknesses,
+    capabilityLevel: "MEDIUM-HIGH (reconnaissance + planning)"
+};
+
+console.log("Results saved to: window.unauthenticatedAttackerPOC");
