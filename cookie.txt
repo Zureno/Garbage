@@ -1,56 +1,45 @@
 """
-UCAS Debugger - Unified Control Automation System Debugging Tool
+UCAS Debugger - Enhanced Edition with Advanced Features
 
 Provides method-level instrumentation with execution timing, structured logging,
-and performance bottleneck detection for AWS Lambda microservices.
+performance bottleneck detection, historical tracking, smart suggestions, and more!
 
-Features:
-- Colored console output for local development
-- Structured JSON logs for CloudWatch production logging
-- Auto-environment detection (no code changes needed)
-- Dynamic performance tracking and bottleneck identification
-- Visual performance breakdown with color-coded bars
-
-Usage:
-    from ucas_debugger import UCASDebugger
-    
-    # Auto-detect environment
-    import os
-    is_local = os.getenv('AWS_EXECUTION_ENV') is None
-    ucas = UCASDebugger(logger, colored_output=is_local)
-    
-    # In your methods
-    ucas.method_start("my_method", param1="value")
-    # ... your code ...
-    ucas.method_stop("my_method", result="success")
+New Features:
+- Performance history tracking with trends
+- Smart optimization suggestions
+- Method comparison (current vs previous runs)
+- HTML report generation
+- AWS cost estimation
+- Alert thresholds
+- CloudWatch query generator
+- Sparkline visualization
 """
 
 import time
+import json
+import os
+from datetime import datetime
+from pathlib import Path
 from aws_lambda_powertools import Logger
 
 
 class Colors:
     """ANSI color codes for terminal output"""
-    # Status colors
     HEADER = '\033[95m'      # Magenta
     CYAN = '\033[96m'        # Cyan
     BLUE = '\033[94m'        # Blue
     GREEN = '\033[92m'       # Green
     WARNING = '\033[93m'     # Yellow
     ERROR = '\033[91m'       # Red
+    PASS = '\033[92m'        # Green (for success)
+    STOP = '\033[92m'        # Green (for fast completions)
     PURPLE = '\033[95m'      # Purple
     ORANGE = '\033[38;5;208m'  # Orange
     PINK = '\033[38;5;213m'    # Pink
-    
-    # Special
-    PASS = '\033[92m'        # Green (for success)
-    STOP = '\033[92m'        # Green (for fast completions)
-    
-    # Formatting
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     DIM = '\033[2m'
-    END = '\033[0m'          # Reset
+    END = '\033[0m'
     
     # Method-specific color palette (each method gets its own color)
     METHOD_COLORS = {
@@ -70,83 +59,176 @@ class Colors:
 
 
 class UCASDebugger:
-    """
-    UCAS Debugger for Lambda microservices.
+    """Enhanced UCAS Debugger with advanced features."""
     
-    Provides method-level execution tracking with timing, metrics logging,
-    and performance analysis.
-    """
+    # Performance thresholds (configurable)
+    THRESHOLDS = {
+        'get_akamai_onboarding_compliance': 3000,  # 3 seconds
+        'validate_akamai': 100,  # 100ms
+        'build_result': 50,  # 50ms
+        'write_result': 500,  # 500ms
+        'handler': 5000,  # 5 seconds
+    }
+    
+    # AWS Lambda pricing (per 1ms of execution)
+    LAMBDA_COST_PER_MS = 0.0000000167  # $0.0000000167 per ms for 512MB
     
     def __init__(self, logger_instance: Logger, colored_output: bool = False):
-        """
-        Initialize UCAS Debugger.
-        
-        Args:
-            logger_instance: AWS Lambda Powertools Logger instance
-            colored_output: True for colored console output (local dev),
-                          False for structured JSON (production)
-        """
+        """Initialize Enhanced UCAS Debugger."""
         self.logger = logger_instance
         self.colored_output = colored_output
         self.start_time = None
         self.method_name = None
-        self.durations = {}  # Store all method durations for analysis
+        self.durations = {}
+        self.method_calls = {}  # Track call counts
+        self.alerts = []  # Store performance alerts
+        self.history_file = Path('.ucas_history.json')
+        self.current_run = {
+            'timestamp': datetime.now().isoformat(),
+            'durations': {},
+            'alerts': [],
+            'status': 'RUNNING'
+        }
     
     def _color_print(self, color: str, message: str):
         """Print colored message to console."""
         if self.colored_output:
             print(f"{color}{message}{Colors.END}")
     
-    def method_start(self, method_name: str, **parameters):
-        """
-        Log the start of a method execution.
+    def _generate_sparkline(self, values: list, width: int = 10) -> str:
+        """Generate ASCII sparkline from values."""
+        if not values or len(values) < 2:
+            return "─" * width
         
-        Args:
-            method_name: Name of the method being executed
-            **parameters: Key-value pairs of method parameters to log
-        """
+        min_val = min(values)
+        max_val = max(values)
+        
+        if max_val == min_val:
+            return "─" * width
+        
+        # Normalize values to 0-7 range for block characters
+        chars = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
+        normalized = [(v - min_val) / (max_val - min_val) for v in values[-width:]]
+        sparkline = ''.join(chars[int(n * 7)] for n in normalized)
+        
+        return sparkline
+    
+    def _load_history(self):
+        """Load performance history from file."""
+        if self.history_file.exists():
+            try:
+                with open(self.history_file, 'r') as f:
+                    return json.load(f)
+            except:
+                return {'runs': []}
+        return {'runs': []}
+    
+    def _save_history(self):
+        """Save current run to history file."""
+        if not self.colored_output:
+            return  # Only save in local mode
+        
+        history = self._load_history()
+        
+        # Add current run
+        self.current_run['durations'] = self.durations
+        self.current_run['alerts'] = self.alerts
+        history['runs'].append(self.current_run)
+        
+        # Keep last 50 runs
+        history['runs'] = history['runs'][-50:]
+        
+        try:
+            with open(self.history_file, 'w') as f:
+                json.dump(history, f, indent=2)
+        except:
+            pass  # Silently fail if can't write
+    
+    def _get_performance_trend(self, method_name: str) -> str:
+        """Get performance trend for a method (↑ getting slower, ↓ getting faster, → stable)."""
+        history = self._load_history()
+        
+        # Get last 5 runs for this method
+        recent_durations = []
+        for run in history['runs'][-5:]:
+            if method_name in run.get('durations', {}):
+                recent_durations.append(run['durations'][method_name])
+        
+        if len(recent_durations) < 2:
+            return "→"  # Not enough data
+        
+        # Compare current vs average of previous
+        current = recent_durations[-1]
+        previous_avg = sum(recent_durations[:-1]) / len(recent_durations[:-1])
+        
+        if current > previous_avg * 1.2:
+            return f"↑ +{int((current/previous_avg - 1) * 100)}%"  # Getting slower
+        elif current < previous_avg * 0.8:
+            return f"↓ -{int((1 - current/previous_avg) * 100)}%"  # Getting faster
+        else:
+            return "→"  # Stable
+    
+    def _estimate_cost(self, duration_ms: float) -> float:
+        """Estimate AWS Lambda cost for this execution."""
+        return duration_ms * self.LAMBDA_COST_PER_MS
+    
+    def method_start(self, method_name: str, **parameters):
+        """Log the start of a method execution."""
         self.start_time = time.time()
         self.method_name = method_name
         
+        # Track call count
+        self.method_calls[method_name] = self.method_calls.get(method_name, 0) + 1
+        
         if self.colored_output:
-            # Colored console output for local development
             # Each method gets its own color
             method_color = Colors.get_method_color(method_name)
             params_str = ", ".join(f"{k}={v}" for k, v in parameters.items())
+            
+            # Show call count if method called multiple times
+            call_indicator = ""
+            if self.method_calls[method_name] > 1:
+                call_indicator = f" {Colors.DIM}[call #{self.method_calls[method_name]}]{Colors.END}"
+            
             self._color_print(
                 method_color + Colors.BOLD,
-                f"▶ START: {method_name} ({params_str})"
+                f"▶ START: {method_name} ({params_str}){call_indicator}"
             )
         else:
-            # Structured JSON for CloudWatch
             self.logger.info(
                 f"Method started: {method_name}",
                 extra={
                     "event": "method_start",
                     "method": method_name,
-                    "parameters": parameters
+                    "parameters": parameters,
+                    "call_number": self.method_calls[method_name]
                 }
             )
     
     def method_stop(self, method_name: str, **metrics):
-        """
-        Log the completion of a method execution with timing.
-        
-        Args:
-            method_name: Name of the method that completed
-            **metrics: Key-value pairs of metrics to log (e.g., record_count, status)
-        """
+        """Log the completion of a method execution with timing and alerts."""
         duration_ms = None
         if self.start_time:
             duration_ms = round((time.time() - self.start_time) * 1000, 2)
-            # Store duration for performance analysis
             self.durations[method_name] = duration_ms
         
+        # Check for threshold violations
+        threshold = self.THRESHOLDS.get(method_name)
+        threshold_violated = threshold and duration_ms and duration_ms > threshold
+        
+        if threshold_violated:
+            alert = {
+                'method': method_name,
+                'duration': duration_ms,
+                'threshold': threshold,
+                'overage': duration_ms - threshold
+            }
+            self.alerts.append(alert)
+        
         if self.colored_output:
-            # Colored console output with visual indicators
             metrics_str = ", ".join(f"{k}={v}" for k, v in metrics.items())
             
-            # Check if this is an error (look for error-related metrics)
+            # Check if this is an error
             is_error = any(key in metrics for key in ['error', 'error_type', 'error_message', 'final_status']) and \
                       (metrics.get('final_status') == 'ERROR' or 'error_type' in metrics)
             
@@ -157,34 +239,37 @@ class UCASDebugger:
                 # Same color as the method's START
                 color = Colors.get_method_color(method_name) + Colors.BOLD
             
+            # Add performance trend indicator
+            trend = self._get_performance_trend(method_name)
+            trend_str = f" {Colors.CYAN}{trend}{Colors.END}" if trend != "→" else ""
+            
+            # Add threshold warning
+            threshold_str = ""
+            if threshold_violated:
+                threshold_str = f" {Colors.ERROR}⚠ SLOW!{Colors.END}"
+            
             self._color_print(
                 color,
-                f"■ STOP: {method_name} [{duration_ms}ms] ({metrics_str})"
+                f"■ STOP: {method_name} [{duration_ms}ms]{trend_str}{threshold_str} ({metrics_str})"
             )
         else:
-            # Structured JSON for CloudWatch with queryable fields
             self.logger.info(
                 f"Method completed: {method_name}",
                 extra={
                     "event": "method_stop",
                     "method": method_name,
                     "duration_ms": duration_ms,
-                    "metrics": metrics
+                    "metrics": metrics,
+                    "threshold_violated": threshold_violated
                 }
             )
         
-        # Reset for next method
         self.start_time = None
     
     def log_metrics(self, **metrics):
-        """
-        Log intermediate metrics during method execution.
-        
-        Args:
-            **metrics: Key-value pairs of metrics to log
-        """
+        """Log intermediate metrics during method execution."""
         if self.colored_output:
-            # Colored console output with method-specific color (dimmed)
+            # Use method-specific color (dimmed)
             method_color = Colors.get_method_color(self.method_name)
             metrics_str = ", ".join(f"{k}={v}" for k, v in metrics.items())
             self._color_print(
@@ -192,7 +277,6 @@ class UCASDebugger:
                 f"  ℹ METRICS: {self.method_name} → {metrics_str}"
             )
         else:
-            # Structured JSON for CloudWatch
             self.logger.debug(
                 "Method metrics",
                 extra={
@@ -203,93 +287,86 @@ class UCASDebugger:
             )
     
     def get_performance_breakdown(self):
-        """
-        Get performance breakdown with percentages.
-        
-        Returns:
-            List of tuples: (method_name, duration_ms, percentage)
-            Sorted by duration (slowest first)
-        """
+        """Get performance breakdown with percentages."""
         if not self.durations:
             return []
         
-        # Calculate total (use handler if available, otherwise sum all)
         total = self.durations.get('handler', sum(self.durations.values()))
-        
-        # Calculate percentages for each method
         breakdown = []
+        
         for method, duration in sorted(self.durations.items(), key=lambda x: x[1], reverse=True):
-            if method != 'handler':  # Exclude handler from breakdown (it's the total)
+            if method != 'handler':
                 percentage = (duration / total) * 100
                 breakdown.append((method, duration, percentage))
         
         return breakdown
     
     def get_bottleneck(self):
-        """
-        Automatically identify the performance bottleneck.
-        
-        Returns:
-            Tuple of (method_name, duration_ms, percentage) or None if no data
-        """
+        """Automatically identify the performance bottleneck."""
         breakdown = self.get_performance_breakdown()
         if not breakdown:
             return None
-        
-        # Bottleneck is the slowest method (first in sorted list)
         return breakdown[0]
     
     def print_performance_summary(self, total_duration_ms: float = None):
-        """
-        Print a formatted performance breakdown with visual bars.
-        
-        Args:
-            total_duration_ms: Optional total duration override
-        """
+        """Print enhanced performance breakdown with trends and insights."""
         if not self.colored_output:
-            return  # Only print for local/colored mode
+            return
         
         breakdown = self.get_performance_breakdown()
         if not breakdown:
             return
         
-        # Get total duration
         total = total_duration_ms or self.durations.get('handler', sum(d for _, d, _ in breakdown))
         
-        # Print header
+        # Load history for trends
+        history = self._load_history()
+        
         print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
-        print(f"{Colors.HEADER}{Colors.BOLD}📊 Performance Breakdown{Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}📊 Performance Analysis{Colors.END}")
         print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
         
-        # Print each method with visual bar
+        # Show each method with enhanced info
         for method, duration, percentage in breakdown:
-            # Color based on percentage of total time
+            # Color based on percentage
             if percentage > 50:
-                color = Colors.ERROR  # Red for major bottlenecks
+                color = Colors.ERROR
                 icon = "🔴"
             elif percentage > 10:
-                color = Colors.WARNING  # Yellow for moderate time
+                color = Colors.WARNING
                 icon = "🟡"
             else:
-                color = Colors.PASS  # Green for fast operations
+                color = Colors.PASS
                 icon = "🟢"
             
-            # Create visual bar (max 50 characters)
+            # Visual bar
             bar_length = int(percentage / 2)
             bar = "█" * bar_length
             
-            # Print formatted line with bar
-            print(f"{color}{icon} {method:40} {bar} {duration:7.2f}ms ({percentage:5.1f}%){Colors.END}")
+            # Get trend sparkline
+            method_history = []
+            for run in history['runs'][-10:]:
+                if method in run.get('durations', {}):
+                    method_history.append(run['durations'][method])
+            
+            sparkline = self._generate_sparkline(method_history) if len(method_history) > 1 else ""
+            sparkline_str = f" {Colors.CYAN}{sparkline}{Colors.END}" if sparkline else ""
+            
+            # Cost estimate
+            cost = self._estimate_cost(duration)
+            cost_str = f" ${cost:.6f}" if cost > 0.000001 else ""
+            
+            print(f"{color}{icon} {method:40} {bar} {duration:7.2f}ms ({percentage:5.1f}%){sparkline_str}{Colors.DIM}{cost_str}{Colors.END}")
         
-        # Print footer with totals
         print(f"{Colors.HEADER}{Colors.BOLD}{'─'*70}{Colors.END}")
-        print(f"{Colors.BOLD}   Total Duration: {total:.2f}ms{Colors.END}")
+        
+        # Total summary with cost
+        total_cost = self._estimate_cost(total)
+        print(f"{Colors.BOLD}   Total Duration: {total:.2f}ms  |  Estimated Cost: ${total_cost:.6f}{Colors.END}")
         print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}\n")
     
-    def print_bottleneck_alert(self):
-        """
-        Print an alert highlighting the performance bottleneck.
-        """
+    def print_smart_suggestions(self):
+        """Print AI-powered optimization suggestions based on performance data."""
         if not self.colored_output:
             return
         
@@ -299,60 +376,155 @@ class UCASDebugger:
         
         method, duration, percentage = bottleneck
         
-        print(f"{Colors.ERROR}{Colors.BOLD}🔴 BOTTLENECK DETECTED:{Colors.END}")
-        print(f"   Method: {Colors.BOLD}{method}{Colors.END}")
-        print(f"   Duration: {Colors.ERROR}{duration:.2f}ms{Colors.END} ({percentage:.1f}% of total execution)")
-        print(f"   💡 Recommendation: Optimize {Colors.UNDERLINE}{method}{Colors.END} for better performance\n")
-    
-    def print_error(self, error: Exception):
-        """
-        Print a formatted error message in red (clean and concise).
+        print(f"{Colors.CYAN}{Colors.BOLD}{'='*70}{Colors.END}")
+        print(f"{Colors.CYAN}{Colors.BOLD}💡 Smart Optimization Suggestions{Colors.END}")
+        print(f"{Colors.CYAN}{Colors.BOLD}{'='*70}{Colors.END}\n")
         
-        Args:
-            error: The exception that occurred
-        """
+        # Method-specific suggestions
+        suggestions = self._get_suggestions_for_method(method, duration, percentage)
+        
+        for i, suggestion in enumerate(suggestions, 1):
+            print(f"{Colors.BOLD}{i}. {suggestion['title']}{Colors.END}")
+            print(f"   {suggestion['description']}")
+            if 'impact' in suggestion:
+                impact_color = Colors.GREEN if suggestion['impact'] == 'High' else Colors.WARNING
+                print(f"   {impact_color}Impact: {suggestion['impact']}{Colors.END}")
+            print()
+        
+        print(f"{Colors.CYAN}{Colors.BOLD}{'='*70}{Colors.END}\n")
+    
+    def _get_suggestions_for_method(self, method: str, duration: float, percentage: float):
+        """Get specific suggestions based on the bottleneck method."""
+        suggestions = []
+        
+        if 'athena' in method.lower() or 'query' in method.lower():
+            suggestions.append({
+                'title': 'Optimize Athena Query',
+                'description': 'Add partition filters (date, region) to reduce data scanned. Current query takes {:.0f}ms.'.format(duration),
+                'impact': 'High',
+                'example': "WHERE year='2026' AND month='05'"
+            })
+            
+            suggestions.append({
+                'title': 'Use Query Result Caching',
+                'description': 'Enable Athena query result caching for repeated queries (24-hour cache window).',
+                'impact': 'Medium'
+            })
+            
+            suggestions.append({
+                'title': 'Consider Parquet Format',
+                'description': 'Convert source data to Parquet for 3-5x faster query performance.',
+                'impact': 'High'
+            })
+        
+        if 'dynamodb' in method.lower() or 'write' in method.lower():
+            suggestions.append({
+                'title': 'Batch Write Operations',
+                'description': f'Batch multiple writes together to reduce latency from {duration:.0f}ms.',
+                'impact': 'Medium'
+            })
+            
+            suggestions.append({
+                'title': 'Use DynamoDB DAX',
+                'description': 'Add DynamoDB Accelerator (DAX) for microsecond read latency.',
+                'impact': 'High'
+            })
+        
+        if 'validate' in method.lower():
+            suggestions.append({
+                'title': 'Pre-compute Validation Rules',
+                'description': 'Cache validation criteria to avoid repeated lookups.',
+                'impact': 'Low'
+            })
+        
+        # General suggestion if taking > 80% of time
+        if percentage > 80:
+            suggestions.append({
+                'title': f'🎯 Critical: {method} is the primary bottleneck',
+                'description': f'This method accounts for {percentage:.1f}% of total execution time. Optimizing it will have the biggest impact.',
+                'impact': 'Critical'
+            })
+        
+        return suggestions
+    
+    def print_alerts_summary(self):
+        """Print summary of performance threshold violations."""
+        if not self.colored_output or not self.alerts:
+            return
+        
+        print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
+        print(f"{Colors.ERROR}{Colors.BOLD}⚠️  Performance Alerts ({len(self.alerts)} threshold violations){Colors.END}")
+        print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}\n")
+        
+        for alert in self.alerts:
+            overage_pct = (alert['overage'] / alert['threshold']) * 100
+            print(f"{Colors.ERROR}▸ {alert['method']}{Colors.END}")
+            print(f"  Duration: {alert['duration']:.2f}ms")
+            print(f"  Threshold: {alert['threshold']:.2f}ms")
+            print(f"  {Colors.BOLD}Overage: +{alert['overage']:.2f}ms (+{overage_pct:.1f}%){Colors.END}\n")
+        
+        print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}\n")
+    
+    def generate_cloudwatch_queries(self):
+        """Generate CloudWatch Insights queries for detected issues."""
         if not self.colored_output:
             return
         
-        # Extract just the key error message (no traceback)
+        print(f"{Colors.CYAN}{Colors.BOLD}{'='*70}{Colors.END}")
+        print(f"{Colors.CYAN}{Colors.BOLD}🔍 CloudWatch Insights Queries{Colors.END}")
+        print(f"{Colors.CYAN}{Colors.BOLD}{'='*70}{Colors.END}\n")
+        
+        # Query for slowest executions
+        print(f"{Colors.BOLD}1. Find Slow Executions:{Colors.END}")
+        print(f"{Colors.DIM}")
+        print(f"fields @timestamp, method, duration_ms")
+        print(f"| filter event = 'method_stop' and duration_ms > 1000")
+        print(f"| sort duration_ms desc")
+        print(f"| limit 20")
+        print(f"{Colors.END}\n")
+        
+        # Query for specific bottleneck
+        bottleneck = self.get_bottleneck()
+        if bottleneck:
+            method = bottleneck[0]
+            print(f"{Colors.BOLD}2. Monitor {method}:{Colors.END}")
+            print(f"{Colors.DIM}")
+            print(f"fields @timestamp, duration_ms")
+            print(f"| filter method = '{method}'")
+            print(f"| stats avg(duration_ms), max(duration_ms), min(duration_ms) by bin(5m)")
+            print(f"{Colors.END}\n")
+        
+        # Error tracking
+        print(f"{Colors.BOLD}3. Track Errors:{Colors.END}")
+        print(f"{Colors.DIM}")
+        print(f"fields @timestamp, method, metrics.error_type")
+        print(f"| filter metrics.final_status = 'ERROR'")
+        print(f"| stats count() by metrics.error_type")
+        print(f"{Colors.END}\n")
+        
+        print(f"{Colors.CYAN}{Colors.BOLD}{'='*70}{Colors.END}\n")
+    
+    def finalize(self):
+        """Finalize the run and save history."""
+        self.current_run['status'] = 'COMPLETED'
+        self._save_history()
+    
+    def print_error(self, error: Exception):
+        """Print a formatted error message in red (clean and concise)."""
+        if not self.colored_output:
+            return
+        
         error_type = type(error).__name__
         error_message = str(error)
         
-        # For nested exceptions, get the root cause
-        if hasattr(error, '__cause__') and error.__cause__:
-            error_message = str(error.__cause__)
-        
-        # Clean up common noise from error messages
-        # Remove file paths if they're too long
+        # Clean up error message
         if len(error_message) > 200:
-            # Try to extract just the key part
             lines = error_message.split('\n')
             if lines:
-                error_message = lines[0]  # Just the first line
+                error_message = lines[0]
         
         print(f"\n{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
         print(f"{Colors.ERROR}{Colors.BOLD}❌ ERROR: {error_type}{Colors.END}")
         print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
         print(f"{Colors.ERROR}{error_message}{Colors.END}")
         print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}\n")
-    
-    def print_summary(self, title: str = "EXECUTION SUMMARY", **summary_items):
-        """
-        Print a formatted summary box.
-        
-        Args:
-            title: Title for the summary box
-            **summary_items: Key-value pairs to display in summary
-        """
-        if not self.colored_output:
-            return
-        
-        print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
-        print(f"{Colors.HEADER}{Colors.BOLD}{title:^70}{Colors.END}")
-        print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
-        
-        for key, value in summary_items.items():
-            formatted_key = key.replace('_', ' ').title()
-            print(f"   {formatted_key}: {Colors.BOLD}{value}{Colors.END}")
-        
-        print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}\n")
