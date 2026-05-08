@@ -77,7 +77,7 @@ class UCASDebugger:
         """Initialize Enhanced UCAS Debugger."""
         self.logger = logger_instance
         self.colored_output = colored_output
-        self.start_time = None
+        self.start_times = {}  # Track start time per method
         self.method_name = None
         self.durations = {}
         self.method_calls = {}  # Track call counts
@@ -174,7 +174,7 @@ class UCASDebugger:
     
     def method_start(self, method_name: str, **parameters):
         """Log the start of a method execution."""
-        self.start_time = time.time()
+        self.start_times[method_name] = time.time()  # Track per method
         self.method_name = method_name
         
         # Track call count
@@ -226,9 +226,10 @@ class UCASDebugger:
     def method_stop(self, method_name: str, **metrics):
         """Log the completion of a method execution with timing and alerts."""
         duration_ms = None
-        if self.start_time:
-            duration_ms = round((time.time() - self.start_time) * 1000, 2)
+        if method_name in self.start_times:
+            duration_ms = round((time.time() - self.start_times[method_name]) * 1000, 2)
             self.durations[method_name] = duration_ms
+            del self.start_times[method_name]  # Clean up
         
         # Format duration for display (handle None case)
         duration_display = f"{duration_ms}" if duration_ms is not None else "N/A"
@@ -290,8 +291,6 @@ class UCASDebugger:
                 self.logger.info(f"{symbol} STOP: {method_name} [{duration_display}ms] ({metrics_str})")
             else:
                 self.logger.info(f"{symbol} STOP: {method_name} [{duration_display}ms]")
-        
-        self.start_time = None
     
     def log_metrics(self, **metrics):
         """Log intermediate metrics during method execution."""
