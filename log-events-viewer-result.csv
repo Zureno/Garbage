@@ -1,0 +1,401 @@
+timestamp,message
+1778188880397,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=2d2321da-6869-4afb-885b-465c00edbb7b) executed successfully"",""timestamp"":""2026-05-07 21:21:20,397+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880717,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:109"",""message"":""Record passes special conditions for AppCI CPA"",""timestamp"":""2026-05-07 21:21:20,717+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880717,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:109"",""message"":""Record passes special conditions for AppCI CPA"",""timestamp"":""2026-05-07 21:21:20,717+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880717,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:109"",""message"":""Record passes special conditions for AppCI CPA"",""timestamp"":""2026-05-07 21:21:20,717+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for CPA: PASS"",""timestamp"":""2026-05-07 21:21:20,717+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [15608.88ms] (record_count=1)"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""validate_akamai:26"",""message"":""Akamai validation PASSED — criteria matched"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.16ms] (validation_result=PASS)"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=CPA)"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.09ms] (result_size=478)"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880718,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=CPA)"",""timestamp"":""2026-05-07 21:21:20,718+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880725,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=CPA, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:21:20,725+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880725,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [7.23ms] (status=success)"",""timestamp"":""2026-05-07 21:21:20,725+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880726,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=478)"",""timestamp"":""2026-05-07 21:21:20,725+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0241-4eba98dad88e879d0417c1a1""}
+"
+1778188880728,"END RequestId: 4e1dcb24-6c55-5e36-b712-a9536821df61
+"
+1778188880728,"REPORT RequestId: 4e1dcb24-6c55-5e36-b712-a9536821df61	Duration: 15619.30 ms	Billed Duration: 15620 ms	Memory Size: 2048 MB	Max Memory Used: 105 MB	
+"
+1778188881898,"START RequestId: d79f009d-e8f1-52bc-81d8-62eaec74a407 Version: $LATEST
+"
+1778188881899,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:21:21,898+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188881899,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:21:21,899+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188881899,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='AGS', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:21:21,899+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188881899,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for AGS - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:21:21,899+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188881899,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=AGS)"",""timestamp"":""2026-05-07 21:21:21,899+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887051,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=11e65ccb-0f20-44ea-ba17-67e29a3297d4) executed successfully"",""timestamp"":""2026-05-07 21:21:27,051+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for AGS: FAIL"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5286.8ms] (record_count=0)"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""validate_akamai:29"",""message"":""Akamai validation FAILED — criteria not met"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.17ms] (validation_result=FAIL)"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=AGS)"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=750)"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887186,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=AGS)"",""timestamp"":""2026-05-07 21:21:27,186+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887194,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=AGS, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:21:27,194+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887194,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [7.86ms] (status=success)"",""timestamp"":""2026-05-07 21:21:27,194+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887194,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=750)"",""timestamp"":""2026-05-07 21:21:27,194+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0251-d954ed52d34fb1ac123db570""}
+"
+1778188887196,"END RequestId: d79f009d-e8f1-52bc-81d8-62eaec74a407
+"
+1778188887196,"REPORT RequestId: d79f009d-e8f1-52bc-81d8-62eaec74a407	Duration: 5297.70 ms	Billed Duration: 5298 ms	Memory Size: 2048 MB	Max Memory Used: 105 MB	
+"
+1778188887642,"START RequestId: 4ec31cc3-ae4b-516d-b326-7eb4aaddea30 Version: $LATEST
+"
+1778188887643,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:21:27,643+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188887643,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:21:27,643+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188887643,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='BMB', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:21:27,643+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188887643,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for BMB - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:21:27,643+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188887644,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=BMB)"",""timestamp"":""2026-05-07 21:21:27,643+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892788,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=77bee5dd-80b9-4c00-ab4c-590038823205) executed successfully"",""timestamp"":""2026-05-07 21:21:32,788+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for BMB: PASS"",""timestamp"":""2026-05-07 21:21:32,925+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5282.15ms] (record_count=1)"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""validate_akamai:26"",""message"":""Akamai validation PASSED — criteria matched"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.18ms] (validation_result=PASS)"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=BMB)"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.11ms] (result_size=478)"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892926,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=BMB)"",""timestamp"":""2026-05-07 21:21:32,926+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892934,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=BMB, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:21:32,934+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892934,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [7.7ms] (status=success)"",""timestamp"":""2026-05-07 21:21:32,934+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892934,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=478)"",""timestamp"":""2026-05-07 21:21:32,934+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0257-a1940c674a267dfa7fe1ad2d""}
+"
+1778188892936,"END RequestId: 4ec31cc3-ae4b-516d-b326-7eb4aaddea30
+"
+1778188892936,"REPORT RequestId: 4ec31cc3-ae4b-516d-b326-7eb4aaddea30	Duration: 5293.08 ms	Billed Duration: 5294 ms	Memory Size: 2048 MB	Max Memory Used: 105 MB	
+"
+1778188893821,"START RequestId: 8309ae81-edac-59d2-817d-ccf6e922606f Version: $LATEST
+"
+1778188893822,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:21:33,822+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188893822,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:21:33,822+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188893822,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='ATG', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:21:33,822+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188893823,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for ATG - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:21:33,822+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188893823,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=ATG)"",""timestamp"":""2026-05-07 21:21:33,823+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188898954,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=abe86523-6523-44f6-8338-9c27e5bf2db2) executed successfully"",""timestamp"":""2026-05-07 21:21:38,954+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899140,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for ATG: FAIL"",""timestamp"":""2026-05-07 21:21:39,140+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899140,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5317.76ms] (record_count=0)"",""timestamp"":""2026-05-07 21:21:39,140+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899140,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:21:39,140+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899141,"{""level"":""INFO"",""location"":""validate_akamai:29"",""message"":""Akamai validation FAILED — criteria not met"",""timestamp"":""2026-05-07 21:21:39,141+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899141,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.17ms] (validation_result=FAIL)"",""timestamp"":""2026-05-07 21:21:39,141+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899141,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=ATG)"",""timestamp"":""2026-05-07 21:21:39,141+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899141,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=750)"",""timestamp"":""2026-05-07 21:21:39,141+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899141,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=ATG)"",""timestamp"":""2026-05-07 21:21:39,141+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899148,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=ATG, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:21:39,148+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899148,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [7.38ms] (status=success)"",""timestamp"":""2026-05-07 21:21:39,148+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899148,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=750)"",""timestamp"":""2026-05-07 21:21:39,148+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd025d-d30723c786113cd25b27a3a0""}
+"
+1778188899150,"END RequestId: 8309ae81-edac-59d2-817d-ccf6e922606f
+"
+1778188899150,"REPORT RequestId: 8309ae81-edac-59d2-817d-ccf6e922606f	Duration: 5328.43 ms	Billed Duration: 5329 ms	Memory Size: 2048 MB	Max Memory Used: 105 MB	
+"
+1778188899604,"START RequestId: 242042ba-ab84-50f2-886f-20cdaf1fe61f Version: $LATEST
+"
+1778188899605,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:21:39,605+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188899605,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:21:39,605+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188899605,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='EMF', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:21:39,605+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188899605,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for EMF - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:21:39,605+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188899605,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=EMF)"",""timestamp"":""2026-05-07 21:21:39,605+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904731,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=5b701b7d-0773-49e2-90f5-a5ef0aa72ee4) executed successfully"",""timestamp"":""2026-05-07 21:21:44,730+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for EMF: FAIL"",""timestamp"":""2026-05-07 21:21:44,870+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5265.29ms] (record_count=0)"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""validate_akamai:29"",""message"":""Akamai validation FAILED — criteria not met"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.19ms] (validation_result=FAIL)"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=EMF)"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=750)"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904871,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=EMF)"",""timestamp"":""2026-05-07 21:21:44,871+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904878,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=EMF, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:21:44,878+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904878,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [7.04ms] (status=success)"",""timestamp"":""2026-05-07 21:21:44,878+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904878,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=750)"",""timestamp"":""2026-05-07 21:21:44,878+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0263-c18a0d53286875e7999b7250""}
+"
+1778188904880,"END RequestId: 242042ba-ab84-50f2-886f-20cdaf1fe61f
+"
+1778188904880,"REPORT RequestId: 242042ba-ab84-50f2-886f-20cdaf1fe61f	Duration: 5275.29 ms	Billed Duration: 5276 ms	Memory Size: 2048 MB	Max Memory Used: 105 MB	
+"
+1778188905927,"START RequestId: 5ee1c91e-ae60-583d-9742-ab69aaf69a3f Version: $LATEST
+"
+1778188905928,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:21:45,928+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188905928,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:21:45,928+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188905928,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='CRN', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:21:45,928+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188905928,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for CRN - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:21:45,928+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188905928,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=CRN)"",""timestamp"":""2026-05-07 21:21:45,928+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911070,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=f4510675-8b79-417f-a21c-87d39faeccbe) executed successfully"",""timestamp"":""2026-05-07 21:21:51,070+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911234,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for CRN: FAIL"",""timestamp"":""2026-05-07 21:21:51,234+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911234,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5305.87ms] (record_count=0)"",""timestamp"":""2026-05-07 21:21:51,234+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911234,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:21:51,234+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911235,"{""level"":""INFO"",""location"":""validate_akamai:29"",""message"":""Akamai validation FAILED — criteria not met"",""timestamp"":""2026-05-07 21:21:51,234+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911235,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.18ms] (validation_result=FAIL)"",""timestamp"":""2026-05-07 21:21:51,235+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911235,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=CRN)"",""timestamp"":""2026-05-07 21:21:51,235+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911235,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=750)"",""timestamp"":""2026-05-07 21:21:51,235+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911235,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=CRN)"",""timestamp"":""2026-05-07 21:21:51,235+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911243,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=CRN, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:21:51,243+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911243,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [7.95ms] (status=success)"",""timestamp"":""2026-05-07 21:21:51,243+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911243,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=750)"",""timestamp"":""2026-05-07 21:21:51,243+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0269-a360ede65139cbce0322282d""}
+"
+1778188911245,"END RequestId: 5ee1c91e-ae60-583d-9742-ab69aaf69a3f
+"
+1778188911245,"REPORT RequestId: 5ee1c91e-ae60-583d-9742-ab69aaf69a3f	Duration: 5316.85 ms	Billed Duration: 5317 ms	Memory Size: 2048 MB	Max Memory Used: 105 MB	
+"
+1778189265420,"START RequestId: 55e0fe41-4a4f-5a60-b347-9c364c4033e3 Version: $LATEST
+"
+1778189265423,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:27:45,422+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189265423,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:27:45,423+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189265423,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='BEX', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:27:45,423+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189265424,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for BEX - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:27:45,424+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189265424,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=BEX)"",""timestamp"":""2026-05-07 21:27:45,424+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270594,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=e5b3bf4a-6180-4229-a0e7-f8d6da811aea) executed successfully"",""timestamp"":""2026-05-07 21:27:50,594+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270738,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for BEX: PASS"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270738,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5313.8ms] (record_count=1)"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270738,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270738,"{""level"":""INFO"",""location"":""validate_akamai:26"",""message"":""Akamai validation PASSED — criteria matched"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270738,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.18ms] (validation_result=PASS)"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270738,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=BEX)"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270739,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.09ms] (result_size=478)"",""timestamp"":""2026-05-07 21:27:50,738+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270739,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=BEX)"",""timestamp"":""2026-05-07 21:27:50,739+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270815,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=BEX, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:27:50,815+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270815,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [76.53ms] (status=success)"",""timestamp"":""2026-05-07 21:27:50,815+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270815,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=478)"",""timestamp"":""2026-05-07 21:27:50,815+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd03d1-5920f158900d7dd9e581c66b""}
+"
+1778189270817,"END RequestId: 55e0fe41-4a4f-5a60-b347-9c364c4033e3
+"
+1778189270817,"REPORT RequestId: 55e0fe41-4a4f-5a60-b347-9c364c4033e3	Duration: 5396.55 ms	Billed Duration: 5397 ms	Memory Size: 2048 MB	Max Memory Used: 106 MB	
+"
+1778189360058,"START RequestId: 537eb7b8-0dbd-53f9-8e97-d5cf0bd3c63e Version: $LATEST
+"
+1778189360059,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:29:20,058+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189360059,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:29:20,059+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189360059,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='AOY', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:29:20,059+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189360059,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for AOY - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:29:20,059+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189360059,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=AOY)"",""timestamp"":""2026-05-07 21:29:20,059+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365229,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=95bb419f-a25e-4ec6-8b79-8fa3acb366e7) executed successfully"",""timestamp"":""2026-05-07 21:29:25,229+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365366,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:109"",""message"":""Record passes special conditions for AppCI AOY"",""timestamp"":""2026-05-07 21:29:25,366+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365366,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:109"",""message"":""Record passes special conditions for AppCI AOY"",""timestamp"":""2026-05-07 21:29:25,366+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:109"",""message"":""Record passes special conditions for AppCI AOY"",""timestamp"":""2026-05-07 21:29:25,366+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for AOY: PASS"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5307.86ms] (record_count=1)"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""validate_akamai:26"",""message"":""Akamai validation PASSED — criteria matched"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.18ms] (validation_result=PASS)"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=AOY)"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=478)"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365367,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=AOY)"",""timestamp"":""2026-05-07 21:29:25,367+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365444,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=AOY, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:29:25,444+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365444,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [76.81ms] (status=success)"",""timestamp"":""2026-05-07 21:29:25,444+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365444,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=478)"",""timestamp"":""2026-05-07 21:29:25,444+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0430-1cceb322f128b0d2c1475457""}
+"
+1778189365446,"END RequestId: 537eb7b8-0dbd-53f9-8e97-d5cf0bd3c63e
+"
+1778189365446,"REPORT RequestId: 537eb7b8-0dbd-53f9-8e97-d5cf0bd3c63e	Duration: 5388.06 ms	Billed Duration: 5389 ms	Memory Size: 2048 MB	Max Memory Used: 106 MB	
+"
+1778189385931,"START RequestId: d76c8908-1b7e-5bf0-b27b-eb7f1dfcbd76 Version: $LATEST
+"
+1778189385933,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:29:45,933+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189385933,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:29:45,933+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189385933,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='EER', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:29:45,933+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189385933,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for EER - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:29:45,933+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189385935,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=EER)"",""timestamp"":""2026-05-07 21:29:45,934+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391058,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=f98993cc-239d-4817-8f81-211870bbd2be) executed successfully"",""timestamp"":""2026-05-07 21:29:51,058+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391199,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for EER: FAIL"",""timestamp"":""2026-05-07 21:29:51,199+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391199,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5265.73ms] (record_count=0)"",""timestamp"":""2026-05-07 21:29:51,199+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391200,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:29:51,199+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391200,"{""level"":""INFO"",""location"":""validate_akamai:29"",""message"":""Akamai validation FAILED — criteria not met"",""timestamp"":""2026-05-07 21:29:51,200+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391200,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.18ms] (validation_result=FAIL)"",""timestamp"":""2026-05-07 21:29:51,200+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391200,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=EER)"",""timestamp"":""2026-05-07 21:29:51,200+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391200,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=750)"",""timestamp"":""2026-05-07 21:29:51,200+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391200,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=EER)"",""timestamp"":""2026-05-07 21:29:51,200+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391210,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=EER, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:29:51,210+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391210,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [9.94ms] (status=success)"",""timestamp"":""2026-05-07 21:29:51,210+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391210,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=750)"",""timestamp"":""2026-05-07 21:29:51,210+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd0449-2f9ffdd1fabf77b682c0b522""}
+"
+1778189391212,"END RequestId: d76c8908-1b7e-5bf0-b27b-eb7f1dfcbd76
+"
+1778189391212,"REPORT RequestId: d76c8908-1b7e-5bf0-b27b-eb7f1dfcbd76	Duration: 5279.91 ms	Billed Duration: 5280 ms	Memory Size: 2048 MB	Max Memory Used: 106 MB	
+"
+1778189786954,"START RequestId: ca0062ba-afcb-58b7-aa3c-00cda7c00a9f Version: $LATEST
+"
+1778189786956,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""► START: handler (request_id=local)"",""timestamp"":""2026-05-07 21:36:26,954+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189786956,"{""level"":""INFO"",""location"":""extract_lambda_input:32"",""message"":""Parsed SQS message body"",""timestamp"":""2026-05-07 21:36:26,954+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189786956,"{""level"":""INFO"",""location"":""extract_lambda_input:68"",""message"":""Input extracted — identifier='BNI', control='CDR-NSS3.4.2 - App01', validator type='akamai'"",""timestamp"":""2026-05-07 21:36:26,954+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189786956,"{""level"":""INFO"",""location"":""handler:46"",""message"":""Processing validation for BNI - CDR-NSS3.4.2 - App01"",""timestamp"":""2026-05-07 21:36:26,954+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189786956,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: get_akamai_onboarding_compliance (appci=BNI)"",""timestamp"":""2026-05-07 21:36:26,955+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792127,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:73"",""message"":""Athena query for akamai validator (id=7cf3222e-81fd-4193-9b98-6d2a239ad6bc) executed successfully"",""timestamp"":""2026-05-07 21:36:32,127+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792274,"{""level"":""INFO"",""location"":""get_akamai_onboarding_compliance:142"",""message"":""Akamai onboarding & coverage compliance for BNI: FAIL"",""timestamp"":""2026-05-07 21:36:32,274+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792274,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: get_akamai_onboarding_compliance [5319.83ms] (record_count=0)"",""timestamp"":""2026-05-07 21:36:32,274+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792275,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: validate_akamai (validator_type=akamai)"",""timestamp"":""2026-05-07 21:36:32,274+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792275,"{""level"":""INFO"",""location"":""validate_akamai:29"",""message"":""Akamai validation FAILED — criteria not met"",""timestamp"":""2026-05-07 21:36:32,275+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792275,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: validate_akamai [0.17ms] (validation_result=FAIL)"",""timestamp"":""2026-05-07 21:36:32,275+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792275,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: build_result (identifier=BNI)"",""timestamp"":""2026-05-07 21:36:32,275+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792275,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: build_result [0.1ms] (result_size=750)"",""timestamp"":""2026-05-07 21:36:32,275+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792275,"{""level"":""INFO"",""location"":""method_start:222"",""message"":""  ► START: write_result (identifier=BNI)"",""timestamp"":""2026-05-07 21:36:32,275+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792357,"{""level"":""INFO"",""location"":""write_result:165"",""message"":""Successfully updated results for identifier=BNI, sort_key=CDR-NSS3.4.2 - App01#[{'type': 'akamai', 'criteria': ['akamai']}]"",""timestamp"":""2026-05-07 21:36:32,357+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792358,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""  ■ STOP: write_result [82.52ms] (status=success)"",""timestamp"":""2026-05-07 21:36:32,357+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792358,"{""level"":""INFO"",""location"":""method_stop:290"",""message"":""■ STOP: handler [N/Ams] (final_status=PASS, result_size=750)"",""timestamp"":""2026-05-07 21:36:32,358+0000"",""service"":""akamaivalidator-lambda"",""xray_trace_id"":""1-69fd05da-39a09dd80e4b12eb545cfa0e""}
+"
+1778189792360,"END RequestId: ca0062ba-afcb-58b7-aa3c-00cda7c00a9f
+"
+1778189792360,"REPORT RequestId: ca0062ba-afcb-58b7-aa3c-00cda7c00a9f	Duration: 5405.56 ms	Billed Duration: 5406 ms	Memory Size: 2048 MB	Max Memory Used: 106 MB	
+"
