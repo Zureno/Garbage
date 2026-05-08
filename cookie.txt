@@ -1,368 +1,166 @@
-"""
-UCAS Debugger - Enhanced Edition with Advanced Features
-
-Provides method-level instrumentation with execution timing, structured logging,
-performance bottleneck detection, historical tracking, smart suggestions, and more!
-
-New Features:
-- Performance history tracking with trends
-- Smart optimization suggestions
-- Method comparison (current vs previous runs)
-- HTML report generation
-- AWS cost estimation
-- Alert thresholds
-- CloudWatch query generator
-- Sparkline visualization
-"""
-
-import time
 import json
 import os
+import sys
 from datetime import datetime
-from pathlib import Path
-from aws_lambda_powertools import Logger
+from logger import logger
+from input import extract_lambda_input
+from data import get_akamai_onboarding_compliance
+from validate import validate_akamai
+from output import build_result, write_result
+
+# Import UCAS Debugger
+from ucas_debugger import UCASDebugger
+
+# Initialize UCAS with environment detection
+is_local = os.getenv('AWS_EXECUTION_ENV') is None
+ucas = UCASDebugger(logger, colored_output=is_local)
 
 
-class Colors:
-    """ANSI color codes for terminal output"""
-    HEADER = '\033[95m'      # Magenta
-    CYAN = '\033[96m'        # Cyan
-    BLUE = '\033[94m'        # Blue
-    GREEN = '\033[92m'       # Green
-    WARNING = '\033[93m'     # Yellow
-    ERROR = '\033[91m'       # Red
-    PASS = '\033[92m'        # Green (for success)
-    STOP = '\033[92m'        # Green (for fast completions)
-    PURPLE = '\033[95m'      # Purple
-    ORANGE = '\033[38;5;208m'  # Orange
-    PINK = '\033[38;5;213m'    # Pink
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    DIM = '\033[2m'
-    END = '\033[0m'
-    
-    # Method-specific color palette (each method gets its own color)
-    METHOD_COLORS = {
-        'handler': '\033[95m',  # Magenta/Purple
-        'get_akamai_onboarding_compliance': '\033[96m',  # Cyan
-        'validate_akamai': '\033[92m',  # Green
-        'build_result': '\033[93m',  # Yellow
-        'write_result': '\033[94m',  # Blue
-        'extract_lambda_input': '\033[38;5;208m',  # Orange
-        'get_validator_config': '\033[38;5;213m',  # Pink
-    }
-    
-    @classmethod
-    def get_method_color(cls, method_name):
-        """Get color for a specific method, or default to cyan"""
-        return cls.METHOD_COLORS.get(method_name, cls.CYAN)
+def handler(event, context):
+    """
+    Akamai Validator Lambda — standalone microservice with UCAS debugging.
 
-
-class UCASDebugger:
-    """Enhanced UCAS Debugger with advanced features."""
-    
-    # Performance thresholds (configurable)
-    THRESHOLDS = {
-        'get_akamai_onboarding_compliance': 3000,  # 3 seconds
-        'validate_akamai': 100,  # 100ms
-        'build_result': 50,  # 50ms
-        'write_result': 500,  # 500ms
-        'handler': 5000,  # 5 seconds
-    }
-    
-    # AWS Lambda pricing (per 1ms of execution)
-    LAMBDA_COST_PER_MS = 0.0000000167  # $0.0000000167 per ms for 512MB
-    
-    def __init__(self, logger_instance: Logger, colored_output: bool = False):
-        """Initialize Enhanced UCAS Debugger."""
-        self.logger = logger_instance
-        self.colored_output = colored_output
-        self.start_times = {}  # Track start time per method
-        self.method_name = None
-        self.durations = {}
-        self.method_calls = {}  # Track call counts
-        self.alerts = []  # Store performance alerts
-        self.history_file = Path('.ucas_history.json')
-        self.current_run = {
-            'timestamp': datetime.now().isoformat(),
-            'durations': {},
-            'alerts': [],
-            'status': 'RUNNING'
+    Expected event (direct invocation):
+        {
+            "identifier": "BFM",
+            "control": "CDR-NSS3.4.2 - App01",
+            "validator": {"type": "akamai", "criteria": ["akamai"]}
         }
+
+    Or SNS-wrapped in event["Records"][0]["Sns"]["Message"].
+
+    Flow:
+        1. Parse input  → identifier, control name, validator config
+        2. Collect data  → query Athena for Akamai onboarding compliance
+        3. Validate      → compare criteria against collected data
+        4. Build output  → assemble standardised result dict
+        5. Write result  → persist to eqa-validation-results-table
+    """
+    # Get request ID (Lambda uses aws_request_id, not request_id)
+    request_id = getattr(context, 'aws_request_id', 'local') if context else 'local'
+    ucas.method_start("handler", request_id=request_id)
     
-    def _color_print(self, color: str, message: str):
-        """Print colored message to console."""
-        if self.colored_output:
-            print(f"{color}{message}{Colors.END}")
-    
-    def _generate_sparkline(self, values: list, width: int = 10) -> str:
-        """Generate ASCII sparkline from values."""
-        if not values or len(values) < 2:
-            return "─" * width
-        
-        min_val = min(values)
-        max_val = max(values)
-        
-        if max_val == min_val:
-            return "─" * width
-        
-        # Normalize values to 0-7 range for block characters
-        chars = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
-        normalized = [(v - min_val) / (max_val - min_val) for v in values[-width:]]
-        sparkline = ''.join(chars[int(n * 7)] for n in normalized)
-        
-        return sparkline
-    
-    def _load_history(self):
-        """Load performance history from file."""
-        if self.history_file.exists():
-            try:
-                with open(self.history_file, 'r') as f:
-                    return json.load(f)
-            except:
-                return {'runs': []}
-        return {'runs': []}
-    
-    def _save_history(self):
-        """Save current run to history file."""
-        if not self.colored_output:
-            return  # Only save in local mode
-        
-        history = self._load_history()
-        
-        # Add current run
-        self.current_run['durations'] = self.durations
-        self.current_run['alerts'] = self.alerts
-        history['runs'].append(self.current_run)
-        
-        # Keep last 50 runs
-        history['runs'] = history['runs'][-50:]
-        
+    try:
+        # 1. Parse input
+        identifier, control, validator = extract_lambda_input(event)
+        logger.info(f"Processing validation for {identifier} - {control}")
+
+        # 2. Collect data from Athena
+        ucas.method_start("get_akamai_onboarding_compliance", appci=identifier)
         try:
-            with open(self.history_file, 'w') as f:
-                json.dump(history, f, indent=2)
-        except:
-            pass  # Silently fail if can't write
-    
-    def _get_performance_trend(self, method_name: str) -> str:
-        """Get performance trend for a method (↑ getting slower, ↓ getting faster, → stable)."""
-        history = self._load_history()
+            akamai_data = get_akamai_onboarding_compliance(identifier)
+            ucas.method_stop("get_akamai_onboarding_compliance", record_count=len(akamai_data) if akamai_data else 0)
+        except Exception as e:
+            ucas.method_stop(
+                "get_akamai_onboarding_compliance",
+                error_type=type(e).__name__,
+                error_message=str(e)
+            )
+            raise
+
+        # 3. Validate
+        ucas.method_start("validate_akamai", validator_type=validator.get('type'))
+        try:
+            passed = validate_akamai(validator, akamai_data)
+            ucas.method_stop("validate_akamai", validation_result="PASS" if passed else "FAIL")
+        except Exception as e:
+            ucas.method_stop(
+                "validate_akamai",
+                error_type=type(e).__name__,
+                error_message=str(e)
+            )
+            raise
+
+        # 4. Build output
+        ucas.method_start("build_result", identifier=identifier)
+        try:
+            result = build_result(identifier, control, validator, passed)
+            ucas.method_stop("build_result", result_size=len(str(result)))
+        except Exception as e:
+            ucas.method_stop(
+                "build_result",
+                error_type=type(e).__name__,
+                error_message=str(e)
+            )
+            raise
+
+        # 5. Write to DynamoDB
+        ucas.method_start("write_result", identifier=identifier)
+        try:
+            write_result(identifier, control, validator, result)
+            ucas.method_stop("write_result", status="success")
+        except Exception as e:
+            ucas.method_stop(
+                "write_result",
+                error_type=type(e).__name__,
+                error_message=str(e)
+            )
+            raise
+
+        # Success
+        ucas.method_stop("handler", final_status="PASS", result_size=len(str(result)))
+        return result
+
+    except Exception as e:
+        # Error handling
+        error_type = type(e).__name__
+        error_message = str(e)
         
-        # Get last 5 runs for this method
-        recent_durations = []
-        for run in history['runs'][-5:]:
-            if method_name in run.get('durations', {}):
-                recent_durations.append(run['durations'][method_name])
+        # Log error with UCAS
+        ucas.print_error(e)
+        ucas.method_stop(
+            "handler",
+            final_status="ERROR",
+            error_type=error_type,
+            error_message=error_message
+        )
         
-        if len(recent_durations) < 2:
-            return "→"  # Not enough data
-        
-        # Compare current vs average of previous
-        current = recent_durations[-1]
-        previous_avg = sum(recent_durations[:-1]) / len(recent_durations[:-1])
-        
-        if current > previous_avg * 1.2:
-            return f"↑ +{int((current/previous_avg - 1) * 100)}%"  # Getting slower
-        elif current < previous_avg * 0.8:
-            return f"↓ -{int((1 - current/previous_avg) * 100)}%"  # Getting faster
+        # In Lambda: raise the error
+        # Locally: exit cleanly
+        if is_local:
+            sys.exit(1)
         else:
-            return "→"  # Stable
+            raise
+
+
+# ---------------------------------------------------------------------------
+# Local testing — run directly:  python index.py
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    # Mock context for local testing
+    class MockContext:
+        request_id = "local"
+        function_name = "local"
     
-    def _estimate_cost(self, duration_ms: float) -> float:
-        """Estimate AWS Lambda cost for this execution."""
-        return duration_ms * self.LAMBDA_COST_PER_MS
+    test_event = {
+        "identifier": "BFM",
+        "control": "CDR-NSS3.4.2 - App01",
+        "validator": {
+            "type": "akamai",
+            "criteria": ["akamai"]
+        }
+    }
     
-    def method_start(self, method_name: str, **parameters):
-        """Log the start of a method execution."""
-        self.start_times[method_name] = time.time()  # Track per method
-        self.method_name = method_name
-        
-        # Track call count
-        self.method_calls[method_name] = self.method_calls.get(method_name, 0) + 1
-        
-        if self.colored_output:
-            # Each method gets its own color
-            method_color = Colors.get_method_color(method_name)
-            
-            # Only show key parameters (limit to 2-3 most important)
-            key_params = {}
-            priority_keys = ['request_id', 'identifier', 'appci', 'validator_type']
-            for key in priority_keys:
-                if key in parameters:
-                    key_params[key] = parameters[key]
-            
-            params_str = ", ".join(f"{k}={v}" for k, v in key_params.items())
-            
-            # Show call count if method called multiple times
-            call_indicator = ""
-            if self.method_calls[method_name] > 1:
-                call_indicator = f" {Colors.DIM}[call #{self.method_calls[method_name]}]{Colors.END}"
-            
-            if params_str:
-                self._color_print(
-                    method_color + Colors.BOLD,
-                    f"▶ START: {method_name} ({params_str}){call_indicator}"
-                )
-            else:
-                self._color_print(
-                    method_color + Colors.BOLD,
-                    f"▶ START: {method_name}{call_indicator}"
-                )
-        else:
-            # CloudWatch: Plain text format with visual symbols (no colors)
-            params_str = ", ".join(f"{k}={v}" for k, v in parameters.items())
-            
-            # Add visual indicator based on method
-            if method_name == "handler":
-                symbol = "►"  # Main handler
-            else:
-                symbol = "  ►"  # Sub-methods (indented)
-            
-            if params_str:
-                self.logger.info(f"{symbol} START: {method_name} ({params_str})")
-            else:
-                self.logger.info(f"{symbol} START: {method_name}")
+    # Print header (only locally)
+    if is_local:
+        from ucas_debugger import Colors
+        print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}  UCAS Debugger - akamaivalidator{Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}\n")
     
-    def method_stop(self, method_name: str, **metrics):
-        """Log the completion of a method execution with timing and alerts."""
-        duration_ms = None
-        if method_name in self.start_times:
-            duration_ms = round((time.time() - self.start_times[method_name]) * 1000, 2)
-            self.durations[method_name] = duration_ms
-            del self.start_times[method_name]  # Clean up
+    # Run handler
+    try:
+        result = handler(test_event, MockContext())
         
-        # Format duration for display (handle None case)
-        duration_display = f"{duration_ms}" if duration_ms is not None else "N/A"
-        
-        # Check for threshold violations
-        threshold = self.THRESHOLDS.get(method_name)
-        threshold_violated = threshold and duration_ms and duration_ms > threshold
-        
-        if threshold_violated:
-            alert = {
-                'method': method_name,
-                'duration': duration_ms,
-                'threshold': threshold,
-                'overage': duration_ms - threshold
-            }
-            self.alerts.append(alert)
-        
-        if self.colored_output:
-            metrics_str = ", ".join(f"{k}={v}" for k, v in metrics.items())
+        # Print summary (only locally)
+        if is_local:
+            status = "PASS" if result.get('passed') else "FAIL"
+            status_color = Colors.PASS if result.get('passed') else Colors.ERROR
             
-            # Check if this is an error
-            is_error = any(key in metrics for key in ['error', 'error_type', 'error_message', 'final_status']) and \
-                      (metrics.get('final_status') == 'ERROR' or 'error_type' in metrics)
-            
-            # Use method-specific color (same as START), but RED for errors
-            if is_error:
-                color = Colors.ERROR + Colors.BOLD  # RED for errors
-            else:
-                # Same color as the method's START
-                color = Colors.get_method_color(method_name) + Colors.BOLD
-            
-            # Simple output: just method, duration, and metrics if any
-            if metrics_str:
-                self._color_print(
-                    color,
-                    f"■ STOP: {method_name} [{duration_display}ms] ({metrics_str})"
-                )
-            else:
-                self._color_print(
-                    color,
-                    f"■ STOP: {method_name} [{duration_display}ms]"
-                )
-        else:
-            # CloudWatch: Plain text format with visual symbols (no colors)
-            metrics_str = ", ".join(f"{k}={v}" for k, v in metrics.items())
-            
-            # Check if this is an error
-            is_error = 'error_type' in metrics or 'error' in metrics
-            
-            # Add visual indicator based on method and error status
-            if is_error:
-                symbol = "✖" if method_name == "handler" else "  ✖"  # Error symbol
-            elif method_name == "handler":
-                symbol = "■"  # Main handler
-            else:
-                symbol = "  ■"  # Sub-methods (indented)
-            
-            if metrics_str:
-                self.logger.info(f"{symbol} STOP: {method_name} [{duration_display}ms] ({metrics_str})")
-            else:
-                self.logger.info(f"{symbol} STOP: {method_name} [{duration_display}ms]")
+            print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
+            print(f"{status_color}{Colors.BOLD}{status}{Colors.END} | {test_event['identifier']} | {result['control']}")
+            print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}\n")
     
-    def log_metrics(self, **metrics):
-        """Log intermediate metrics during method execution."""
-        # Disabled for minimal output
-        pass
-        # if self.colored_output:
-        #     # Use method-specific color (dimmed)
-        #     method_color = Colors.get_method_color(self.method_name)
-        #     metrics_str = ", ".join(f"{k}={v}" for k, v in metrics.items())
-        #     self._color_print(
-        #         method_color + Colors.DIM,
-        #         f"  ℹ METRICS: {self.method_name} → {metrics_str}"
-        #     )
-        # else:
-        #     self.logger.debug(
-        #         "Method metrics",
-        #         extra={
-        #             "event": "metrics",
-        #             "method": self.method_name,
-        #             "metrics": metrics
-        #         }
-        #     )
-    
-    def get_performance_breakdown(self):
-        """Get performance breakdown with percentages."""
-        if not self.durations:
-            return []
-        
-        total = self.durations.get('handler', sum(self.durations.values()))
-        breakdown = []
-        
-        for method, duration in sorted(self.durations.items(), key=lambda x: x[1], reverse=True):
-            if method != 'handler':
-                percentage = (duration / total) * 100
-                breakdown.append((method, duration, percentage))
-        
-        return breakdown
-    
-    def get_bottleneck(self):
-        """Automatically identify the performance bottleneck."""
-        breakdown = self.get_performance_breakdown()
-        if not breakdown:
-            return None
-        return breakdown[0]
-    
-    def finalize(self):
-        """Finalize the run and save history."""
-        self.current_run['status'] = 'COMPLETED'
-        self._save_history()
-    
-    def print_error(self, error: Exception):
-        """Print a formatted error message in red (clean and concise)."""
-        error_type = type(error).__name__
-        error_message = str(error)
-        
-        # Clean up error message
-        if len(error_message) > 200:
-            lines = error_message.split('\n')
-            if lines:
-                error_message = lines[0]
-        
-        if self.colored_output:
-            # Terminal: Colored error box
-            print(f"\n{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
-            print(f"{Colors.ERROR}{Colors.BOLD}ERROR: {error_type}{Colors.END}")
-            print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
-            print(f"{Colors.ERROR}{error_message}{Colors.END}")
-            print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}\n")
-        else:
-            # CloudWatch: Plain text error format with visual symbols
-            self.logger.error(f"{'='*70}")
-            self.logger.error(f"✖ ERROR: {error_type}")
-            self.logger.error(f"{'='*70}")
-            self.logger.error(f"Message: {error_message}")
-            self.logger.error(f"{'='*70}")
+    except SystemExit:
+        pass  # Clean exit on error
