@@ -1,429 +1,391 @@
 """
-ucas_debugger.py - Universal UCAS Debugger with Execution Modes
+index.py - CodeQL Validator with UCAS Enhanced v2.0
 
-Features:
-- Multiple execution modes: PRODUCTION, DEBUG, VERBOSE
-- DynamoDB configuration (no code changes to toggle)
-- Verbose logging (queries, responses, raw data)
-- Mode-aware output (prevents S3 bloat)
-- Environment detection (local vs Lambda)
-- Universal/reusable across all validators
+Lambda entry point for the standalone CodeQL Validator microservice with UCAS debugging.
 
-Version: 2.0 (Enhanced with team feedback)
+Flow:
+  1. input.py     - parse the Lambda event
+  2. data.py      - fetch CodeQL findings from GitHub
+  3. validator.py - match findings against the control criteria
+  4. evidence.py  - build human-readable evidence strings
+  5. output.py    - assemble result dict and write to DynamoDB
+
+Version: 2.0 (Enhanced with UCAS execution modes, DynamoDB config, verbose logging)
 """
 
-import time
 import os
+import sys
 import json
 from datetime import datetime
-from pathlib import Path
-from typing import Dict, Any, Optional
-from enum import Enum
+from input     import extract_lambda_input
+from data      import CodeqlData
+from validator import CodeqlValidator
+from evidence  import build_raw_evidence, build_evidence, build_finding_ids
+from output    import build_result, build_sort_key, write_validator_result
+from logger    import logger
 import boto3
-from botocore.exceptions import ClientError
+
+# Import UCAS Debugger
+from ucas_debugger import UCASDebugger
+
+# Initialize UCAS with environment detection and validator name
+is_local = os.getenv('AWS_EXECUTION_ENV') is None
+ucas = UCASDebugger(
+    logger,
+    colored_output=is_local,
+    validator_name='codeqlalertsvalidator'  # For DynamoDB config lookup
+)
+
+dynamodb = boto3.client('dynamodb', region_name="us-east-1")
 
 
-class ExecutionMode(Enum):
-    """Execution modes for UCAS debugger."""
-    PRODUCTION = "PRODUCTION"  # Minimal logging
-    DEBUG = "DEBUG"            # Standard UCAS output (current)
-    VERBOSE = "VERBOSE"        # Super detailed (queries, responses, raw data)
+def handler(event: dict, context) -> dict:
+    """
+    CodeQL Validator Lambda with UCAS Enhanced v2.0 debugging.
     
-    @classmethod
-    def from_string(cls, mode_str: str):
-        """Convert string to ExecutionMode enum."""
+    Supports execution modes:
+    - PRODUCTION: Minimal logging (errors only)
+    - DEBUG: Standard UCAS output with timing
+    - VERBOSE: Super detailed (queries, responses, raw data)
+    
+    Toggle mode via DynamoDB (no code changes needed!)
+    """
+    # Get actual Lambda request ID
+    request_id = getattr(context, 'aws_request_id', 'local') if context else 'local'
+    ucas.method_start("handler", request_id=request_id)
+    
+    try:
+        logger.info(f"Event received: {event}")
+
+        # ------------------------------------------------------------------
+        # 1. Parse input
+        # ------------------------------------------------------------------
+        ucas.method_start("extract_lambda_input")
         try:
-            return cls[mode_str.upper()]
-        except KeyError:
-            return cls.DEBUG  # Default to DEBUG
+            identifier, control, validator = extract_lambda_input(event)
+            
+            # VERBOSE: Log raw event data
+            ucas.log_raw_data("extract_lambda_input", event, "Raw Event")
+            
+            ucas.method_stop("extract_lambda_input", 
+                           identifier=identifier, 
+                           control=control[:30] if len(control) > 30 else control,
+                           validator_type=validator.get('type', 'unknown'))
+        except ValueError as exc:
+            ucas.method_stop("extract_lambda_input", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            logger.error(f"Input parsing failed: {exc}")
+            ucas.method_stop("handler", final_status="ERROR", error_type="ValueError")
+            return {"error": str(exc), "status": "FAILED"}
 
-
-class Colors:
-    """ANSI color codes for terminal output."""
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    ERROR = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
-    PASS = '\033[92m'
-    
-    @staticmethod
-    def get_method_color(method_name: str) -> str:
-        """Get color based on method name."""
-        if method_name == "handler":
-            return Colors.HEADER
-        return Colors.OKCYAN
-
-
-class UCASConfig:
-    """Configuration manager for UCAS - reads from DynamoDB."""
-    
-    def __init__(self, validator_name: str, logger):
-        self.validator_name = validator_name
-        self.logger = logger
-        self.dynamodb = boto3.client('dynamodb', region_name='us-east-1')
-        self.config_table = os.getenv('UCAS_CONFIG_TABLE', 'eqa-ucas-config')
-        self.cache_ttl = 300  # 5 minutes cache
-        self.last_fetch = None
-        self.cached_config = None
+        # ------------------------------------------------------------------
+        # 2. Fetch CodeQL findings from GitHub
+        # ------------------------------------------------------------------
+        logger.info(f"Fetching CodeQL findings for {identifier}")
         
-    def get_config(self) -> Dict[str, Any]:
-        """Get UCAS configuration from DynamoDB with caching."""
-        # Check cache first
-        if self.cached_config and self.last_fetch:
-            if (time.time() - self.last_fetch) < self.cache_ttl:
-                return self.cached_config
-        
-        # Fetch from DynamoDB
+        ucas.method_start("get_codeql_findings", identifier=identifier)
         try:
-            response = self.dynamodb.get_item(
-                TableName=self.config_table,
-                Key={'validator': {'S': self.validator_name}}
+            # VERBOSE: Log the GitHub API request (conceptual - would need data.py modification)
+            github_request = {
+                'organization': 'your-org',
+                'repository': identifier,
+                'endpoint': '/code-scanning/alerts'
+            }
+            ucas.log_query("get_codeql_findings", 
+                          json.dumps(github_request, indent=2), 
+                          "GitHub API Request")
+            
+            # Execute query
+            findings = CodeqlData().get_codeql_findings(identifier)
+            
+            # VERBOSE: Log the actual response
+            ucas.log_response("get_codeql_findings", findings, "GitHub API Response")
+            
+            # VERBOSE: Log raw data structure
+            if findings:
+                ucas.log_raw_data("get_codeql_findings", 
+                                findings[0] if len(findings) > 0 else {}, 
+                                "First Finding")
+            
+            ucas.method_stop("get_codeql_findings", 
+                           finding_count=len(findings) if findings else 0)
+        except Exception as exc:
+            ucas.method_stop("get_codeql_findings", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            logger.error(f"Data fetch failed: {exc}")
+            ucas.method_stop("handler", final_status="ERROR", error_type=type(exc).__name__)
+            return {"error": str(exc), "status": "FAILED"}
+
+        # ------------------------------------------------------------------
+        # 3. Run validation
+        # ------------------------------------------------------------------
+        ucas.method_start("validate", 
+                         validator_type=validator.get('type'),
+                         criteria_count=len(validator.get('criteria', [])))
+        try:
+            # VERBOSE: Log validation criteria
+            ucas.log_raw_data("validate", validator, "Validator Config")
+            
+            success, avits, exception, evidence_internal = CodeqlValidator().validate(
+                validator, findings
             )
             
-            if 'Item' in response:
-                config = {
-                    'execution_mode': response['Item'].get('execution_mode', {}).get('S', 'DEBUG'),
-                    'enable_query_logging': response['Item'].get('enable_query_logging', {}).get('BOOL', False),
-                    'enable_response_logging': response['Item'].get('enable_response_logging', {}).get('BOOL', False),
-                    'enable_raw_data_logging': response['Item'].get('enable_raw_data_logging', {}).get('BOOL', False),
-                    'max_response_size': int(response['Item'].get('max_response_size', {}).get('N', '5000')),
-                }
-                
-                self.cached_config = config
-                self.last_fetch = time.time()
-                return config
-            else:
-                # No config found, use defaults
-                return self._get_default_config()
-                
-        except ClientError as e:
-            self.logger.warning(f"Failed to fetch UCAS config from DynamoDB: {e}")
-            return self._get_default_config()
-        except Exception as e:
-            self.logger.warning(f"Unexpected error fetching UCAS config: {e}")
-            return self._get_default_config()
-    
-    def _get_default_config(self) -> Dict[str, Any]:
-        """Get default configuration."""
-        # Check environment variables first
-        env_mode = os.getenv('UCAS_EXECUTION_MODE', 'DEBUG')
-        
-        return {
-            'execution_mode': env_mode,
-            'enable_query_logging': os.getenv('UCAS_ENABLE_QUERY_LOGGING', 'false').lower() == 'true',
-            'enable_response_logging': os.getenv('UCAS_ENABLE_RESPONSE_LOGGING', 'false').lower() == 'true',
-            'enable_raw_data_logging': os.getenv('UCAS_ENABLE_RAW_DATA_LOGGING', 'false').lower() == 'true',
-            'max_response_size': int(os.getenv('UCAS_MAX_RESPONSE_SIZE', '5000')),
+            validation_result = "EXCEPTION" if exception else ("PASS" if success else "FAIL")
+            
+            # VERBOSE: Log validation details
+            validation_details = {
+                'criteria': validator.get('criteria', []),
+                'findings_count': len(findings) if findings else 0,
+                'matched_avits': len(avits) if avits else 0,
+                'result': validation_result
+            }
+            ucas.log_raw_data("validate", validation_details, "Validation Details")
+            
+            ucas.method_stop("validate", 
+                           validation_result=validation_result,
+                           avit_count=len(avits) if avits else 0,
+                           exception_occurred=exception)
+        except Exception as exc:
+            ucas.method_stop("validate", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            logger.error(f"Validation failed: {exc}")
+            ucas.method_stop("handler", final_status="ERROR", error_type=type(exc).__name__)
+            return {"error": str(exc), "status": "FAILED"}
+
+        # ------------------------------------------------------------------
+        # 4. Determine pass/fail status and confidence
+        # ------------------------------------------------------------------
+        if exception:
+            status_str = "NA"
+            passed     = False
+        elif success is True:
+            status_str = "PASS"
+            passed     = True
+        else:
+            status_str = "FAIL"
+            passed     = False
+
+        # Build the single validation entry
+        validation_entry = {
+            "type":               validator.get("type", "codeql"),
+            "scope":              validator.get("scope", ""),
+            "criteria":           validator.get("criteria", []),
+            "identifier":         identifier,
+            "name":               control,
+            "status":             status_str,
+            "_evidence_internal": evidence_internal,
         }
 
+        validations = [validation_entry]
 
-class UCASDebugger:
-    """
-    Universal Control Automation System (UCAS) Debugger - Enhanced Version
-    
-    Provides method-level execution tracking with multiple execution modes:
-    - PRODUCTION: Minimal logging (errors only)
-    - DEBUG: Standard output with timing (current behavior)
-    - VERBOSE: Super detailed with queries, responses, raw data
-    """
-    
-    def __init__(self, logger_instance, colored_output: bool = False, validator_name: str = None):
-        """
-        Initialize UCAS Debugger.
-        
-        Args:
-            logger_instance: AWS Lambda Powertools logger
-            colored_output: True for local (colored), False for Lambda (plain text)
-            validator_name: Name of validator for config lookup (e.g., 'akamaivalidator')
-        """
-        self.logger = logger_instance
-        self.colored_output = colored_output
-        self.validator_name = validator_name or 'unknown'
-        
-        # Load configuration
-        self.config_manager = UCASConfig(self.validator_name, logger_instance)
-        self.config = self.config_manager.get_config()
-        self.execution_mode = ExecutionMode.from_string(self.config['execution_mode'])
-        
-        # Tracking variables
-        self.start_times = {}  # Per-method start times
-        self.method_name = None
-        self.durations = {}
-        self.method_calls = {}
-        self.alerts = []
-        
-        # Verbose data storage
-        self.method_data = {}  # Store queries, responses, etc.
-        
-        # Log configuration on startup (DEBUG or VERBOSE only)
-        if self.execution_mode != ExecutionMode.PRODUCTION:
-            self._log_config()
-    
-    def _log_config(self):
-        """Log UCAS configuration (DEBUG/VERBOSE modes only)."""
-        config_msg = f"UCAS Configuration: mode={self.execution_mode.value}, validator={self.validator_name}"
-        if self.colored_output:
-            print(f"{Colors.HEADER}{config_msg}{Colors.END}")
-        else:
-            self.logger.info(config_msg)
-    
-    def _should_log(self, level: str = "DEBUG") -> bool:
-        """Check if we should log based on execution mode."""
-        if level == "ERROR":
-            return True  # Always log errors
-        if self.execution_mode == ExecutionMode.PRODUCTION:
-            return False  # Production: errors only
-        if self.execution_mode == ExecutionMode.DEBUG:
-            return level != "VERBOSE"  # DEBUG: skip verbose
-        return True  # VERBOSE: log everything
-    
-    def _format_data(self, data: Any, max_length: int = None) -> str:
-        """Format data for logging (truncate if needed)."""
-        if max_length is None:
-            max_length = self.config.get('max_response_size', 5000)
-        
-        if isinstance(data, (dict, list)):
-            json_str = json.dumps(data, indent=2)
-            if len(json_str) > max_length:
-                return json_str[:max_length] + f"... [truncated, total: {len(json_str)} chars]"
-            return json_str
-        else:
-            str_data = str(data)
-            if len(str_data) > max_length:
-                return str_data[:max_length] + f"... [truncated, total: {len(str_data)} chars]"
-            return str_data
-    
-    def _color_print(self, color: str, message: str):
-        """Print with color (terminal only)."""
-        print(f"{color}{message}{Colors.END}")
-    
-    def method_start(self, method_name: str, **parameters):
-        """
-        Log the start of a method execution.
-        
-        Args:
-            method_name: Name of the method
-            **parameters: Key-value pairs to log (e.g., identifier="BFM")
-        """
-        if not self._should_log():
-            return
-        
-        self.start_times[method_name] = time.time()
-        self.method_name = method_name
-        self.method_calls[method_name] = self.method_calls.get(method_name, 0) + 1
-        
-        # Initialize storage for this method
-        self.method_data[method_name] = {'parameters': parameters}
-        
-        # Format parameters
-        params_str = ", ".join(f"{k}={v}" for k, v in parameters.items())
-        
-        # Determine symbol and color
-        if method_name == "handler":
-            symbol = "►"
-            color = Colors.HEADER + Colors.BOLD
-        else:
-            symbol = "  ►"
-            color = Colors.OKCYAN
-        
-        # Log
-        if self.colored_output:
-            if params_str:
-                self._color_print(color, f"{symbol} START: {method_name} ({params_str})")
-            else:
-                self._color_print(color, f"{symbol} START: {method_name}")
-        else:
-            if params_str:
-                self.logger.info(f"{symbol} START: {method_name} ({params_str})")
-            else:
-                self.logger.info(f"{symbol} START: {method_name}")
-    
-    def log_query(self, method_name: str, query: str, query_type: str = "SQL"):
-        """
-        Log a query (SQL, API call, etc.) in VERBOSE mode.
-        
-        Args:
-            method_name: Name of the method executing the query
-            query: The actual query/request
-            query_type: Type of query (SQL, API, HTTP, etc.)
-        """
-        if not self._should_log("VERBOSE"):
-            return
-        
-        if not self.config.get('enable_query_logging', False):
-            return
-        
-        # Store query
-        if method_name not in self.method_data:
-            self.method_data[method_name] = {}
-        self.method_data[method_name]['query'] = query
-        self.method_data[method_name]['query_type'] = query_type
-        
-        # Log query
-        formatted_query = self._format_data(query, max_length=2000)
-        
-        if self.colored_output:
-            self._color_print(Colors.WARNING, f"  📝 {query_type} Query:")
-            print(f"  {formatted_query}")
-        else:
-            self.logger.info(f"  📝 {query_type} Query: {formatted_query}")
-    
-    def log_response(self, method_name: str, response: Any, response_type: str = "Data"):
-        """
-        Log a response/result in VERBOSE mode.
-        
-        Args:
-            method_name: Name of the method that got the response
-            response: The actual response data
-            response_type: Type of response (Data, API Response, etc.)
-        """
-        if not self._should_log("VERBOSE"):
-            return
-        
-        if not self.config.get('enable_response_logging', False):
-            return
-        
-        # Store response
-        if method_name not in self.method_data:
-            self.method_data[method_name] = {}
-        self.method_data[method_name]['response'] = response
-        self.method_data[method_name]['response_type'] = response_type
-        
-        # Log response
-        formatted_response = self._format_data(response)
-        
-        if self.colored_output:
-            self._color_print(Colors.OKGREEN, f"  📦 {response_type} Response:")
-            print(f"  {formatted_response}")
-        else:
-            self.logger.info(f"  📦 {response_type} Response: {formatted_response}")
-    
-    def log_raw_data(self, method_name: str, data: Any, label: str = "Raw Data"):
-        """
-        Log raw data in VERBOSE mode.
-        
-        Args:
-            method_name: Name of the method
-            data: The raw data
-            label: Label for the data
-        """
-        if not self._should_log("VERBOSE"):
-            return
-        
-        if not self.config.get('enable_raw_data_logging', False):
-            return
-        
-        formatted_data = self._format_data(data)
-        
-        if self.colored_output:
-            self._color_print(Colors.OKCYAN, f"  🔍 {label}:")
-            print(f"  {formatted_data}")
-        else:
-            self.logger.info(f"  🔍 {label}: {formatted_data}")
-    
-    def method_stop(self, method_name: str, **metrics):
-        """
-        Log the completion of a method execution.
-        
-        Args:
-            method_name: Name of the method
-            **metrics: Key-value pairs to log (e.g., record_count=1, validation_result="PASS")
-        """
-        if not self._should_log():
-            # In PRODUCTION mode, only log if there's an error
-            if 'error_type' not in metrics:
-                return
-        
-        # Calculate duration
-        duration_ms = None
-        if method_name in self.start_times:
-            duration_ms = round((time.time() - self.start_times[method_name]) * 1000, 2)
-            self.durations[method_name] = duration_ms
-            del self.start_times[method_name]
-        
-        duration_display = f"{duration_ms}" if duration_ms is not None else "N/A"
-        
-        # Check if this is an error
-        is_error = any(key in metrics for key in ['error', 'error_type', 'error_message']) or \
-                   metrics.get('final_status') == 'ERROR'
-        
-        # In VERBOSE mode, log stored queries/responses
-        if self.execution_mode == ExecutionMode.VERBOSE and method_name in self.method_data:
-            method_info = self.method_data[method_name]
+        # ------------------------------------------------------------------
+        # 5. Build evidence strings
+        # ------------------------------------------------------------------
+        ucas.method_start("build_evidence", control=control[:30] if len(control) > 30 else control)
+        try:
+            raw_evidence = build_raw_evidence(control, identifier, passed, validations)
+            evidence_msg = build_evidence(validation_entry)
+            finding_ids  = build_finding_ids(evidence_internal)
             
-            # Log query if present
-            if 'query' in method_info:
-                query_type = method_info.get('query_type', 'Query')
-                formatted_query = self._format_data(method_info['query'], max_length=2000)
-                if self.colored_output:
-                    self._color_print(Colors.WARNING, f"  📝 {query_type}:")
-                    print(f"  {formatted_query}")
-                else:
-                    self.logger.info(f"  📝 {query_type}: {formatted_query}")
+            # VERBOSE: Log evidence details
+            evidence_details = {
+                'raw_evidence': raw_evidence[:200] if raw_evidence else '',
+                'evidence_message': evidence_msg[:200] if evidence_msg else '',
+                'finding_ids': finding_ids
+            }
+            ucas.log_raw_data("build_evidence", evidence_details, "Evidence Summary")
             
-            # Log response if present
-            if 'response' in method_info:
-                response_type = method_info.get('response_type', 'Response')
-                formatted_response = self._format_data(method_info['response'])
-                if self.colored_output:
-                    self._color_print(Colors.OKGREEN, f"  📦 {response_type}:")
-                    print(f"  {formatted_response}")
-                else:
-                    self.logger.info(f"  📦 {response_type}: {formatted_response}")
+            ucas.method_stop("build_evidence", 
+                           finding_id_count=len(finding_ids) if finding_ids else 0,
+                           evidence_length=len(evidence_msg) if evidence_msg else 0)
+        except Exception as exc:
+            ucas.method_stop("build_evidence", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            raise
+
+        # ------------------------------------------------------------------
+        # 6. Get control configuration from DynamoDB
+        # ------------------------------------------------------------------
+        ucas.method_start("get_control_config", control=control[:30] if len(control) > 30 else control)
+        try:
+            # VERBOSE: Log DynamoDB query
+            dynamodb_query = {
+                'table': 'eqa-control-table',
+                'key': {'control': control}
+            }
+            ucas.log_query("get_control_config", 
+                          json.dumps(dynamodb_query, indent=2), 
+                          "DynamoDB GetItem")
+            
+            response = dynamodb.get_item(
+                TableName='eqa-control-table',
+                Key={'control': {'S': control}}
+            )
+            
+            # VERBOSE: Log DynamoDB response
+            ucas.log_response("get_control_config", 
+                            response.get('Item', {}), 
+                            "DynamoDB Item")
+            
+            skip_failure = response['Item'].get('skip_failure', {}).get('BOOL', False)
+            skip_pass    = response['Item'].get('skip_pass',    {}).get('BOOL', False)
+            
+            ucas.method_stop("get_control_config", 
+                           skip_failure=skip_failure, 
+                           skip_pass=skip_pass)
+        except Exception as exc:
+            ucas.method_stop("get_control_config", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            raise
+
+        review_required = "No"
+        if skip_failure and not passed:
+            review_required = "Yes"
+        if skip_pass and passed:
+            review_required = "Yes"
+
+        # ------------------------------------------------------------------
+        # 7. Assemble result
+        # ------------------------------------------------------------------
+        ucas.method_start("build_result", passed=passed)
+        try:
+            result = build_result(
+                control          = control,
+                passed           = passed,
+                avit             = avits,
+                number           = 1 if passed else 0,
+                confidence       = "",
+                validations      = validations,
+                raw_evidence     = raw_evidence,
+                evidence         = evidence_msg,
+                finding_ids      = finding_ids,
+                review_required  = review_required,
+            )
+            
+            sort_key = build_sort_key(control, validator)
+            
+            # VERBOSE: Log result structure
+            result_summary = {
+                'control': control,
+                'passed': passed,
+                'sort_key': sort_key,
+                'result_keys': list(result.keys()) if result else []
+            }
+            ucas.log_raw_data("build_result", result_summary, "Result Summary")
+            
+            ucas.method_stop("build_result", 
+                           result_size=len(str(result)),
+                           sort_key=sort_key[:30] if sort_key and len(sort_key) > 30 else sort_key)
+        except Exception as exc:
+            ucas.method_stop("build_result", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            raise
+
+        # ------------------------------------------------------------------
+        # 8. Write to DynamoDB
+        # ------------------------------------------------------------------
+        ucas.method_start("write_validator_result", identifier=identifier)
+        try:
+            # VERBOSE: Log write details
+            write_details = {
+                'table': 'eqa-validation-results-table',
+                'identifier': identifier,
+                'sort_key': sort_key,
+                'result_size': len(str(result))
+            }
+            ucas.log_raw_data("write_validator_result", write_details, "DynamoDB Write Details")
+            
+            write_validator_result(identifier, sort_key, result)
+            
+            ucas.method_stop("write_validator_result", status="success")
+        except ValueError as exc:
+            ucas.method_stop("write_validator_result", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            logger.error(f"Failed to write result: {exc}")
+            ucas.method_stop("handler", final_status="ERROR", error_type="ValueError")
+            return {"error": str(exc), "status": "FAILED"}
+        except Exception as exc:
+            ucas.method_stop("write_validator_result", 
+                           error_type=type(exc).__name__, 
+                           error_message=str(exc))
+            raise
+
+        logger.info(f"Validation complete — control: {control}, passed: {passed}")
         
-        # Format metrics
-        metrics_str = ", ".join(f"{k}={v}" for k, v in metrics.items())
+        # Success
+        ucas.method_stop("handler", 
+                        final_status="PASS" if passed else "FAIL",
+                        validation_passed=passed,
+                        result_size=len(str(result)))
+        return result
+
+    except Exception as e:
+        # Error handling
+        error_type = type(e).__name__
+        error_message = str(e)
         
-        # Determine symbol and color
-        if is_error:
-            symbol = "✖" if method_name == "handler" else "  ✖"
-            color = Colors.ERROR + Colors.BOLD
-        elif method_name == "handler":
-            symbol = "■"
-            color = Colors.HEADER + Colors.BOLD
+        # Log error with UCAS
+        ucas.print_error(e)
+        ucas.method_stop("handler", 
+                        final_status="ERROR",
+                        error_type=error_type,
+                        error_message=error_message)
+        
+        # In Lambda: raise the error
+        # Locally: exit cleanly
+        if is_local:
+            sys.exit(1)
         else:
-            symbol = "  ■"
-            color = Colors.OKCYAN
-        
-        # Log
-        if self.colored_output:
-            if metrics_str:
-                self._color_print(color, f"{symbol} STOP: {method_name} [{duration_display}ms] ({metrics_str})")
-            else:
-                self._color_print(color, f"{symbol} STOP: {method_name} [{duration_display}ms]")
-        else:
-            if metrics_str:
-                self.logger.info(f"{symbol} STOP: {method_name} [{duration_display}ms] ({metrics_str})")
-            else:
-                self.logger.info(f"{symbol} STOP: {method_name} [{duration_display}ms]")
+            raise
+
+
+# ---------------------------------------------------------------------------
+# Local testing — run directly:  python index.py
+# ---------------------------------------------------------------------------
+if __name__ == '__main__':
+    # Mock context for local testing
+    class MockContext:
+        aws_request_id = "local"
+        function_name = "local"
     
-    def print_error(self, error: Exception):
-        """Print a formatted error message."""
-        error_type = type(error).__name__
-        error_message = str(error)
+    # Test event
+    test_event = {
+        "identifier": "AQQ",
+        "control": "OWASP-V1.14.3",
+        "validator": {
+            "criteria": ["131", "119"],
+            "type": "codeql",
+            "scope": "rule_id"
+        }
+    }
+    
+    # Print header (only locally)
+    if is_local:
+        from ucas_debugger import Colors
+        print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}  UCAS Debugger - codeqlalertsvalidator (Enhanced V2){Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{Colors.END}")
+        print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}\n")
+    
+    # Run handler
+    try:
+        result = handler(test_event, MockContext())
         
-        # Clean up error message
-        if len(error_message) > 200:
-            lines = error_message.split('\n')
-            if lines:
-                error_message = lines[0]
-        
-        if self.colored_output:
-            # Terminal: Colored error box
-            print(f"\n{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
-            print(f"{Colors.ERROR}{Colors.BOLD}ERROR: {error_type}{Colors.END}")
-            print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}")
-            print(f"{Colors.ERROR}{error_message}{Colors.END}")
-            print(f"{Colors.ERROR}{Colors.BOLD}{'='*70}{Colors.END}\n")
-        else:
-            # CloudWatch: Plain text error format with visual symbols
-            self.logger.error(f"{'='*70}")
-            self.logger.error(f"✖ ERROR: {error_type}")
-            self.logger.error(f"{'='*70}")
-            self.logger.error(f"Message: {error_message}")
-            self.logger.error(f"{'='*70}")
+        # Print summary (only locally)
+        if is_local:
+            status = "PASS" if result.get('passed') else "FAIL"
+            status_color = Colors.PASS if result.get('passed') else Colors.ERROR
+            
+            print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}")
+            print(f"{status_color}{Colors.BOLD}{status}{Colors.END} | {test_event['identifier']} | {result.get('control', 'N/A')}")
+            print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.END}\n")
+    
+    except SystemExit:
+        pass  # Clean exit on error
